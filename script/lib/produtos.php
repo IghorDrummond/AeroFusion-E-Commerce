@@ -30,6 +30,12 @@
             }
             
             //Métodos
+            /*
+            *Metodo: retornaValores()
+            *Descrição: Retorna valores da pesquisa da query
+            *Data: 28/05/2024
+            *Programador(a): Ighor Drummond
+            */
             public function retornaValores(){
                 $this->Query = "
                     SELECT 
@@ -63,6 +69,12 @@
                     return 'ERROR';
                 }
             }
+            /*
+			*Metodo: montaQuery()
+			*Descrição: Retorna por montar a query
+			*Data: 28/05/2024
+			*Programador(a): Ighor Drummond
+			*/
             private function montaQuery(){
                 $query = '';
                 //Valida se há um produto especificado
@@ -99,7 +111,12 @@
                 return $query;
             }
         }   
-
+        /*
+        *Classes: Produto()
+        *Descrição: Classe responsavel por apresentar produtos
+        *Data: 28/05/2024
+        *Programador(a): Ighor Drummond
+        */
         class Produto implements ProdutoInterface{
             //Atributos
             public $ID;
@@ -115,6 +132,12 @@
             }
 
             //Métodos
+            /*
+            *Metodo: retornaValores()
+            *Descrição: Retorna valores da pesquisa da query
+            *Data: 28/05/2024
+            *Programador(a): Ighor Drummond
+            */
             public function retornaValores(){
                 $Ret = false;
                 try{
@@ -127,7 +150,12 @@
                     return $Ret;
                 }
             }
-
+            /*
+            *Metodo: montaQuery()
+            *Descrição: Retorna por montar a query
+            *Data: 28/05/2024
+            *Programador(a): Ighor Drummond
+            */
             private function montaQuery(){
                 $this->query = "
                     SELECT 
@@ -156,7 +184,12 @@
                 ";
             }
         }
-
+        /*
+        *Classes: AvalicaoProduto()
+        *Descrição: Classe responsavel por retornas avaliações dos usuários
+        *Data: 28/05/2024
+        *Programador(a): Ighor Drummond
+        */
         class AvalicaoProduto implements ProdutoInterface{
             //Atributos
             public $ID;
@@ -172,6 +205,12 @@
             }
 
             //Metodo
+            /*
+            *Metodo: retornaValores()
+            *Descrição: Retorna valores da pesquisa da query
+            *Data: 28/05/2024
+            *Programador(a): Ighor Drummond
+            */
             public function retornaValores(){
                 $Ret = false;
                 try{
@@ -184,6 +223,12 @@
                     return $Ret;
                 }
             }
+            /*
+            *Metodo: montaQuery()
+            *Descrição: Retorna por montar a query
+            *Data: 28/05/2024
+            *Programador(a): Ighor Drummond
+            */
             private function montaQuery(){
                 $this->query = "
                     SELECT 
@@ -205,7 +250,12 @@
                 ";
             }
         }
-
+        /*
+        *Classes: Tamanhos()
+        *Descrição: Classe responsavel por retornas os tamanhos do tênis
+        *Data: 28/05/2024
+        *Programador(a): Ighor Drummond
+        */
         class Tamanhos implements ProdutoInterface{
             //Atributos
             public $Tamanhos = '';
@@ -226,6 +276,12 @@
             }
 
             //Métodos
+            /*
+            *Metodo: retornaValores()
+            *Descrição: Retorna valores da pesquisa da query
+            *Data: 28/05/2024
+            *Programador(a): Ighor Drummond
+            */
             public function retornaValores(){
                 $this->montaQuery();
                 $Ret = null;
@@ -239,7 +295,12 @@
                     return $Ret;
                 }
             }
-
+            /*
+            *Metodo: montaQuery()
+            *Descrição: Retorna por montar a query
+            *Data: 28/05/2024
+            *Programador(a): Ighor Drummond
+            */
             protected function montaQuery(){
                 $Valores = explode(';', $this->Tamanhos);
                 $InQuery = "";

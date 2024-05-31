@@ -119,11 +119,11 @@
 						INNER JOIN
 							cliente as cli ON cli.id = car.id_cliente
 						INNER JOIN
-						produtos as prod ON car.id_prod  = prod.id_prod
+							produtos as prod ON car.id_prod  = prod.id_prod
 						WHERE
 							prod.id_prod = $this->Produto
 							AND cli.email = '$this->Cliente'
-							AND tamanho = $this->Tam
+							AND car.id_tam = $this->Tam
 					";
 				}elseif($Val === 2){
 					$this->Query = "
@@ -211,7 +211,7 @@
 					cli.nome,
 					car.quant,
 					img_prod.img1 as img,
-					car.id_tam as tamanho,
+					tam.nome_tam as tamanho,
 					FORMAT(CASE
 						WHEN 
 							prod.promocao_ativo = 1
@@ -238,6 +238,8 @@
 					cliente as cli ON cli.id = car.id_cliente
 				INNER JOIN
 					imagens_prod as img_prod ON img_prod.id_prod = prod.id_prod
+				INNER JOIN 
+					tamanho as tam ON tam.id_tam = car.id_tam
 				WHERE  
 					prod.estoque > 0
 					AND cli.email = '$this->Cliente'
@@ -249,7 +251,7 @@
 					prod.promocao_ativo, 
 					cli.nome, 
 					car.quant, 
-					car.id_tam,
+					tam.nome_tam,
 					img_prod.img1
 				";
 			}
