@@ -27,7 +27,15 @@
 			retornaProd($Carrinho->retornaValores());
 		}
 	}else{
-		echo 'LOGIN';
+		if($Opc != "1"){
+			echo 'LOGIN';
+		}else{
+		echo '
+			<i onclick="fecharCarrinho()" class="fa-solid fa-x w-100 border border-warning rounded text-center"></i>
+			<h6 class="text-center text-warning">Faça um login para adicionar produtos ao carrinho</h6>
+			<a href="login.php" class="btn btn-md btn-primary text-white p-1 rounded">Fazer Login</a>
+			';
+		}
 	}
 
 	function retornaProd($Produtos){

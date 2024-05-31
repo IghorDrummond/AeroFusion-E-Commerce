@@ -130,16 +130,10 @@ if(isset($_SESSION['Login']) and $_SESSION['Login']){
 				<li class="d-flex justify-content-center align-items-center mr-2 ">
 					<i class="fa-solid fa-cart-shopping fa-lg" style="color: orange;" onclick="abreCarrinho(0)"></i>
 					<span class="d-block badge badge-primary mt-1">0</span>
+					<!--Caixa do Carrinho -->
 					<dialog id="carrinho" class="rounded border border-warning">
-						<i onclick="fecharCarrinho()" class="fa-solid fa-x w-100 border border-warning rounded text-center"></i>
-						<?php
-							if(!$logado){
-						?>
-							<h6 class="text-center text-warning">Faça um login para adicionar produtos ao carrinho</h6>
-						<?php
-							}
-						?>
 					</dialog>
+					<!-- Fim da caixa do carrinho -->
 				</li>
 				<li class="nav-item d-flex justify-content-center align-items-center ">
 					<?php
