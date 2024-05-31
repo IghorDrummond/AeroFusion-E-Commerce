@@ -21,7 +21,6 @@
 	//----------Funções
 	function catalogaProdutos($Produtos){
 		if(isset($Produtos[0]['Produto'])){
-			echo "<h6 class='text-center w-100 bg-success text-white p-1 sticky-top'>Encontrado ". strval(count($Produtos)) ." Produtos</h6>";
 			foreach ($Produtos as $Indice => $Prod) {
 ?>
 				<div class="produto" onclick="maisDetalhes(<?php echo($Prod['IdProd']) ?>)">
