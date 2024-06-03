@@ -177,7 +177,4 @@
 	function faltaProduto(){
 		echo('<h1>Nenhum Produto Encontrado!</h1>');
 	}
-	//<i class="fa-solid fa-star-half-stroke"></i>
-	//<i class="fa-regular fa-star"></i>
-	//<i class="fa-solid fa-star"></i>
 ?>

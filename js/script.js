@@ -94,7 +94,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
         $('#carrinho').load('script/carrinho.php?Opc=1', ()=>{
             carrinho.scrollHeight = scrollHeight;
         });*/
-    }, 1500);
+    }, 1000);
 });
 
 /*
