@@ -5,6 +5,8 @@
 	require_once('lib/compras.php');
 	use Compra\AdicionarCarrinho;
 	use Compra\VerCarrinho;
+	use Compra\QuantCarrinho;
+	use Compra\ApagarItem;
 
 	//Declaração de variaveis
 	//String
@@ -22,6 +24,11 @@
 			echo $Carrinho->guardaProduto();
 		}elseif($Opc === "3"){
 			//Contar quantos items tem dentro do carrinho
+			$Carrinho = new QuantCarrinho(Email: $_SESSION['Email']);
+			echo ($Carrinho->retornarValores()[0]['quant_item']);
+		}elseif($Opc === "4"){
+			$Carrinho = new ApagarItem(IdCar: $Prod, Cliente: $_SESSION['Email']);
+			$Carrinho->apagaDados();
 		}else{
 			$Carrinho = new VerCarrinho(Cliente: $_SESSION['Email']);
 			retornaProd($Carrinho->retornaValores());
@@ -29,6 +36,8 @@
 	}else{
 		if($Opc != "1"){
 			echo 'LOGIN';
+		}elseif($Opc === "3"){
+			echo('0');
 		}else{
 		echo '
 			<i onclick="fecharCarrinho()" class="fa-solid fa-x w-100 border border-warning rounded text-center"></i>
@@ -43,12 +52,11 @@
 		if(!empty($Produtos)){
 			echo '
 			<i onclick="fecharCarrinho()" class="fa-solid fa-x w-100 border border-warning rounded text-center"></i>
-			<div id="carrinho_produtos" class="mt-1">';
+			<div id="carrinho_produtos" class="mt-1" onscroll="guardaScroll()">';
 			foreach ($Produtos as $Prod) {
 ?>
-	<div class="d-flex border border-warning p-1 flex-column carrino_prod align-items-center text-center" onclick="maisDetalhes(<?php echo($Prod['id_prod']) ?>)">
-		<div>
-			<img src="img/<?php echo($Prod['img']) ?>" width="50" height="50" class="img-fluid rounded">
+	<div class="d-flex border border-warning p-1 flex-column align-items-center text-center p-2" onclick="maisDetalhes(<?php echo($Prod['id_prod']) ?>)" onscroll="guardaScroll()">
+			<img src="img/<?php echo($Prod['img']) ?>" width="120" height="120" class="img-fluid rounded">
 			<h6><?php echo(ucfirst(strtolower($Prod['produto']))) ?></h6>
 			Preço do item:R$ <?php echo($Prod['total_item']) ?>
 			<br>
@@ -57,7 +65,7 @@
 			Quant: <?php echo($Prod['quant']) ?>
 			<br>
 			<button class="text-warning">Mais Detalhes</button>
-		</div>
+			<i onclick="deletaItem(<?php echo($Prod['id_car']) ?>)" class="fa-regular fa-trash-can" style="color: red;"></i>
 	</div>
 <?php
 			}

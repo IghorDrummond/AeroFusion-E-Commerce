@@ -210,6 +210,7 @@
 					prod.promocao_ativo,
 					cli.nome,
 					car.quant,
+					car.id_car,
 					img_prod.img1 as img,
 					tam.nome_tam as tamanho,
 					FORMAT(CASE
@@ -267,6 +268,140 @@
 				$this->stmt = $this->conexao->query($this->query);
 				$Ret = $this->stmt->fetchAll(\PDO::FETCH_ASSOC);
 				return $Ret;
+			}
+		}
+		/*
+		*Classes: QuantCarrinho()
+		*Descrição: Classe responsavel por retornar total de items no carrinho
+		*Data: 01/06/2024
+		*Programador(a): Ighor Drummond
+		*/
+		class QuantCarrinho{
+			//Atributo
+			protected $query = null;
+			protected $stmt = null;
+			protected $conexao = null;
+
+			//Construtor
+			public function __construct(
+				public $Email = ''
+			){
+				$this->conexao = new \IniciaServer();
+				$this->conexao = $this->conexao->conexao();
+			}
+
+			//Métodos
+			/*
+			*Metodo: retornarValores()
+			*Descrição: Retorna valores da Query
+			*Data: 01/06/2024
+			*Programador(a): Ighor Drummond
+			*/
+			public function retornarValores(){
+				$Valores = [];
+				$this->montaQuery();
+
+				try{
+					$this->stmt = $this->conexao->query($this->query);
+					$Valores = $this->stmt->fetchAll(\PDO::FETCH_ASSOC);
+				}catch(\PDOException $e){
+					echo $e->getMessage();
+				}finally{
+					return $Valores;
+				}
+			}
+			/*
+			*Metodo: montaQuery()
+			*Descrição: Responsavel por monta a query
+			*Data: 01/06/2024
+			*Programador(a): Ighor Drummond
+			*/
+			protected function montaQuery(){
+				$this->query = "
+					SELECT 
+						count(car.id_car) as quant_item
+					FROM
+						carrinho as car
+					INNER JOIN
+						produtos as prod ON prod.id_prod = car.id_prod
+					INNER JOIN  
+						cliente as cli ON cli.id = car.id_cliente
+					WHERE
+						cli.email = '$this->Email'
+				";
+			}
+		}
+
+		class ApagarItem{
+			//Atributos
+			protected $conexao = null;
+			protected $query = null;
+			protected $stmt = null;
+
+			//Construtor
+			public function __construct(
+				public $Cliente = null,
+				public $IdCar = null
+			){
+				$this->conexao = new \IniciaServer();
+				$this->conexao = $this->conexao->conexao();
+			}
+
+			//Métodos
+			/*
+			*Metodo: apagaDados()
+			*Descrição: Responsavel por deletar o item do carrinho
+			*Data: 01/06/2024
+			*Programador(a): Ighor Drummond
+			*/
+			public function apagaDados(){
+				$Ret = 0;
+
+				try{
+					//Recupera ID do cliente Logado
+					$this->montaQuery(2);
+					$this->stmt = $this->conexao->query($this->query);
+					$this->Cliente = $this->stmt[0]['id_cliente'];
+					//Apaga Produto no carrinho
+					$this->montaQuery(1);
+					$this->conexao->beginTransaction();
+					$Ret = $this->conexao->exec($this->query);
+					//Valida se foi apagado
+					if($Ret > 0){
+						$this->conexao->commit();
+					}
+				}catch(\PDOException $e){
+					echo $e->getMessage();
+					$this->conexao->rollback();
+				}finally{
+					return $Ret;
+				}
+			}
+			/*
+			*Metodo: montaQuery(Opção)
+			*Descrição: Responsavel por monta a query
+			*Data: 01/06/2024
+			*Programador(a): Ighor Drummond
+			*/
+			protected function montaQuery($val){
+				if($val === 1){
+					$this->query = "
+						DELETE FROM
+							carrinho
+						WHERE
+							id_car = $this->IdCar
+							AND	id_cliente = $this->Cliente									
+					";
+				}else{
+					$this->query = "
+						SELECT 
+							id as id_cliente
+						FROM
+							cliente
+						WHERE 
+							email = '$this->Cliente'
+					";					
+				}
 			}
 		}
 	}

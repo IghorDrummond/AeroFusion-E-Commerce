@@ -10,9 +10,11 @@ var Pesquisa = document.getElementById('Pesquisa');
 var caixaPesq = document.getElementById('caixaPesq');
 var aviso = document.getElementsByClassName('alertas');
 var aviso_texto = document.getElementsByClassName('alerta_texto');
+var quantCarrinho = document.getElementsByClassName('badge-primary');
 //Numerico
 var tamAnt = 0;
 var Tam = 0;
+var scrollHeight = 0;
 // Objeto
 var ajax = null;
 // Função Anônima para abrir a caixa de diálogo
@@ -76,6 +78,24 @@ window.addEventListener('click', function(event) {
         desligaCab();
     }
 });
+/*
+* Evento: DOMContentLoaded
+* Descrição: Carrega a quantidade de items no carrinho
+* Programador(a): Ighor Drummond
+* Data: 01/06/2024
+*/
+window.addEventListener('DOMContentLoaded', ()=>{
+    //Inicia os valores
+    $('.badge-primary').load('script/carrinho.php?Opc=3');
+    //Inicia o intervalo para atualização a cada 1.5 segundos
+    var Z = setInterval(()=>{
+        $('.badge-primary').load('script/carrinho.php?Opc=3');
+        /*
+        $('#carrinho').load('script/carrinho.php?Opc=1', ()=>{
+            carrinho.scrollHeight = scrollHeight;
+        });*/
+    }, 1500);
+});
 
 /*
 * Evento: resize
@@ -89,6 +109,11 @@ if (configuracao) {
     configuracao.addEventListener('blur', function() {
         configuracao.style.visibility = 'hidden';
         configuracao.close();
+    });
+}
+if (carrinho) {
+    carrinho.addEventListener('scroll', () => {
+        alert(carrinho.scrollHeight);
     });
 }
 
@@ -293,4 +318,39 @@ Programador: Ighor Drummond
 */
 function pesquisaProduto(){  
     window.location.href = 'pesquisa.php?Pesq='+ encodeURIComponent((Pesquisa.value).toUpperCase());
+}
+/*
+Função: guardaScroll()
+Descrição: Guarda Posição do Scroll para fixar logo depois
+Data: 01/06/2024
+Programador: Ighor Drummond
+*/
+function guardaScroll(){
+    scrollHeight = carrinho.scrollHeight;
+}
+/*
+Função: deletaItem()
+Descrição: deleta o produto no carrinho
+Data: 03/06/2024
+Programador: Ighor Drummond
+*/
+function deletaItem(Prod){
+    telaCarregamento(true);
+    // Inicia a requisição
+    ajax = new XMLHttpRequest();
+    // prepara a abertura o get.
+    ajax.open('GET', 'script/carrinho.php?opc=4&Prod=' + encodeURIComponent(Prod));
+    // monitora o status da solicitação da url
+    ajax.onreadystatechange = () => {
+        telaCarregamento(false);
+        if (ajax.readyState === 4) {
+            if (ajax.status < 400) {
+                console.log(ajax.responseText);
+            } else {
+                window.location.href = 'error.php?Error=' + ajax.status.toString();
+            }
+        }
+    };
+    // Inicia Solicitação
+    ajax.send();
 }
