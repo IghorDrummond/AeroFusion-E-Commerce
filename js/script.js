@@ -339,13 +339,17 @@ function deletaItem(Prod){
     // Inicia a requisição
     ajax = new XMLHttpRequest();
     // prepara a abertura o get.
-    ajax.open('GET', 'script/carrinho.php?opc=4&Prod=' + encodeURIComponent(Prod));
+    ajax.open('GET', 'script/carrinho.php?Opc=4&Prod=' + encodeURIComponent(Prod));
     // monitora o status da solicitação da url
     ajax.onreadystatechange = () => {
         telaCarregamento(false);
         if (ajax.readyState === 4) {
             if (ajax.status < 400) {
-                console.log(ajax.responseText);
+                let ret = parseInt(ajax.responseText);
+
+                if(ret > 0){
+                    $('#carrinho').load('script/carrinho.php?Opc=1');
+                }
             } else {
                 window.location.href = 'error.php?Error=' + ajax.status.toString();
             }

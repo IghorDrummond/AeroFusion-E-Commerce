@@ -28,7 +28,7 @@
 			echo ($Carrinho->retornarValores()[0]['quant_item']);
 		}elseif($Opc === "4"){
 			$Carrinho = new ApagarItem(IdCar: $Prod, Cliente: $_SESSION['Email']);
-			$Carrinho->apagaDados();
+			echo $Carrinho->apagaDados();
 		}else{
 			$Carrinho = new VerCarrinho(Cliente: $_SESSION['Email']);
 			retornaProd($Carrinho->retornaValores());
@@ -55,7 +55,8 @@
 			<div id="carrinho_produtos" class="mt-1" onscroll="guardaScroll()">';
 			foreach ($Produtos as $Prod) {
 ?>
-	<div class="d-flex border border-warning p-1 flex-column align-items-center text-center p-2" onclick="maisDetalhes(<?php echo($Prod['id_prod']) ?>)" onscroll="guardaScroll()">
+	<div class="d-flex border border-warning p-1 flex-column align-items-center text-center p-2">
+		<div onclick="maisDetalhes(<?php echo($Prod['id_prod']) ?>)" onscroll="guardaScroll()">
 			<img src="img/<?php echo($Prod['img']) ?>" width="120" height="120" class="img-fluid rounded">
 			<h6><?php echo(ucfirst(strtolower($Prod['produto']))) ?></h6>
 			Preço do item:R$ <?php echo($Prod['total_item']) ?>
@@ -65,7 +66,8 @@
 			Quant: <?php echo($Prod['quant']) ?>
 			<br>
 			<button class="text-warning">Mais Detalhes</button>
-			<i onclick="deletaItem(<?php echo($Prod['id_car']) ?>)" class="fa-regular fa-trash-can" style="color: red;"></i>
+		</div>
+		<i onclick="deletaItem(<?php echo($Prod['id_car']) ?>)" class="fa-regular fa-trash-can" style="color: red;"></i>
 	</div>
 <?php
 			}
@@ -74,7 +76,9 @@
 				<button class="bg-warning text-white p-1 rounded" onclick="modificarCarrinho()">Modificar items do carrinho</button>
 			';
 		}else{
-			echo "<h1>Não há Produtos</h1>";
+			echo '
+			<i onclick="fecharCarrinho()" class="fa-solid fa-x w-100 border border-warning rounded text-center"></i>
+			<h1>Não há Produtos</h1>';
 		}
 	}
 ?>

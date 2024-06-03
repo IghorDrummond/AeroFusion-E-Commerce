@@ -361,6 +361,7 @@
 					//Recupera ID do cliente Logado
 					$this->montaQuery(2);
 					$this->stmt = $this->conexao->query($this->query);
+					$this->stmt = $this->stmt->fetchAll(\PDO::FETCH_ASSOC);
 					$this->Cliente = $this->stmt[0]['id_cliente'];
 					//Apaga Produto no carrinho
 					$this->montaQuery(1);
