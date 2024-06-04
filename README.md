@@ -28,7 +28,12 @@ Backend: A lógica de negócios e interação com o banco de dados é gerenciada
 O AeroFusion, com seu uso inovador de Three.js para animações 3D e uma base robusta em PHP, MySQL, AJAX, e outras tecnologias, proporciona uma experiência de compra única e imersiva para os usuários. 🎉🌐👟
 </P>
 
-<blockquote cite="">
+<blockquote cite="https://aerofusion1.000webhostapp.com/index.php">
+	O site Aerofusion já está disponível online, porém, encontra-se em fase de desenvolvimento. Como resultado, é possível que ocorram bugs, erros ortográficos e falta de conteúdos complementares.
+	
+	O desenvolvimento do site Aerofusion está em andamento, o que pode resultar na presença de bugs e erros ortográficos durante a navegação.
+	Devido à fase de desenvolvimento, é importante estar ciente da possibilidade de falta de conteúdos complementares em algumas seções do site.
+	Portanto, é aconselhável ter em mente que, devido ao estado de desenvolvimento, a experiência no site Aerofusion pode ser impactada por esses fatores temporários.
 	<a href="https://aerofusion1.000webhostapp.com/index.php" title="Aero Fusion Online">Acessar Site </a>
 </blockquote>					
 <h4>Desenvolvido pelas Linguangens:</h4>
