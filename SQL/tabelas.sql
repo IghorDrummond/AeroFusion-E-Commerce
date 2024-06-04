@@ -2,35 +2,49 @@
 *BANCO CRIADO COM CARINHO POR IGHOR DRUMMOND.
 *DATA: 17/05/2024
 *OBJETIVO: CRIAR BANCO, TABELA E ALGUNS DADOS PADRÕES.
-*/	
+*/  
 #CRIANDO BANCO DE DADOS
-CREATE DATABASE db_aerofusion;
+CREATE DATABASE db_aerofusion CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 #USANDO O BANCO
 USE db_aerofusion;
 #CRIANDO TABELA
 
+#CRIANDO TABELA DE SETORES
+CREATE TABLE setores(
+    id_set int primary key auto_increment not null,
+    nome varchar(20) not null,
+    descricao varchar(150) not null
+);
+
+#INSIRINDO SETORES NA TABELA SETORES
+INSERT INTO setores(nome, descricao) VALUES('Admin', 'Responsavel por controlar todo site');
+INSERT INTO setores(nome, descricao) VALUES('Atendente', 'Responsavel por controlar os protocolos e garantia');
+INSERT INTO setores(nome, descricao) VALUES('Vendedor', 'Responsavel por controlar produtos fora de estoques');
+INSERT INTO setores(nome, descricao) VALUES('Cliente', 'Opção de cliente para efetuar compras');
+
 #CRIANDO A TABELA DE CLIENTES
 CREATE TABLE cliente(
-	id int primary key auto_increment not null,
+    id int primary key auto_increment not null,
     email varchar(50) not null,
     senha varchar(12) not null,
-	nome varchar(30) not null,
-	sobrenome varchar(30) not null,
-	data_nascimento date not null,
+    nome varchar(30) not null,
+    sobrenome varchar(30) not null,
+    data_nascimento date not null,
     genero varchar(1) default 'M',
     celular varchar(11) not null,
     cpf  varchar(11) not null,
     foto varchar(100) default 'novo_usuario.png' not null,
-    opc boolean default false not null
+    opc int not null,
+    FOREIGN KEY (opc) REFERENCES setores(id_set)
 );
 
 #INSIRINDO O ADMINISTRADOR NA TABELA CLIENTE
 INSERT INTO cliente(email, senha, nome, sobrenome, data_nascimento, celular, cpf, opc)
-VALUES('admin@aerofusion.com', '123456789', 'Administrador', 'do Sistema', '2024-01-01', '11999999999', 'xxxxxxxxxxx' ,true);
+VALUES('admin@aerofusion.com', '123456789', 'Administrador', 'do Sistema', '2024-01-01', '11999999999', 'xxxxxxxxxxx' , 1);
 
 #CRIANDO A TABELA DE ENDEREÇO
 CREATE TABLE endereco(
-	id_end int primary key auto_increment not null,
+    id_end int primary key auto_increment not null,
     rua varchar(60) not null,
     bairro varchar(50) not null,
     cidade varchar(20) not null,
@@ -45,7 +59,7 @@ CREATE TABLE endereco(
 
 #CRIANDO A TABELA DE CATEGORIAS
 CREATE TABLE categoria(
-	id_cat int primary key auto_increment not null,
+    id_cat int primary key auto_increment not null,
     nome_cat varchar(30) not null,
     descricao_cat text
 );
@@ -58,7 +72,7 @@ INSERT INTO categoria(nome_cat) VALUES('promocao');
 
 #CRIANDO A TABELA DE TAMANHOS
 CREATE TABLE tamanho(
-	id_tam int primary key auto_increment not null,
+    id_tam int primary key auto_increment not null,
     nome_tam varchar(2) not null
 );
 
@@ -77,7 +91,7 @@ INSERT INTO tamanho(nome_tam) VALUES('44');
 
 #CRIANDO A TABELA DE PRODUTOS
 CREATE TABLE produtos(
-	id_prod int primary key auto_increment not null,
+    id_prod int primary key auto_increment not null,
     nome varchar(250) not null,
     descricao text not null,
     preco float(8,2) default 0 not null,
@@ -93,7 +107,7 @@ CREATE TABLE produtos(
 
 #CRIANDO TABELA DE IMAGENS DOS PRODUTOS
 CREATE TABLE imagens_prod(
-	id_img int primary key auto_increment not null,
+    id_img int primary key auto_increment not null,
     img1 varchar(150) not null,
     img2 varchar(150) default '',
     img3 varchar(150) default '',
@@ -105,7 +119,7 @@ CREATE TABLE imagens_prod(
 
 #CRIANDO TABELA DE FAVORITOS
 CREATE TABLE favoritos(
-	id_fav int primary key auto_increment not null,
+    id_fav int primary key auto_increment not null,
     id_prod int not null,
     id_cliente int not null,
     FOREIGN KEY (id_prod) REFERENCES produtos(id_prod),
@@ -114,7 +128,7 @@ CREATE TABLE favoritos(
 
 #CRIANDO TABELA DE BANDEIRAS PARA CARTÃO
 CREATE TABLE bandeiras(
-	id_ban int primary key auto_increment not null,
+    id_ban int primary key auto_increment not null,
     nome_ban varchar(30) not null
 );
 
@@ -132,7 +146,7 @@ INSERT INTO bandeiras(nome_ban) VALUES('UNIONPLAY');
 
 #CRIANDO TABELA DE CARTÕES
 CREATE TABLE cartoes(
-	id_card int primary key auto_increment not null,
+    id_card int primary key auto_increment not null,
     nome_cartao varchar(250) not null,
     numero_cartao int(16) not null,
     cvv int(3) not null,
@@ -145,7 +159,7 @@ CREATE TABLE cartoes(
 
 #CRIANDO TABELA DE AVALIAÇÕES
 CREATE TABLE avaliacoes(
-	id_ava int primary key auto_increment not null,
+    id_ava int primary key auto_increment not null,
     titulo_men varchar(100) not null,
     mensagem text not null,
     estrelas int default 0 not null,
@@ -161,7 +175,7 @@ CREATE TABLE avaliacoes(
 
 #CRIANDO TABELA DE CUPONS
 CREATE TABLE cupons(
-	id_cup int primary key auto_increment not null,
+    id_cup int primary key auto_increment not null,
     nome_cupom  varchar(20) not null,
     data_validade date not null,
     valor_desconto float(2,2) default 0 not null,
@@ -177,17 +191,6 @@ CREATE TABLE codigos(
     id_cliente int not null,
     FOREIGN KEY (id_cliente) REFERENCES cliente(id)
 );
-
-#CRIANDO TABELA DE SETORES
-CREATE TABLE setores(
-    id_set int primary key auto_increment not null,
-    nome varchar(20) not null,
-    descricao varchar(150) not null
-);
-
-#INSIRINDO SETORES NA TABELA SETORES
-INSERT INTO setores(nome, descricao) VALUES('Atendente', 'Responsavel por controlar os protocolos e garantia');
-INSERT INTO setores(nome, descricao) VALUES('Vendedor', 'Responsavel por controlar produtos fora de estoques');
 
 #CRIANDO TABELA DE FUNCIONARIOS
 CREATE TABLE funcionarios(
@@ -212,6 +215,18 @@ INSERT INTO status(nome) VALUES('Entrega');
 INSERT INTO status(nome) VALUES('Entregue');
 INSERT INTO status(nome) VALUES('Cancelado');
 
+#CRIANDO TABELA DE FORMA DE PAGAMENTO
+CREATE TABLE forma_pagamento(
+    id_form int primary key auto_increment not null,
+    forma_pag varchar(100) default '' not null
+);
+
+#INSIRINDO FORMA DE PAGAMENTOS
+INSERT INTO forma_pagamento(forma_pag) VALUES('PIX');
+INSERT INTO forma_pagamento(forma_pag) VALUES('CARTÃO');
+INSERT INTO forma_pagamento(forma_pag) VALUES('BOLETO');
+INSERT INTO forma_pagamento(forma_pag) VALUES('PARCELAMENTO');
+
 #CRIANDO TABELA DE PEDIDOS DE COMPRA
 CREATE TABLE pedidos(
     id_ped int auto_increment primary key not null,
@@ -220,9 +235,11 @@ CREATE TABLE pedidos(
     id_cliente int not null,
     id_end int not null,
     status int not null,
+    id_form int not null,
     FOREIGN KEY (id_cliente) REFERENCES cliente(id),
     FOREIGN KEY (status) REFERENCES status(id_sta),
-    FOREIGN KEY (id_end) REFERENCES endereco(id_end)
+    FOREIGN KEY (id_end) REFERENCES endereco(id_end),
+    FOREIGN KEY (id_form) REFERENCES forma_pagamento(id_form)
 );
 
 #CRIANDO TABELA DE ITENS DOS PEDIDOS

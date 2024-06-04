@@ -329,7 +329,7 @@
 						$this->conexao->beginTransaction();
 						//Monta as Querys para incluir novo usuário
 						$Query[0] = " INSERT INTO cliente(email, senha, nome, sobrenome, data_nascimento, genero, celular, cpf, opc) 
-						VALUES('$this->Email', '$this->Senha', '$this->Nome', '$this->Sobrenome', '$this->Data', '$this->Genero', '$this->Celular', '$this->Cpf', 'false')";
+						VALUES('$this->Email', '$this->Senha', '$this->Nome', '$this->Sobrenome', '$this->Data', '$this->Genero', '$this->Celular', '$this->Cpf', 4)";
 
 						$Query[1] = " INSERT INTO endereco(rua, bairro, cidade, numero, complemento, referencia, cep, uf, id_cliente) ";
 						//Mande executar as querys
