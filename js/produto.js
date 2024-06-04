@@ -16,7 +16,8 @@ var Tam = 0;
 var ajax = null;
 //-----Escopo
 quantidade.value = 1;
-precoFixado = parseFloat(preco.innerText.substr(preco.innerText.indexOf('$') +1, preco.innerText.length));
+precoFixado = preco.innerText.replace(",", ".");
+precoFixado = parseFloat(precoFixado.substr(precoFixado.indexOf('$') +1, precoFixado.length));
 //-----Enventos
 quantidade.addEventListener('input', ()=>{
     quantidade_texto.innerText = 'Quant: ' + quantidade.value;
@@ -106,6 +107,7 @@ function comprar(Prod){
             telaCarregamento(false);
             if(ajax.readyState === 4){
                 if(ajax.status < 400){
+                    $('#carrinho').load('script/carrinho.php?Opc=1');
                     switch(ajax.responseText.trim()){
                         case 'LOGIN':
                             alerta('Para comprar este item, você precisa está logado primeiro!', 0);
