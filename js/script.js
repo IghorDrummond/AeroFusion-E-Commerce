@@ -15,6 +15,9 @@ var quantCarrinho = document.getElementsByClassName('badge-primary');
 var tamAnt = 0;
 var Tam = 0;
 var scrollHeight = 0;
+//Array
+var produtosSelecionados = [];
+var antValoresInput = [];
 // Objeto
 var ajax = null;
 // Função Anônima para abrir a caixa de diálogo
@@ -116,6 +119,33 @@ if (carrinho) {
         alert(carrinho.scrollHeight);
     });
 }
+/*
+* Evento: change - input name Produto
+* Descrição: Salva produtos para acionar um novo pedido
+* Programador(a): Ighor Drummond
+* Data: 04/06/2024
+*/
+document.querySelectorAll('input[name="CarProd"]').forEach(checkbox =>{
+    checkbox.addEventListener('change', (event)=>{
+        let valor = event.target.value;
+
+        //verifica se o input que foi selecionado o produto ainda existe no carrinho
+        if(document.querySelectorAll('input[name="CarProd"][value="$value"]')){
+            //Valida se há inputs com o checked, ai salva valores
+            if(event.target.checked){
+                produtosSelecionados.push(event.target.value);
+            }else{
+                //valida se há algum valor que foi retirado o check para deletar do array
+                produtosSelecionados = produtosSelecionados.filter(item => item !== event.target.value);
+            }
+        }else{
+            //remove valor do input caso o mesmo não existir mais no carrinho
+           produtosSelecionados = produtosSelecionados.filter(item => item !== event.target.value);
+        }
+
+        console.log(produtosSelecionados);
+    });
+});
 
 // ------------------------- Funções
 /*
@@ -346,9 +376,10 @@ function deletaItem(Prod){
         if (ajax.readyState === 4) {
             if (ajax.status < 400) {
                 let ret = parseInt(ajax.responseText);
-
                 if(ret > 0){
-                    $('#carrinho').load('script/carrinho.php?Opc=1');
+                    $('#carrinho').load('script/carrinho.php?Opc=1', ()=>{
+                        selecionarProduto();//Atualiza dados para remoção do item ao carrinho
+                    });
                 }
             } else {
                 window.location.href = 'error.php?Error=' + ajax.status.toString();
@@ -357,4 +388,59 @@ function deletaItem(Prod){
     };
     // Inicia Solicitação
     ajax.send();
+}
+/*
+Função: selecionarProduto()
+Descrição: cria um novo pedido com os produtos selecionados dentro do carrinho
+Data: 04/06/2024
+Programador: Ighor Drummond
+*/
+function selecionarProduto(){
+    let checkbox = document.querySelectorAll('input[name="CarProd"]');
+    let auxAnt = [];
+
+    checkbox.forEach((check, indice) =>{
+        //verifique os inputs com check
+        if(check.checked){
+            if(!produtosSelecionados.includes(check.value)){
+                produtosSelecionados.push(check.value);
+            }
+        }else{
+            //valida se há algum valor que foi retirado o check para deletar do array
+            produtosSelecionados = produtosSelecionados.filter(item => item !== check.value);
+        } 
+        auxAnt.push(check.value);  
+    });
+
+    //Remove valores ao qual os inputs não existem mais
+    antValoresInput.forEach(valor =>{
+        //valida se o input com o valor anterior não existe mais
+        if(document.querySelectorAll('input[name="CarProd"][value="'+ valor + '"]').length === 0){
+            //se caso não existir mais, valida se esse valor já estava dentro do input
+            if(produtosSelecionados.includes(valor)){
+                //se caso estiver, ele deleta do nosso produtos selecionados
+                produtosSelecionados = produtosSelecionados.filter(item => item !== valor)
+            }
+        }
+    });
+    //Coloca os novos valores do checkboxs existentes
+    antValoresInput = auxAnt;
+}
+
+/*
+Função: adicionarPedido()
+Descrição: cria um novo pedido com os produtos selecionados dentro do carrinho
+Data: 04/06/2024
+Programador: Ighor Drummond
+*/
+function adicionarPedido(){
+    if(produtosSelecionados.length > 0){
+        let parametros = "";
+
+        //Chama um fonte que vai enviar os id dos carrinhos e lá ele abre um pedido com status de aguardando, com prazo de 7 dias
+        //após isso, vai retornar o id do pedido aqui para js e levaremos para a página de pagamento, validar o numero do id do pedido se é do cliente para não houver fraudes ou invasão de dados indevidos
+        window.location.href="pagamento.php?";        
+    }else{
+        alerta('Selecione um dos produtos do carrinho para continuar', 0);
+    }
 }

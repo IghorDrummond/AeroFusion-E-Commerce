@@ -56,7 +56,9 @@
 			foreach ($Produtos as $Prod) {
 ?>
 	<div class="d-flex border border-warning p-1 flex-column align-items-center text-center p-2">
-		<div onclick="maisDetalhes(<?php echo($Prod['id_prod']) ?>)" onscroll="guardaScroll()">
+		Selecionar para comprar
+		<input type="checkbox" name="CarProd" value="<?php echo($Prod['id_car']) ?>" onchange="selecionarProduto()">
+		<div onclick="maisDetalhes(<?php echo($Prod['id_prod']) ?>)" onscroll="guardaScroll()" style="cursor: pointer;" title="Ver detalhes">
 			<img src="img/<?php echo($Prod['img']) ?>" width="120" height="120" class="img-fluid rounded">
 			<h6><?php echo(ucfirst(strtolower($Prod['produto']))) ?></h6>
 			Preço do item:R$ <?php echo($Prod['total_item']) ?>
@@ -67,13 +69,15 @@
 			<br>
 			<button class="text-warning">Mais Detalhes</button>
 		</div>
-		<i onclick="deletaItem(<?php echo($Prod['id_car']) ?>)" class="fa-regular fa-trash-can" style="color: red;"></i>
+		<i onclick="deletaItem(<?php echo($Prod['id_car']) ?>)" class="fa-regular fa-trash-can" style="color: red; cursor: pointer;" title="Deletar Item"></i>
 	</div>
 <?php
 			}
 			echo '</div>
 				<h6>Total: R$ '. $Produtos[0]['total_carrinho'] .'</h6>
-				<button class="bg-warning text-white p-1 rounded" onclick="modificarCarrinho()">Modificar items do carrinho</button>
+				<button class="bg-warning text-white p-1 rounded" onclick="adicionarPedido()">Comprar</button>
+				ou
+				<a class="bg-warning text-white p-1 rounded" href="home.php#carrinho">Modificar items do carrinho</a>
 			';
 		}else{
 			echo '
