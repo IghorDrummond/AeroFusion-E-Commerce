@@ -1,5 +1,5 @@
 <H1>🌟 Apresento com alegria o projeto AeroFusion ! 🚀 </H1>
-<img src="img/logo.png" alt="Logo do Projeto" width="100" height="100" align="center">
+<img src="PROJETO 1/img/logo.png" alt="Logo do Projeto" width="100" height="100" align="center">
 <P>
 O AeroFusion é um site de e-commerce especializado na venda de sneakers (tênis) que se destaca por seu uso inovador de animações 3D com Three.js, tornando a experiência de compra mais interativa e envolvente. Além disso, o site é desenvolvido utilizando uma variedade de tecnologias modernas, incluindo PHP com PDO e POO, MySQL, AJAX, Bootstrap, CSS, HTML e JavaScript.
 
