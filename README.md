@@ -43,4 +43,5 @@ O AeroFusion, com seu uso inovador de Three.js para animações 3D e uma base ro
 	<li> <img aling="center" alt="BootStrap" src="https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white"></li>
 	<li><img aling="center" alt="MySQL" src="https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white"> </li>
 	<li><img align="center" alt="Three.js" src="https://img.shields.io/badge/threejs-black?style=for-the-badge&logo=three.js&logoColor=white"></li>
+	<li><img aligh="center" alt="Apache" src="https://img.shields.io/badge/apache-%23D42029.svg?style=for-the-badge&logo=apache&logoColor=white"></li>
 </ul>
