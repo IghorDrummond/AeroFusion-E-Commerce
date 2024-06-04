@@ -211,7 +211,8 @@ CREATE TABLE status(
 
 #INSIRINDO SETORES NA TABELA SETORES
 INSERT INTO status(nome) VALUES('Pendente');
-INSERT INTO status(nome) VALUES('Entrega');
+INSERT INTO status(nome) VALUES('Transportando');
+INSERT INTO status(nome) VALUES('Saiu para entrega');
 INSERT INTO status(nome) VALUES('Entregue');
 INSERT INTO status(nome) VALUES('Cancelado');
 
