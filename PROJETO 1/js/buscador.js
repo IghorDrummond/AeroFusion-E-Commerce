@@ -76,7 +76,7 @@ function filtrar(){
 
     parametros = parametros.substr(0, parametros.length -1);
     
-    $("#exibeProdutos").load('script/filtrar.php?' + parametros, ()=>{
+    $("#exibeProdutos").load('../AeroFusion/filtrar.php?' + parametros, ()=>{
         telaCarregamento(false);
     });
 }
