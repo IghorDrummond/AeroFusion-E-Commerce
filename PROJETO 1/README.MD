@@ -7,6 +7,7 @@ Correção de bugs na atualização em tempo real da quantidade de produtos. ✔
 Adicionada agora a página de pagamento - Ainda não funcional em 04/06/2024. ✔️
 <hr>
 Foram adicionadas novas tabelas SQL para registrar a forma de pagamento, juntamente com atualizações nas tabelas existentes, como pedido, status e cliente. ✔️
+*<h4> Atualização 05/06/2024 </h4>*
 <hr>
 resolver bug na pagina de pesquisar produto ao qual ao fazer um filtro, não retorna agora nessa nova versão adaptada para servidores web e provedores de hospedagem. ✔️
 <hr>
@@ -23,3 +24,5 @@ Ajustar o Scrollspy da aba home.php. ❌
 Adicionar a implementação de um sistema de pagamento seguro, com mecanismos de prevenção a fraudes. ❌
 <hr>
 Resolver o problema de tratamento de senha durante o cadastro, removendo quebras de linha. ❌
+<hr>
+adicionar imagens ao passar do mouse em cima do produtos ❌
