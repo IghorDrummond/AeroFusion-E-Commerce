@@ -8,7 +8,7 @@ Adicionada agora a página de pagamento - Ainda não funcional em 04/06/2024. �
 <hr>
 Foram adicionadas novas tabelas SQL para registrar a forma de pagamento, juntamente com atualizações nas tabelas existentes, como pedido, status e cliente. ✔️
 <br>
-*<h4> Atualização 05/06/2024 </h4>*
+<h4> Atualização 05/06/2024</h4>
 <hr>
 resolver bug na pagina de pesquisar produto ao qual ao fazer um filtro, não retorna agora nessa nova versão adaptada para servidores web e provedores de hospedagem. ✔️
 <hr>
