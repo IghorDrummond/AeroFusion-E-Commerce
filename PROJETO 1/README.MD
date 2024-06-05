@@ -23,9 +23,10 @@ Adicionar a implementação de um sistema de pagamento seguro, com mecanismos de
 <hr>
 Resolver o problema de tratamento de senha durante o cadastro, removendo quebras de linha. ❌
 <hr>
+adicionar imagens ao passar do mouse em cima do produtos ❌
+<hr>
 <br>
 ---------------------------------------------------------------------------------------------------------------
 <br>
-adicionar imagens ao passar do mouse em cima do produtos ❌
 ⚠️ *Os fontes foram produzidos desde da data 15/04/2024 mas apenas registro de atualização na data 04/06/2024* ⚠️<br>
 ---------------------------------------------------------------------------------------------------------------
