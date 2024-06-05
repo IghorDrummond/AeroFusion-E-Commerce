@@ -8,13 +8,13 @@ Adicionada agora a página de pagamento - Ainda não funcional em 04/06/2024. �
 <hr>
 Foram adicionadas novas tabelas SQL para registrar a forma de pagamento, juntamente com atualizações nas tabelas existentes, como pedido, status e cliente. ✔️
 <br>
-<h4> Atualização 05/06/2024</h4>
+<h4> ------------ Atualização 05/06/2024 ------------</h4>
 <hr>
 resolver bug na pagina de pesquisar produto ao qual ao fazer um filtro, não retorna agora nessa nova versão adaptada para servidores web e provedores de hospedagem. ✔️
 <hr>
 Resolver o bug relacionado à sessão já aberta no arquivo cabeçalho.php. ✔️
 <hr>
-<h4> para implementar futuramente </h4>
+<h4> ------------ Implementação futuras ------------</h4>
 Ajustar a página de pesquisa para exibir a navegação entre páginas (1, 2, 3, etc.) caso haja muitos produtos ❌
 <hr>
 Ajustar o Scrollspy da aba home.php. ❌
