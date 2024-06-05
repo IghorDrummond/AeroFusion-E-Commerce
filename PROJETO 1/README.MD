@@ -22,6 +22,8 @@ Ajustar o Scrollspy da aba home.php. ❌
 Adicionar a implementação de um sistema de pagamento seguro, com mecanismos de prevenção a fraudes. ❌
 <hr>
 Resolver o problema de tratamento de senha durante o cadastro, removendo quebras de linha. ❌
-<hr>
+<hr>]
+---------------------------------------------------------------------------------------------------------------
 adicionar imagens ao passar do mouse em cima do produtos ❌
 ⚠️ *Os fontes foram produzidos desde da data 15/04/2024 mas apenas registro de atualização na data 04/06/2024* ⚠️
+---------------------------------------------------------------------------------------------------------------
