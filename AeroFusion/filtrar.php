@@ -21,7 +21,7 @@
 	//----------Funções
 	function catalogaProdutos($Produtos){
 		if(isset($Produtos[0]['Produto'])){
-			foreach ($Produtos as $Indice => $Prod) {
+			foreach ($Produtos as $Prod) {
 ?>
 				<div class="produto" onclick="maisDetalhes(<?php echo($Prod['IdProd']) ?>)">
 					<img src="img/<?php echo($Prod['img1']); ?>" class="img-fluid">

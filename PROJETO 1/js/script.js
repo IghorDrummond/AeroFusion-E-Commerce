@@ -347,6 +347,7 @@ Data: 29/05/2024
 Programador: Ighor Drummond
 */
 function pesquisaProduto(){  
+    event.preventDefault();
     window.location.href = 'pesquisa.php?Pesq='+ encodeURIComponent((Pesquisa.value).toUpperCase());
 }
 /*
