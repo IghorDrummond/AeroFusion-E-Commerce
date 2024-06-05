@@ -14,6 +14,7 @@ resolver bug na pagina de pesquisar produto ao qual ao fazer um filtro, não ret
 <hr>
 Resolver o bug relacionado à sessão já aberta no arquivo cabeçalho.php. ✔️
 <hr>
+<h4> para implementar futuramente </h4>
 Ajustar a página de pesquisa para exibir a navegação entre páginas (1, 2, 3, etc.) caso haja muitos produtos ❌
 <hr>
 Ajustar o Scrollspy da aba home.php. ❌
