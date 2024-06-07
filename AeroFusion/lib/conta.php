@@ -254,6 +254,9 @@
 					if(empty($this->Email) or empty($this->Senha) or empty($this->ConfirmeSenha) or empty($this->Genero) or empty($this->Celular)){
 						throw new Error("Error Processing Request", 'Não foi passado os parametros corretos!');
 					}
+					//Retira quebra de linha na senha
+					$this->Senha = preg_replace('/\r\n|\r|\n/', '', $this->Senha);
+					$this->ConfirmeSenha = preg_replace('/\r\n|\r|\n/', '', $this->ConfirmeSenha);
 
 					$this->conexao = new \IniciaServer();//Inicia classe responsavel para construção
 					$this->conexao = $this->conexao->conexao();//Passa toda operação de conexão para variavel
