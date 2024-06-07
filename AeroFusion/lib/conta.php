@@ -891,6 +891,8 @@
 			)
 			{
 				try{
+					//Retira quebra de linha na senha
+					$this->Senha = preg_replace('/\r\n|\r|\n/', '', $this->Senha);
 					//Inicia conexão
 					$this->conexao  = new \IniciaServer();
 					$this->conexao = $this->conexao->conexao();
