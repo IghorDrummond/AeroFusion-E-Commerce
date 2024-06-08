@@ -1,0 +1,130 @@
+a{
+	cursor: pointer;
+}
+main{
+	background: url('../img/fundo.png');
+}
+section .row div{
+	height: 60vh;
+}
+/*Campo Primario */
+#area_dados div{
+	-webkit-animation: 2s surgir;
+	    animation: 2s surgir;
+}
+
+/* Campo Secundario */
+#tela_info{
+	-webkit-backdrop-filter: blur(5px);
+	        backdrop-filter: blur(5px);	
+}
+
+/* Corpo Cadastrar */
+pre{
+	background-color: transparent;
+	overflow: auto;
+	white-space: pre-line !important;	
+	font-family: inherit;
+	-webkit-animation: 1s surgir;
+	        animation: 1s surgir;
+}
+.col-md-6:ntd-child(1){
+	-webkit-backdrop-filter: blur(5px);
+	        backdrop-filter: blur(5px);
+}
+pre input[type="checkbox"]{
+	accent-color: green;
+	margin-right: 15px;
+}
+
+
+/* Animações */
+@-webkit-keyframes transicionar{
+	0%{
+		-webkit-transform: translateX(0px);
+		        transform: translateX(0px);
+	}100%{
+		-webkit-transform: translateX(-100%);
+		        transform: translateX(-100%);
+	}
+}
+
+@keyframes transicionar{
+	0%{
+		-webkit-transform: translateX(0%);
+		        transform: translateX(0%);
+	}100%{
+		-webkit-transform: translateX(-100%);
+		        transform: translateX(-100%);
+	}
+}
+
+@-webkit-keyframes transicionarinverso{
+	0%{
+		-webkit-transform: translateX(0px);
+		        transform: translateX(0px);
+	}100%{
+		-webkit-transform: translateX(100%);
+		        transform: translateX(100%);
+	}
+}
+
+@keyframes transicionarinverso{
+	0%{
+		-webkit-transform: translateX(0%);
+		        transform: translateX(0%);
+	}100%{
+		-webkit-transform: translateX(100%);
+		        transform: translateX(100%);
+	}
+}
+
+@-webkit-keyframes s6 { 
+	100%{-webkit-transform: rotate(1turn);transform: rotate(1turn)}
+  }
+
+@keyframes s6 { 
+	100%{
+		-webkit-transform: rotate(1turn);transform: rotate(1turn)
+	}
+}
+
+@-webkit-keyframes transicionarVoltar{
+	0%{
+		-webkit-transform: translateX(-100%);
+		        transform: translateX(-100%);
+	}100%{
+		-webkit-transform: translateX(0%);
+		        transform: translateX(0%);
+	}
+}
+
+@keyframes transicionarVoltar{
+	0%{
+		-webkit-transform: translateX(-100%);
+		        transform: translateX(-100%);
+	}100%{
+		-webkit-transform: translateX(0%);
+		        transform: translateX(0%);
+	}
+}
+
+@-webkit-keyframes transicionarinversoVoltar{
+	0%{
+		-webkit-transform: translateX(100%);
+		        transform: translateX(100%);
+	}100%{
+		-webkit-transform: translateX(0%);
+		        transform: translateX(0%);
+	}	
+}
+
+@keyframes transicionarinversoVoltar{
+	0%{
+		-webkit-transform: translateX(100%);
+		        transform: translateX(100%);
+	}100%{
+		-webkit-transform: translateX(0%);
+		        transform: translateX(0%);
+	}	
+}
