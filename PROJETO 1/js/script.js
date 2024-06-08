@@ -11,17 +11,20 @@ var caixaPesq = document.getElementById('caixaPesq');
 var aviso = document.getElementsByClassName('alertas');
 var aviso_texto = document.getElementsByClassName('alerta_texto');
 var quantCarrinho = document.getElementsByClassName('badge-primary');
+var produtos = document?.getElementsByClassName('produto');
 //Numerico
 var tamAnt = 0;
 var Tam = 0;
 var scrollHeight = 0;
+var PosicImg = 0;
 //Array
 var produtosSelecionados = [];
 var antValoresInput = [];
+var Intervalos = new Array(produtos.length).fill(null);
 // Objeto
 var ajax = null;
 // Função Anônima para abrir a caixa de diálogo
-var abreConfig = function() {
+var abreConfig = function () {
     // Obtenha a posição da imagem
     let rect = img.getBoundingClientRect();
     let dialogWidth = configuracao.offsetWidth;
@@ -43,10 +46,10 @@ var abrePesq = () => {
     caixaPesq.style.visibility = 'visible'; // Altera visibilidade
     caixaPesq.show();
 };
-var buscarProduto = ()=>{
-    if(Pesquisa.value != ''){
-        $("#caixaPesq").load('script/caixaPesquisa.php?Produto=' + encodeURIComponent(Pesquisa.value), ()=>{
-            if(tamAnt != caixaPesq.offsetWidth){
+var buscarProduto = () => {
+    if (Pesquisa.value != '') {
+        $("#caixaPesq").load('script/caixaPesquisa.php?Produto=' + encodeURIComponent(Pesquisa.value), () => {
+            if (tamAnt != caixaPesq.offsetWidth) {
                 abrePesq();
             }
         });
@@ -59,7 +62,7 @@ if (img) {
 }
 //Configura a barra de pesquisa
 Pesquisa.onfocus = abrePesq;//Para abrir a pesquisa
-Pesquisa.onchange = ()=>{
+Pesquisa.onchange = () => {
     fecharPesq();
 }
 Pesquisa.onkeyup = buscarProduto;
@@ -70,7 +73,7 @@ Pesquisa.onkeyup = buscarProduto;
 * Programador(a): Ighor Drummond
 * Data: 23/05/2024
 */
-window.addEventListener('click', function(event) {
+window.addEventListener('click', function (event) {
     if (configuracao && !configuracao.contains(event.target) && event.target !== img) {
         fecharConfig();
     }
@@ -87,11 +90,11 @@ window.addEventListener('click', function(event) {
 * Programador(a): Ighor Drummond
 * Data: 01/06/2024
 */
-window.addEventListener('DOMContentLoaded', ()=>{
+window.addEventListener('DOMContentLoaded', () => {
     //Inicia os valores
     $('.badge-primary').load('script/carrinho.php?Opc=3');
     //Inicia o intervalo para atualização a cada 1.5 segundos
-    var Z = setInterval(()=>{
+    var Z = setInterval(() => {
         $('.badge-primary').load('script/carrinho.php?Opc=3');
         /*
         $('#carrinho').load('script/carrinho.php?Opc=1', ()=>{
@@ -109,7 +112,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
 window.addEventListener('resize', reajusta);
 
 if (configuracao) {
-    configuracao.addEventListener('blur', function() {
+    configuracao.addEventListener('blur', function () {
         configuracao.style.visibility = 'hidden';
         configuracao.close();
     });
@@ -125,22 +128,22 @@ if (carrinho) {
 * Programador(a): Ighor Drummond
 * Data: 04/06/2024
 */
-document.querySelectorAll('input[name="CarProd"]').forEach(checkbox =>{
-    checkbox.addEventListener('change', (event)=>{
+document.querySelectorAll('input[name="CarProd"]').forEach(checkbox => {
+    checkbox.addEventListener('change', (event) => {
         let valor = event.target.value;
 
         //verifica se o input que foi selecionado o produto ainda existe no carrinho
-        if(document.querySelectorAll('input[name="CarProd"][value="$value"]')){
+        if (document.querySelectorAll('input[name="CarProd"][value="$value"]')) {
             //Valida se há inputs com o checked, ai salva valores
-            if(event.target.checked){
+            if (event.target.checked) {
                 produtosSelecionados.push(event.target.value);
-            }else{
+            } else {
                 //valida se há algum valor que foi retirado o check para deletar do array
                 produtosSelecionados = produtosSelecionados.filter(item => item !== event.target.value);
             }
-        }else{
+        } else {
             //remove valor do input caso o mesmo não existir mais no carrinho
-           produtosSelecionados = produtosSelecionados.filter(item => item !== event.target.value);
+            produtosSelecionados = produtosSelecionados.filter(item => item !== event.target.value);
         }
 
         console.log(produtosSelecionados);
@@ -154,7 +157,7 @@ Descrição: Responsavel por ligar o alerta na página
 Data: 19/05/2024
 Programador: Ighor Drummond
 */
-function alerta(texto, tipoAlerta){
+function alerta(texto, tipoAlerta) {
     aviso[tipoAlerta].classList.remove('d-none');
     aviso[tipoAlerta].classList.add('d-block');
     aviso_texto[tipoAlerta].innerText = texto;
@@ -165,7 +168,7 @@ Descrição: Responsavel por desligar o alerta da página
 Data: 19/05/2024
 Programador: Ighor Drummond
 */
-function fecharAlerta(alerta){
+function fecharAlerta(alerta) {
     aviso[alerta].classList.remove('d-block');
     aviso[alerta].classList.add('d-none');
 }
@@ -290,7 +293,7 @@ function fecharPesq() {
 * Programador(a): Ighor Drummond
 * Data: 26/05/2024
 */
-function abreCarrinho(carShop){
+function abreCarrinho(carShop) {
     //Carrega dados do carrinho
     $('#carrinho').load('script/carrinho.php?Opc=1');
     // Obtenha a posição da imagem
@@ -307,19 +310,19 @@ Descrição: Responsavel por ligar e desligar tela de carregamento
 Data: 19/05/2024
 Programador: Ighor Drummond
 */
-function telaCarregamento(lFecha){
-    if(lFecha){
+function telaCarregamento(lFecha) {
+    if (lFecha) {
         carregamento.classList.remove('d-none');
         carregamento.classList.add('d-flex');
     }
-    else{
+    else {
         carregamento.style.animation = '1s sumir';
-        var Z = setTimeout(()=>{
+        var Z = setTimeout(() => {
             carregamento.classList.remove('d-flex');
             carregamento.classList.add('d-none');
             carregamento.style.animation = '1s surgir';
             clearTimeout(Z);
-        },1000);
+        }, 1000);
     }
 }
 /*
@@ -328,7 +331,7 @@ Descrição: Encaminha o usuário para página de produtos
 Data: 28/05/2024
 Programador: Ighor Drummond
 */
-function maisDetalhes(NumProd){  
+function maisDetalhes(NumProd) {
     window.location.href = 'produto.php?Prod=' + encodeURIComponent(NumProd.toString());
 }
 /*
@@ -337,8 +340,8 @@ Descrição: Redireciona para página de pesquisa com a categoria selecionada
 Data: 29/05/2024
 Programador: Ighor Drummond
 */
-function selecionaCategoria(Categoria){  
-    window.location.href = 'pesquisa.php?categoria='+ encodeURIComponent(Categoria);
+function selecionaCategoria(Categoria) {
+    window.location.href = 'pesquisa.php?categoria=' + encodeURIComponent(Categoria);
 }
 /*
 Função: pesquisaProduto()
@@ -346,9 +349,9 @@ Descrição: Redireciona para página de pesquisa com o produto a ser pesquisado
 Data: 29/05/2024
 Programador: Ighor Drummond
 */
-function pesquisaProduto(){  
+function pesquisaProduto() {
     event.preventDefault();
-    window.location.href = 'pesquisa.php?Pesq='+ encodeURIComponent((Pesquisa.value).toUpperCase());
+    window.location.href = 'pesquisa.php?Pesq=' + encodeURIComponent((Pesquisa.value).toUpperCase());
 }
 /*
 Função: guardaScroll()
@@ -356,7 +359,7 @@ Descrição: Guarda Posição do Scroll para fixar logo depois
 Data: 01/06/2024
 Programador: Ighor Drummond
 */
-function guardaScroll(){
+function guardaScroll() {
     scrollHeight = carrinho.scrollHeight;
 }
 /*
@@ -365,7 +368,7 @@ Descrição: deleta o produto no carrinho
 Data: 03/06/2024
 Programador: Ighor Drummond
 */
-function deletaItem(Prod){
+function deletaItem(Prod) {
     telaCarregamento(true);
     // Inicia a requisição
     ajax = new XMLHttpRequest();
@@ -377,8 +380,8 @@ function deletaItem(Prod){
         if (ajax.readyState === 4) {
             if (ajax.status < 400) {
                 let ret = parseInt(ajax.responseText);
-                if(ret > 0){
-                    $('#carrinho').load('script/carrinho.php?Opc=1', ()=>{
+                if (ret > 0) {
+                    $('#carrinho').load('script/carrinho.php?Opc=1', () => {
                         selecionarProduto();//Atualiza dados para remoção do item ao carrinho
                     });
                 }
@@ -396,29 +399,29 @@ Descrição: cria um novo pedido com os produtos selecionados dentro do carrinho
 Data: 04/06/2024
 Programador: Ighor Drummond
 */
-function selecionarProduto(){
+function selecionarProduto() {
     let checkbox = document.querySelectorAll('input[name="CarProd"]');
     let auxAnt = [];
 
-    checkbox.forEach((check, indice) =>{
+    checkbox.forEach((check, indice) => {
         //verifique os inputs com check
-        if(check.checked){
-            if(!produtosSelecionados.includes(check.value)){
+        if (check.checked) {
+            if (!produtosSelecionados.includes(check.value)) {
                 produtosSelecionados.push(check.value);
             }
-        }else{
+        } else {
             //valida se há algum valor que foi retirado o check para deletar do array
             produtosSelecionados = produtosSelecionados.filter(item => item !== check.value);
-        } 
-        auxAnt.push(check.value);  
+        }
+        auxAnt.push(check.value);
     });
 
     //Remove valores ao qual os inputs não existem mais
-    antValoresInput.forEach(valor =>{
+    antValoresInput.forEach(valor => {
         //valida se o input com o valor anterior não existe mais
-        if(document.querySelectorAll('input[name="CarProd"][value="'+ valor + '"]').length === 0){
+        if (document.querySelectorAll('input[name="CarProd"][value="' + valor + '"]').length === 0) {
             //se caso não existir mais, valida se esse valor já estava dentro do input
-            if(produtosSelecionados.includes(valor)){
+            if (produtosSelecionados.includes(valor)) {
                 //se caso estiver, ele deleta do nosso produtos selecionados
                 produtosSelecionados = produtosSelecionados.filter(item => item !== valor)
             }
@@ -434,14 +437,59 @@ Descrição: cria um novo pedido com os produtos selecionados dentro do carrinho
 Data: 04/06/2024
 Programador: Ighor Drummond
 */
-function adicionarPedido(){
-    if(produtosSelecionados.length > 0){
+function adicionarPedido() {
+    if (produtosSelecionados.length > 0) {
         let parametros = "";
 
         //Chama um fonte que vai enviar os id dos carrinhos e lá ele abre um pedido com status de aguardando, com prazo de 7 dias
         //após isso, vai retornar o id do pedido aqui para js e levaremos para a página de pagamento, validar o numero do id do pedido se é do cliente para não houver fraudes ou invasão de dados indevidos
-        window.location.href="pagamento.php?";        
-    }else{
+        window.location.href = "pagamento.php?";
+    } else {
         alerta('Selecione um dos produtos do carrinho para continuar', 0);
     }
+}
+
+/*
+Função: passaImagens
+Descrição: passar imagens disponíveis do produto
+Data: 07/06/2024
+Programador: Ighor Drummond
+*/
+function passaImagens(posic) {
+
+    if (produtos) {
+        let imagens = produtos[posic].querySelectorAll('img');
+        let ide = 0;
+        
+        clearInterval(Intervalos[posic]);
+        Intervalos[posic] = setInterval(() => {
+            if (ide === imagens.length - 1) {
+                imagens[ide].classList.add('d-none');
+                ide = 0;
+            } 
+            ide++;
+            console.log(ide);
+            imagens[ide - 1].classList.add('d-none');
+            imagens[ide].classList.remove('d-none');
+        }, 2500);
+    }
+}
+
+/*
+Função: paraImagens
+Descrição: parar a passagem de imagens do produto
+Data: 07/06/2024
+Programador: Ighor Drummond
+*/
+function paraImagens(posic) {
+    let imagens = produtos[posic].querySelectorAll('img');
+    clearInterval(Intervalos[posic]);    
+
+    imagens.forEach((img, idx) => {
+        if (idx === 0) {
+            img.classList.remove('d-none');
+        } else {
+            img.classList.add('d-none');
+        }
+    });
 }
