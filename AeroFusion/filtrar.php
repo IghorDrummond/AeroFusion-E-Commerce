@@ -21,10 +21,25 @@
 	//----------Funções
 	function catalogaProdutos($Produtos){
 		if(isset($Produtos[0]['Produto'])){
-			foreach ($Produtos as $Prod) {
+			foreach ($Produtos as $nCont2 => $Prod) {
 ?>
-				<div class="produto" onclick="maisDetalhes(<?php echo($Prod['IdProd']) ?>)">
+				<div class="produto" 
+					onclick="maisDetalhes(<?php echo($Prod['IdProd']) ?>)"
+					onmouseover="passaImagens(<?php echo $nCont2; ?>)" 
+					onmouseleave="paraImagens(<?php echo $nCont2; ?>)"
+				>
 					<img src="img/<?php echo($Prod['img1']); ?>" class="img-fluid">
+					<?php 
+						for($i = 1; $i <= 5; $i++){
+							if($Prod['img' . strval($i)] === ''){
+								continue;
+							}
+					?>
+					<img src="img/<?php echo($Prod['img' . strval($i)]); ?>" class="img-fluid d-none">
+					<?php
+						}
+					?>
+
 					<h6 class="font-weight-bold"><?php print(ucfirst(strtolower($Prod['Produto']))) ?></h6>
 					<span class="d-inline-block text-info"><?php print(ucfirst($Prod['Categoria'])) ?></span>
 					<span class="d-inline-block w-50 text-right" onclick="favoritar('<?php echo($Prod['Produto']); ?>')">

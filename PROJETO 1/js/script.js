@@ -17,6 +17,7 @@ var tamAnt = 0;
 var Tam = 0;
 var scrollHeight = 0;
 var PosicImg = 0;
+var ide = 0;
 //Array
 var produtosSelecionados = [];
 var antValoresInput = [];
@@ -450,8 +451,8 @@ function adicionarPedido() {
 }
 
 /*
-Função: passaImagens
-Descrição: passar imagens disponíveis do produto
+Função: passaImagens(produto selecionado)
+Descrição: passar imagens disponíveis do produto com o mouse em cima
 Data: 07/06/2024
 Programador: Ighor Drummond
 */
@@ -459,7 +460,7 @@ function passaImagens(posic) {
 
     if (produtos) {
         let imagens = produtos[posic].querySelectorAll('img');
-        let ide = 0;
+        ide = 0;
         
         clearInterval(Intervalos[posic]);
         Intervalos[posic] = setInterval(() => {
@@ -471,13 +472,13 @@ function passaImagens(posic) {
             console.log(ide);
             imagens[ide - 1].classList.add('d-none');
             imagens[ide].classList.remove('d-none');
-        }, 2500);
+        }, 1000);
     }
 }
 
 /*
-Função: paraImagens
-Descrição: parar a passagem de imagens do produto
+Função: paraImagens(produto selecionado)
+Descrição: parar a passagem de imagens do produto ao retirar o mouse do produto
 Data: 07/06/2024
 Programador: Ighor Drummond
 */
