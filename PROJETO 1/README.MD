@@ -1,7 +1,8 @@
 <h4> ------------ Atualização 07/06/2024 ------------</h4>
 Resolver o problema de tratamento de senha durante o cadastro, removendo quebras de linha. ✔️
-<br>
+<hr>
 adicionar imagens ao passar do mouse em cima do produtos ✔️
+<hr>
 <br>
 <h4> ------------ Atualização 05/06/2024 ------------</h4>
 <hr>
