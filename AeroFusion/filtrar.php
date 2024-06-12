@@ -30,7 +30,7 @@
 				>
 					<img src="img/<?php echo($Prod['img1']); ?>" class="img-fluid">
 					<!-- Inicio do carousel -->
-					<div class="d-none carousel slide" id="img-prod" data-ride="carousel" data-interval="1500">
+					<div class="d-none carousel slide" id="img-prod" data-ride="carousel" data-interval="1000" data-pause="false">
 						<div class="carousel-inner">
 							<!-- Imagens do carousel -->
 							<?php 
