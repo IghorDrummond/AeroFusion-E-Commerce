@@ -456,24 +456,13 @@ Descrição: passar imagens disponíveis do produto com o mouse em cima
 Data: 07/06/2024
 Programador: Ighor Drummond
 */
-function passaImagens(posic) {
-
-    if (produtos) {
-        let imagens = produtos[posic].querySelectorAll('img');
-        ide = 0;
-        
-        clearInterval(Intervalos[posic]);
-        Intervalos[posic] = setInterval(() => {
-            if (ide === imagens.length - 1) {
-                imagens[ide].classList.add('d-none');
-                ide = 0;
-            } 
-            ide++;
-            console.log(ide);
-            imagens[ide - 1].classList.add('d-none');
-            imagens[ide].classList.remove('d-none');
-        }, 1000);
-    }
+function passaImagens(event) {
+    //Captura o carousel disponivel no elemento
+    let carousel = event.getElementsByClassName('carousel-img-prod')[0];
+    //Desativa imagem principal do produto
+    event.getElementsByTagName('img')[0].classList.add('d-none');
+    //ativa o carousel
+    event.getElementsByClassName('carousel')[0].classList.remove('d-none');
 }
 
 /*
@@ -482,15 +471,11 @@ Descrição: parar a passagem de imagens do produto ao retirar o mouse do produt
 Data: 07/06/2024
 Programador: Ighor Drummond
 */
-function paraImagens(posic) {
-    let imagens = produtos[posic].querySelectorAll('img');
-    clearInterval(Intervalos[posic]);    
-
-    imagens.forEach((img, idx) => {
-        if (idx === 0) {
-            img.classList.remove('d-none');
-        } else {
-            img.classList.add('d-none');
-        }
-    });
+function paraImagens(event) {
+    //Captura o carousel disponivel no elemento
+    let carousel = event.getElementsByClassName('carousel-img-prod')[0];
+    //ativa imagem principal do produto
+    event.getElementsByTagName('img')[0].classList.remove('d-none');
+    //desativa o carousel
+    event.getElementsByClassName('carousel')[0].classList.add('d-none');
 }
