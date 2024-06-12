@@ -3,8 +3,8 @@
 	session_start();
 
 	if(isset($_SESSION['Login'])){
-		if($_SESSION['Login'] === true){
-			header('location: home.php');
+		if(!$_SESSION['Login']){
+			header('location: index.php');
 		}
 	}else{
 		$_SESSION['Login'] = false;

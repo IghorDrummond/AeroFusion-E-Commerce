@@ -147,10 +147,10 @@ if(isset($_SESSION['Login']) and $_SESSION['Login']){
 									<i class="fa-solid fa-x"></i>
 								</button>
 								<h6><?php echo ($_SESSION['Nome']); ?></h6>
-								<button class="text-warning active" onclick="solicitacao(0)">Pedidos</button>
-								<button class="text-warning" onclick="solicitacao(1)">Favoritos</button>
-								<button class="text-warning" onclick="solicitacao(2)">Protocolos/Garantia</button>
-								<button class="text-warning" onclick="solicitacao(3)">Configuração</button>
+								<a class="text-warning active" href="home.php#pedidos">Pedidos</a>
+								<a class="text-warning" href="home.php#favoritos">Favoritos</a>
+								<a class="text-warning" href="home.php#protocolos">Protocolos/Garantia</a>
+								<a class="text-warning" href="home.php#configuracao">Configuração</a>
 								<button class="text-warning" onclick="solicitacao(4)">
 									Sair <i class="fa-solid fa-right-to-bracket"></i>
 								</button>

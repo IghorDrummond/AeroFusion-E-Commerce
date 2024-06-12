@@ -1,4 +1,4 @@
-<?php require_once ('script/valida_acesso.php'); ?>
+<?php require_once ('script/valida_acesso_home.php'); ?>
 <!DOCTYPE html>
 <html>
 
