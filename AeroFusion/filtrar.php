@@ -25,21 +25,28 @@
 ?>
 				<div class="produto" 
 					onclick="maisDetalhes(<?php echo($Prod['IdProd']) ?>)"
-					onmouseover="passaImagens(<?php echo $nCont2; ?>)" 
-					onmouseleave="paraImagens(<?php echo $nCont2; ?>)"
+					onmouseover="passaImagens(this)" 
+					onmouseleave="paraImagens(this)"
 				>
 					<img src="img/<?php echo($Prod['img1']); ?>" class="img-fluid">
-					<?php 
-						for($i = 1; $i <= 5; $i++){
-							if($Prod['img' . strval($i)] === ''){
-								continue;
-							}
-					?>
-					<img src="img/<?php echo($Prod['img' . strval($i)]); ?>" class="img-fluid d-none">
-					<?php
-						}
-					?>
-
+					<!-- Inicio do carousel -->
+					<div class="d-none carousel slide" id="img-prod" data-ride="carousel">
+						<div class="carousel-inner">
+							<!-- Imagens do carousel -->
+							<?php 
+								for($i = 1; $i <= 5; $i++){
+									if($Prod['img' . strval($i)] === ''){
+										continue;
+									}
+							?>	
+							<div class="carousel-item <?php print($i === 2 ? "active" : "") ?>">
+								<img src="img/<?php echo($Prod['img' . strval($i)]); ?>" class="d-block w-100 img-fluid">
+							</div>
+							<?php
+								}
+							?>
+						</div>
+					</div>
 					<h6 class="font-weight-bold"><?php print(ucfirst(strtolower($Prod['Produto']))) ?></h6>
 					<span class="d-inline-block text-info"><?php print(ucfirst($Prod['Categoria'])) ?></span>
 					<span class="d-inline-block w-50 text-right" onclick="favoritar('<?php echo($Prod['Produto']); ?>')">

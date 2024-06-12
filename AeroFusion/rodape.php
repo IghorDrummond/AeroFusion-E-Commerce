@@ -41,7 +41,7 @@
 				</div>
 			</div>
 		</div>
-		<a href="https://github.com/IghorDrummond">
+		<a href="https://ighordrummond.github.io/PortFolio/">
 			<h6 class="text-center pt-5 link_rodape">Desenvolvido por Ighor Drummond</h6>
 		</a>
 	</footer>

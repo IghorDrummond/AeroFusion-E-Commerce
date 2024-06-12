@@ -457,8 +457,6 @@ Data: 07/06/2024
 Programador: Ighor Drummond
 */
 function passaImagens(event) {
-    //Captura o carousel disponivel no elemento
-    let carousel = event.getElementsByClassName('carousel-img-prod')[0];
     //Desativa imagem principal do produto
     event.getElementsByTagName('img')[0].classList.add('d-none');
     //ativa o carousel
@@ -472,10 +470,8 @@ Data: 07/06/2024
 Programador: Ighor Drummond
 */
 function paraImagens(event) {
-    //Captura o carousel disponivel no elemento
-    let carousel = event.getElementsByClassName('carousel-img-prod')[0];
-    //ativa imagem principal do produto
+    //Ativa imagem principal do produto
     event.getElementsByTagName('img')[0].classList.remove('d-none');
-    //desativa o carousel
+    //Desativa o carousel
     event.getElementsByClassName('carousel')[0].classList.add('d-none');
 }

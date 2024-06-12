@@ -35,7 +35,7 @@
 			<img src="img/<?php echo($Produtos[$nCont2]['img1']); ?>" class="img-fluid">
 
 			<!-- Inicio do carousel -->
-			<div class="d-none carousel slide p-2 bg-dark" id="img-prod" data-ride="carousel">
+			<div class="d-none carousel slide" id="img-prod" data-ride="carousel">
 				<div class="carousel-inner">
 					<!-- Imagens do carousel -->
 					<?php 
@@ -44,7 +44,7 @@
 								continue;
 							}
 					?>	
-					<div class="carousel-item">
+					<div class="carousel-item <?php print($i === 2 ? "active" : "") ?>">
 						<img src="img/<?php echo($Produtos[$nCont2]['img' . strval($i)]); ?>" class="d-block w-100 img-fluid">
 					</div>
 					<?php
