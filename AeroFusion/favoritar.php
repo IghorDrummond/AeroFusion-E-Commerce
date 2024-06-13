@@ -19,5 +19,7 @@
         $Favoritos = new Favoritos(Email: $_SESSION['Email']);
         $Param = $Opc === '1' ? 1 : 2;//Valida se é para deletar ou adicionar
         $Favoritos->campoFavorito($Prod, $Param); 
+    }else{
+        echo 'LOGIN';
     }
 ?>

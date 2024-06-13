@@ -503,16 +503,21 @@ function favorito(event, Prod){
     ajax.onreadystatechange = ()=>{
         if(ajax.readyState === 4){
             if(ajax.status < 400){
-                //Ajusta a estrela
-                switch(Produto.Estado){
-                    case 0:
-                        estrela.classList.remove('fa-solid');
-                        estrela.classList.add('fa-regular');
-                        break;
-                    case 1:
-                        estrela.classList.remove('fa-regular');
-                        estrela.classList.add('fa-solid');                            
-                        break;
+
+                if(ajax.responseText.toString() === 'LOGIN'){
+                    window.location.href="login.php";
+                }else{
+                    //Ajusta a estrela
+                    switch(Produto.Estado){
+                        case 0:
+                            estrela.classList.remove('fa-solid');
+                            estrela.classList.add('fa-regular');
+                            break;
+                        case 1:
+                            estrela.classList.remove('fa-regular');
+                            estrela.classList.add('fa-solid');                            
+                            break;
+                    }
                 }
             }else{
                 window.location.href = 'error.php?Error=' + ajax.status.toString();

@@ -71,6 +71,8 @@
 						}else{
 							echo('<i class="fa-regular fa-star"></i>');
 						}
+					}else{
+						echo('<i class="fa-regular fa-star"></i>');
 					}
 				?>
 		</span>
