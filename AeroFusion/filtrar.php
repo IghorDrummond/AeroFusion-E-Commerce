@@ -74,52 +74,6 @@
 				?>
 		</span>
 		<span class="d-block mt-1">R$ <?php echo(strval($Prod['Preco'])) ?></span>
-	</div>	<div 
-		class="produto" 
-		onmouseover="passaImagens(this)" 
-		onmouseleave="paraImagens(this)"
-	>
-		<div
-			onclick="maisDetalhes(<?php echo(strval($Prod['IdProd'])) ?>)"
-		>
-			<img src="img/<?php echo($Prod['img1']); ?>" class="img-fluid">
-
-			<!-- Inicio do carousel -->
-			<div class="d-none carousel slide" id="img-prod" data-ride="carousel" data-interval="1000" data-pause="false">
-				<div class="carousel-inner">
-					<!-- Imagens do carousel -->
-					<?php 
-						for($i = 1; $i <= 5; $i++){
-							if($Prod['img' . strval($i)] === ''){
-								continue;
-							}
-					?>	
-					<div class="carousel-item <?php print($i === 2 ? "active" : "") ?>">
-						<img src="img/<?php echo($Prod['img' . strval($i)]); ?>" class="d-block w-100 img-fluid">
-					</div>
-					<?php
-						}
-					?>
-				</div>
-			</div>
-		</div>
-		<h6 class="font-weight-bold"><?php print(ucfirst(strtolower($Prod['Produto']))) ?></h6>
-		<span class="d-inline-block text-info"><?php print(ucfirst($Prod['Categoria'])) ?></span>
-		<span class="d-inline-block w-50 text-right" onclick="favorito(this, <?php echo(strval($Prod['IdProd'])) ?> )">
-				<!-- Valida se usuário está logado -->
-				<?php
-					if(!is_null($Favoritos)){
-						$Ret = $Favoritos->retornaValores($Prod['IdProd']);
-						//Valida se usuário tem o produto favoritado
-						if($Ret){
-							echo('<i class="fa-solid fa-star"></i>');
-						}else{
-							echo('<i class="fa-regular fa-star"></i>');
-						}
-					}
-				?>
-		</span>
-		<span class="d-block mt-1">R$ <?php echo(strval($Prod['Preco'])) ?></span>
 	</div>
 <?php
 			}
