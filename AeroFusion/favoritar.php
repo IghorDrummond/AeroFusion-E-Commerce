@@ -2,12 +2,12 @@
     //Inicia servidor
     session_start();
     //Bibliotecas
-    require_once('lib/produto.php');
+    require_once('lib/produtos.php');
     use Produto\Favoritos;
     //Declaração de variaveis
     //String
-    $Prod = $_POST['Produto'];
-    $Opc = $_POST['Opc'];
+    $Prod = $_GET['Produto'];
+    $Opc = $_GET['Opc'];
     //Objetos
     $Favoritos = null;
 
@@ -18,10 +18,10 @@
         switch($Opc){
             case '1': 
                 //Adiciona ao favoritos
-                $Favoritos->adicionar($Prod);
+                $Favoritos->campoFavorito($Prod, 1);
                 break;
             case '0':   
-                $Favoritos->remover($Prod);
+                $Favoritos->campoFavorito($Prod, 2);
                 //Retira favorito
                 break;
         }

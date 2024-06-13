@@ -380,12 +380,12 @@
                 }
             }
             /*
-            *Metodo: adicionar(Id do Produto) 
-            *Descrição: Responsavel por adicionar produto aos favoritos
+            *Metodo: campoFavorito(Id do Produto) 
+            *Descrição: Responsavel por adicionar ou remover produto aos favoritos
             *Data: 13/06/2024
             *Programador(a): Ighor Drummond
             */
-            public function adicionar($Prod){
+            public function campoFavorito($Prod, $Opc){
                 $this->IdProd = $Prod;//Passa o Id do Produto
                 $Ret = false;
                 //Monta query para retorna o id do cliente
@@ -394,15 +394,28 @@
                     //Retorna o Id do cliente
                     $this->stmt = $this->conexao->query($this->query);
                     $this->stmt = $this->stmt->fetchAll(\PDO::FETCH_ASSOC);
+                    
+                    //Caso for para inserir, ele valida se já existe o produto nos favoritos
+                    if($Opc === 1){
+                        //Monta Query para validar se já existe produto adicionado ao favoritos
+                        $this->montaQuery(0);
+                        $this->stmt = $this->conexao->query($this->query);
+                        $this->stmt->fetchAll(\PDO::FETCH_ASSOC);  
+                          
+                        if(isset($this->stmt[0]['id_fav'])){
+                            return true;
+                        }
+                    }
                     //Guarda o id do usuário no retorno
                     if(isset($this->stmt[0]['id'])){
                         $this->IdCli = $this->stmt[0]['id'];
-                        //Monta query para inserir o favorito do usuário
-                        $this->montaQuery(1);
+                        //Monta query para inserir ou remover produto do favoritos
+                        $this->montaQuery($Opc);
                         //Adiciona aos favoritos
                         $this->conexao->beginTransaction();
                         $this->conexao->exec($this->query);
                         $this->conexao->commit();
+                        $Ret = true;
                     }
                 }catch(\PDOException $e){
                     echo $e->getMessage();
@@ -451,7 +464,7 @@
                         FROM 
                             cliente
                         WHERE 
-                            email = $this->Email;
+                            email = '$this->Email';
                     ";
                 }
             }

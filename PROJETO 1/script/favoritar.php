@@ -1,5 +1,5 @@
 <?php
-	require_once('../AeroFusion/favoritar.php');
+	require_once('../../AeroFusion/favoritar.php');
     /*
         Aviso aos que tentam invadir ou hackear este sistema:
         
