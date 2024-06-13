@@ -475,3 +475,24 @@ function paraImagens(event) {
     //Desativa o carousel
     event.getElementsByClassName('carousel')[0].classList.add('d-none');
 }
+
+/*
+Função: favorito(Estrela favorito, Id do Produto)
+Descrição: Favorita ou retira o favorito do produto selecionado
+Data: 13/06/2024
+Programador: Ighor Drummond
+*/
+function favorito(event, Prod){
+    //Declaração de variavel
+    let Produto = [
+        IdProd = Prod,
+        Estado = 0
+    ];
+    let estrela = event.getElementsByClassName('fa-star')[0];
+    
+    //Valida o estado do favorito
+    if(estrela.classList.contains('fa-regular')){
+        Produto.Estado = 1;
+    }
+
+}

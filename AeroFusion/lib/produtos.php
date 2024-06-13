@@ -2,6 +2,7 @@
 
     namespace Produto{
         require_once('conexao.php');
+
         interface ProdutoInterface{
             public function retornaValores();
         }
@@ -108,6 +109,11 @@
                     $query .= PHP_EOL . "prod.id_prod " . ($this->Data === 'Recente' ? 'DESC' : 'ASC'); 
                 }
 
+                //Adiciona limite de retorno dos produtos
+                $query .= PHP_EOL . "
+                    LIMIT
+                        12
+                ";
                 return $query;
             }
         }   
@@ -318,6 +324,77 @@
                         tamanho
                     WHERE
                         id_tam in($InQuery)
+                ";
+            }
+        }
+
+        /*
+        *Classes: Favoritos()
+        *Descrição: Valida se o produto já está favoritado
+        *Data: 13/06/2024
+        *Programador(a): Ighor Drummond
+        */
+        class Favoritos{
+            //Atributos
+            private $conexao = null;
+            private $stmt = [];
+            private $query = null;
+            private $IdProd = null;
+
+            //Construtor
+            function __construct(public $Email = "")
+            {
+                try{
+                    //Liga a conexão com o Banco de Dados
+                    $this->conexao = new \IniciaServer();
+                    $this->conexao = $this->conexao->conexao();
+                }catch(\PDOException $e){
+                    echo $e->getMessage();
+                }
+            }
+
+            //Métodos
+            /*
+            *Metodo: retornaValores()
+            *Descrição: Retorna valores da pesquisa da query
+            *Data: 13/06/2024
+            *Programador(a): Ighor Drummond
+            */
+            public function retornaValores($Prod){
+                $this->IdProd = $Prod;
+                //Monta query pesquisando o produto usando usuário logado
+                $this->montaQuery();
+
+                try{
+                    $this->stmt = $this->conexao->query($this->query);
+                    $this->stmt = $this->stmt->fetchAll(\PDO::FETCH_ASSOC);
+                    //Valida se existe o produto favoritado no banco de dados
+                    if(isset($this->stmt[0]['id_cliente'])){
+                        return true;
+                    }else{
+                        return false;
+                    }
+                }catch(\PDOException $e){
+                    echo $e->getMessage();
+                }
+            }
+            /*
+            *Metodo: montaQuery()
+            *Descrição: Retorna por montar a query
+            *Data: 13/06/2024
+            *Programador(a): Ighor Drummond
+            */
+            protected function montaQuery(){
+                $this->query = "
+                    SELECT 
+                        *
+                    FROM 
+                        favoritos as fav
+                    INNER JOIN
+                        cliente as cli ON cli.id = fav.id_cliente
+                    WHERE
+                        cli.email = '$this->Email'
+                        AND id_prod = $this->IdProd 
                 ";
             }
         }
