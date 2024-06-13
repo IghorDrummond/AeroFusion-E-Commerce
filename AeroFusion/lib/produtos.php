@@ -388,24 +388,23 @@
             public function campoFavorito($Prod, $Opc){
                 $this->IdProd = $Prod;//Passa o Id do Produto
                 $Ret = false;
-                //Monta query para retorna o id do cliente
-                $this->montaQuery(3);
+                
                 try{             
-                    //Retorna o Id do cliente
-                    $this->stmt = $this->conexao->query($this->query);
-                    $this->stmt = $this->stmt->fetchAll(\PDO::FETCH_ASSOC);
-                    
                     //Caso for para inserir, ele valida se já existe o produto nos favoritos
                     if($Opc === 1){
                         //Monta Query para validar se já existe produto adicionado ao favoritos
                         $this->montaQuery(0);
                         $this->stmt = $this->conexao->query($this->query);
-                        $this->stmt->fetchAll(\PDO::FETCH_ASSOC);  
+                        $this->stmt = $this->stmt->fetchAll(\PDO::FETCH_ASSOC);  
                           
                         if(isset($this->stmt[0]['id_fav'])){
                             return true;
                         }
                     }
+                    //Retorna o Id do cliente
+                    $this->montaQuery(3);//Monta query para retornar o id do cliente
+                    $this->stmt = $this->conexao->query($this->query);
+                    $this->stmt = $this->stmt->fetchAll(\PDO::FETCH_ASSOC);
                     //Guarda o id do usuário no retorno
                     if(isset($this->stmt[0]['id'])){
                         $this->IdCli = $this->stmt[0]['id'];
