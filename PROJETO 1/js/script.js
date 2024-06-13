@@ -498,7 +498,7 @@ function favorito(event, Prod){
     //Atualiza dados após operação 
     ajax = new XMLHttpRequest();
     //Inicia a requisição
-    ajax.open('POST', 'script/favoritar.php?Opc=' + encodeURIComponent(Produto.Estado) + "&Produto=" + encodeURIComponent(Produto.IdProd));
+    ajax.open('GET', 'script/favoritar.php?Opc=' + encodeURIComponent(Produto.Estado) + "&Produto=" + encodeURIComponent(Produto.IdProd));
     //Atualiza os estados da requisição
     ajax.onreadystatechange = ()=>{
         if(ajax.readyState === 4){
@@ -506,12 +506,12 @@ function favorito(event, Prod){
                 //Ajusta a estrela
                 switch(Produto.Estado){
                     case 0:
-                        estrela.classList.remove('fa-regular');
-                        estrela.classList.add('fa-solid');
+                        estrela.classList.remove('fa-solid');
+                        estrela.classList.add('fa-regular');
                         break;
                     case 1:
-                        estrela.classList.remove('fa-solid');
-                        estrela.classList.add('fa-regular');                            
+                        estrela.classList.remove('fa-regular');
+                        estrela.classList.add('fa-solid');                            
                         break;
                 }
             }else{

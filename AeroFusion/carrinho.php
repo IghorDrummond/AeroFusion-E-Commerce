@@ -40,7 +40,7 @@
 			echo('0');
 		}else{
 		echo '
-			<i onclick="fecharCarrinho()" class="fa-solid fa-x w-100 border border-warning rounded text-center"></i>
+			<i onclick="fecharCarrinho()" class="fa-solid fa-x w-100 border border-warning rounded text-center mb-auto"></i>
 			<h6 class="text-center text-warning">Faça um login para adicionar produtos ao carrinho</h6>
 			<a href="login.php" class="btn btn-md btn-primary text-white p-1 rounded">Fazer Login</a>
 			';
@@ -51,7 +51,7 @@
 
 		if(!empty($Produtos)){
 			echo '
-			<i onclick="fecharCarrinho()" class="fa-solid fa-x w-100 border border-warning rounded text-center"></i>
+			<i onclick="fecharCarrinho()" class="fa-solid fa-x w-100 border border-warning rounded text-center mb-auto"></i>
 			<div id="carrinho_produtos" class="mt-1" onscroll="guardaScroll()">';
 			foreach ($Produtos as $Prod) {
 ?>
@@ -81,7 +81,7 @@
 			';
 		}else{
 			echo '
-			<i onclick="fecharCarrinho()" class="fa-solid fa-x w-100 border border-warning rounded text-center"></i>
+			<i onclick="fecharCarrinho()" class="fa-solid fa-x w-100 border border-warning rounded text-center mb-auto"></i>
 			<h1>Não há Produtos</h1>';
 		}
 	}

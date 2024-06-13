@@ -340,6 +340,7 @@
             private $stmt = [];
             private $query = null;
             private $IdProd = null;
+            private $IdCli = null;
 
             //Construtor
             function __construct(public $Email = "")
@@ -363,7 +364,7 @@
             public function retornaValores($Prod){
                 $this->IdProd = $Prod;
                 //Monta query pesquisando o produto usando usuário logado
-                $this->montaQuery();
+                $this->montaQuery(0);
 
                 try{
                     $this->stmt = $this->conexao->query($this->query);
@@ -379,23 +380,80 @@
                 }
             }
             /*
-            *Metodo: montaQuery()
-            *Descrição: Retorna por montar a query
+            *Metodo: adicionar(Id do Produto) 
+            *Descrição: Responsavel por adicionar produto aos favoritos
             *Data: 13/06/2024
             *Programador(a): Ighor Drummond
             */
-            protected function montaQuery(){
-                $this->query = "
-                    SELECT 
-                        *
-                    FROM 
-                        favoritos as fav
-                    INNER JOIN
-                        cliente as cli ON cli.id = fav.id_cliente
-                    WHERE
-                        cli.email = '$this->Email'
+            public function adicionar($Prod){
+                $this->IdProd = $Prod;//Passa o Id do Produto
+                $Ret = false;
+                //Monta query para retorna o id do cliente
+                $this->montaQuery(3);
+                try{             
+                    //Retorna o Id do cliente
+                    $this->stmt = $this->conexao->query($this->query);
+                    $this->stmt = $this->stmt->fetchAll(\PDO::FETCH_ASSOC);
+                    //Guarda o id do usuário no retorno
+                    if(isset($this->stmt[0]['id'])){
+                        $this->IdCli = $this->stmt[0]['id'];
+                        //Monta query para inserir o favorito do usuário
+                        $this->montaQuery(1);
+                        //Adiciona aos favoritos
+                        $this->conexao->beginTransaction();
+                        $this->conexao->exec($this->query);
+                        $this->conexao->commit();
+                    }
+                }catch(\PDOException $e){
+                    echo $e->getMessage();
+                    $Ret = false;
+                    $this->conexao->rollback();
+                }finally{
+                    return true;
+                }
+            }
+            /*
+            *Metodo: montaQuery()
+            *Descrição: Responsavel por montar as querys
+            *Data: 13/06/2024
+            *Programador(a): Ighor Drummond
+            */
+            protected function montaQuery($Opc){
+                if($Opc === 0){
+                    $this->query = "
+                        SELECT 
+                            *
+                        FROM 
+                            favoritos as fav
+                        INNER JOIN
+                            cliente as cli ON cli.id = fav.id_cliente
+                        WHERE
+                            cli.email = '$this->Email'
                         AND id_prod = $this->IdProd 
                 ";
+                }else if($Opc === 1){
+                    $this->query = "
+                        INSERT INTO favoritos(id_prod, id_cliente)
+                        VALUES($this->IdProd, $this->IdCli);
+                    ";
+                }else if($Opc === 2){
+                    $this->query = "
+                        DELETE FROM
+                            favoritos
+                        WHERE
+                            id_prod = $this->IdProd
+                            AND id_cliente = $this->IdCli;
+                    ";
+                }else if($Opc === 3){
+                    $this->query = "
+                        SELECT 
+                            id
+                        FROM 
+                            cliente
+                        WHERE 
+                            email = $this->Email;
+                    ";
+                }
             }
         }
     }
