@@ -40,6 +40,7 @@
 		class="produto" 
 		onmouseover="passaImagens(this)" 
 		onmouseleave="paraImagens(this)"
+		style="cursor: pointer;" 
 	>
 		<div
 			onclick="maisDetalhes(<?php echo(strval($Produtos[$nCont2]['IdProd'])) ?>)"
@@ -64,8 +65,8 @@
 					?>
 				</div>
 			</div>
+			<h6 class="font-weight-bold"><?php print(ucfirst(strtolower($Produtos[$nCont2]['Produto']))) ?></h6>
 		</div>
-		<h6 class="font-weight-bold"><?php print(ucfirst(strtolower($Produtos[$nCont2]['Produto']))) ?></h6>
 		<span class="d-inline-block text-info"><?php print(ucfirst($Produtos[$nCont2]['Categoria'])) ?></span>
 		<span class="d-inline-block w-50 text-right" onclick="favorito(this, <?php echo(strval($Produtos[$nCont2]['IdProd'])) ?> )">
 				<!-- Valida se usuário está logado -->

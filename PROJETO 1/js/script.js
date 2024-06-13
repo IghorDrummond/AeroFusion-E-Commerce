@@ -484,10 +484,10 @@ Programador: Ighor Drummond
 */
 function favorito(event, Prod){
     //Declaração de variavel
-    let Produto = [
-        IdProd = Prod,
-        Estado = 0
-    ];
+    let Produto = {
+        IdProd : Prod,
+        Estado : 0     
+    }
     let estrela = event.getElementsByClassName('fa-star')[0];
     
     //Valida o estado do favorito
@@ -495,4 +495,30 @@ function favorito(event, Prod){
         Produto.Estado = 1;
     }
 
+    //Atualiza dados após operação 
+    ajax = new XMLHttpRequest();
+    //Inicia a requisição
+    ajax.open('POST', 'script/favoritar.php?Opc=' + encodeURIComponent(Produto.Estado) + "&Produto=" + encodeURIComponent(Produto.IdProd));
+    //Atualiza os estados da requisição
+    ajax.onreadystatechange = ()=>{
+        if(ajax.readyState === 4){
+            if(ajax.status < 400){
+                //Ajusta a estrela
+                switch(Produto.Estado){
+                    case 0:
+                        estrela.classList.remove('fa-regular');
+                        estrela.classList.add('fa-solid');
+                        break;
+                    case 1:
+                        estrela.classList.remove('fa-solid');
+                        estrela.classList.add('fa-regular');                            
+                        break;
+                }
+            }else{
+                window.location.href = 'error.php?Error=' + ajax.status.toString();
+            }
+        }
+    }   
+    //Ativa requisição
+    ajax.send()
 }

@@ -239,7 +239,6 @@ dialog:ntd-child(3) div{
     margin: 15px 15px;
     -webkit-box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
             box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
-    cursor: pointer;
 	background-color: white;
 }
 .produto img{
