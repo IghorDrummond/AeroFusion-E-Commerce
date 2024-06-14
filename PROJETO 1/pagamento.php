@@ -3,7 +3,7 @@
 	<head>
 		<?php require_once('script/style.php'); ?>
 		<!-- Estilo da Página -->
-		<link rel="stylesheet" type="text/css" href="css/produto.css">
+		<link rel="stylesheet" type="text/css" href="css/pagamento.css">
 		<!-- Titulo da página -->
 		<title>AeroFusion - Pagamento</title>
 	</head>

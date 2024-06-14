@@ -1,0 +1,32 @@
+main section{
+	-ms-flex-wrap: wrap;
+	    flex-wrap: wrap;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-pack: center;
+	    -ms-flex-pack: center;
+	        justify-content: center;
+	-webkit-box-align: center;
+	    -ms-flex-align: center;
+	        align-items: center;
+	height: auto;
+}
+/* Configura as duas telas dividas */
+article{
+	width: 50%;
+	overflow: auto;
+}
+/*Tela de pagamento*/
+article form{
+	width: 50%;
+}
+
+/* Dispositivos extra small (telefones em modo retrato, com menos de 576px)*/
+@media (max-width: 767.98px) { 
+	article,
+	article form
+	{
+		width: 100%;
+	}
+}

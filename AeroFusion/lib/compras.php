@@ -498,7 +498,7 @@
 						INNER JOIN  
 							imagens_prod as img_prod ON img_prod.id_prod = prod.id_prod
 						WHERE 
-							car.id_prod IN($this->Produtos)
+							car.id_car IN($this->Produtos)
 						  AND cli.email = '$this->Email'
 						  /*
 						HAVING 
