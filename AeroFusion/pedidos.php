@@ -32,14 +32,17 @@
 
 ?>
 	<section>
-		<article class="p-5 bg-warning d-flex flex-column">
+		<article>
 			<?php
 				foreach ($Dados as $Prod) {
 			?>
-			<div class="w-100 rounded bg-white d-flex flex-row justify-content-center">
+			<div class="w-100 rounded d-flex flex-row justify-content-center">
 				<img src="img/<?php echo($Prod['img1']); ?>" align="left"class="rounded border img-fluid">
 				<h6><?php echo($Prod['nome']); ?></h6>
 				<br>
+				//Quantidade
+				//Habilidar se caso estiver fora de estoque
+				//Mostra valor da promoção caso estiver ativada neste produto
 				<h6><?php echo($Prod['total_item']); ?></h6>
 			</div>
 			<?php
