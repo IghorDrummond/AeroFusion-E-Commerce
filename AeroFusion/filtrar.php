@@ -1,4 +1,8 @@
 <?php
+	// Inicia a sessão se ainda não estiver iniciada
+	if (session_status() == PHP_SESSION_NONE) {
+		session_start();
+	}
 	//Bibliotecas
 	require_once('lib/produtos.php');
 	use Produto\Filtrar;
@@ -63,11 +67,13 @@
 		<span class="d-inline-block w-50 text-right" onclick="favorito(this, <?php echo(strval($Prod['IdProd'])) ?> )">
 				<!-- Valida se usuário está logado -->
 				<?php
+					$Ret = false;
+
 					if(!is_null($Favoritos)){
 						$Ret = $Favoritos->retornaValores($Produtos[$nCont2]['IdProd']);
-						//Valida se usuário tem o produto favoritado
-						$Class = $Ret ? 'fa-solid fa-star' : 'fa-regular fa-star';
 					}
+					//Valida se usuário tem o produto favoritado
+					$Class = $Ret ? 'fa-solid fa-star' : 'fa-regular fa-star';
 				?>
 				<i class="<?php echo($Class); ?>"></i>
 		</span>

@@ -71,11 +71,12 @@
 		<span class="d-inline-block w-50 text-right" onclick="favorito(this, <?php echo(strval($Produtos[$nCont2]['IdProd'])) ?> )">
 				<!-- Valida se usuário está logado -->
 				<?php
+					$Ret = false;
 					if(!is_null($Favoritos)){
 						$Ret = $Favoritos->retornaValores($Produtos[$nCont2]['IdProd']);
-						//Valida se usuário tem o produto favoritado
-						$Class = $Ret ? 'fa-solid fa-star' : 'fa-regular fa-star';
 					}
+					//Valida se usuário tem o produto favoritado
+					$Class = $Ret ? 'fa-solid fa-star' : 'fa-regular fa-star';
 				?>
 				<i class="<?php echo($Class); ?>"></i>
 		</span>
