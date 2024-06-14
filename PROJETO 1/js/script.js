@@ -440,15 +440,14 @@ Programador: Ighor Drummond
 */
 function adicionarPedido() {
     if (produtosSelecionados.length > 0) {
+        let parametros = "";
+        //Ativa tela de carregamento
         telaCarregamento(true);
         //Prepara os Produtos para iniciar um pedido
-        let parametros = "";
-        
         for(nCont = 0; nCont <= produtosSelecionados.length -1; nCont++){
-            parametros += ";" + produtosSelecionados[nCont];
+            parametros += "," + produtosSelecionados[nCont];
         }
-        parametros = encodeURIComponent(parametros);
-
+        parametros = encodeURIComponent(parametros.substr(1, parametros.length-1));
         //Chama o construtor de pedidos onde vai validar se cada produto ainda tem o estoque desejado pelo usuário
         ajax = new XMLHttpRequest();
         ajax.open('POST', 'script/pedido.php?Prod=' + parametros);
@@ -466,7 +465,7 @@ function adicionarPedido() {
                 }
             }
         }
-
+        ajax.send();
         //Chama um fonte que vai enviar os id dos carrinhos e lá ele abre um pedido com status de aguardando, com prazo de 7 dias
         //após isso, vai retornar o id do pedido aqui para js e levaremos para a página de pagamento, validar o numero do id do pedido se é do cliente para não houver fraudes ou invasão de dados indevidos
     } else {

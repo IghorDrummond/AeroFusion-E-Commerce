@@ -406,4 +406,70 @@
 			}
 		}
 	}
+
+	namespace Pedido{
+		require_once('conexao.php');
+
+		/*
+		*Classes: solicitaPedido
+		*Descrição: Classe responsavel por criar o pedido para usuário
+		*Data: 14/06/2024
+		*Programador(a): Ighor Drummond
+		*/
+		class solicitaPedido{	
+			//Atributos
+			private $conexao = null;
+			private $stmt = null;
+			private $query = null;
+
+			//Construtor
+			function __construct(
+				public $Email = '',
+				public $Produtos = ''
+			){
+				//Prepara os produtos para valida os estoques
+				$this->Produtos = explode(';', $this->Produtos);
+
+				//Inicia conexão
+				try{
+					$this->conexao = new \IniciaServer();
+					$this->conexao = $this->conexao->conexao();
+				}catch(\PDOException $e){
+					echo $e->getMessage();
+				}
+			}
+
+			//Métodos
+			public function abrePedido(){
+				$this->montaQuery(0);//Monta query para validar se existe estoques
+			}
+			/*
+			*Metodo: montaQuery(Opção)
+			*Descrição: Responsavel por monta as querys
+			*Data: 14/06/2024
+			*Programador(a): Ighor Drummond
+			*/
+			private function montaQuery($Val){
+				if($Val === 0){
+					$this->query = "
+						SELECT 
+							car.id_car,
+						    car.id_prod,
+						    cli.email,
+						    cli.id,
+						    car.quant,
+						    car.data_car,
+						    car.id_tam
+						FROM
+							carrinho as car
+						INNER JOIN
+							cliente as cli ON cli.id = car.id_cliente
+						WHERE 
+							car.id_prod IN($this->Produto)
+						    AND cli.email = '$this->Email'
+					";
+				}
+			}
+		}
+	}
 ?>
