@@ -74,13 +74,10 @@
 					if(!is_null($Favoritos)){
 						$Ret = $Favoritos->retornaValores($Produtos[$nCont2]['IdProd']);
 						//Valida se usuário tem o produto favoritado
-						if($Ret){
-							echo('<i class="fa-solid fa-star"></i>');
-						}else{
-							echo('<i class="fa-regular fa-star"></i>');
-						}
+						$Class = $Ret ? 'fa-solid fa-star' : 'fa-regular fa-star';
 					}
 				?>
+				<i class="<?php echo($Class); ?>"></i>
 		</span>
 		<span class="d-block mt-1">R$ <?php echo(strval($Produtos[$nCont2]['Preco'])) ?></span>
 	</div>

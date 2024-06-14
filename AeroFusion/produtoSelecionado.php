@@ -3,6 +3,7 @@
 	use Produto\AvalicaoProduto;
 	use Produto\Produto;
 	use Produto\Tamanhos;
+	use Produto\Favoritos;
 	//Declaração de variaveis
 	//Numerico
 	$Indicador = 0;
@@ -18,8 +19,13 @@
 	$Favorito = null;
 	$Tamanho = null;
 
+	//Escopo==============
 	$Produto = new Produto($_GET['Prod']);
 	$Produtos = $Produto->retornaValores();
+
+	if(isset($_SESSION['Login']) and $_SESSION['Login']){
+		$Favorito = new Favoritos(Email: $_SESSION['Email']);//Inicia objeto favoritos
+	}
 
 	if($Produtos != false){
 		//Monta avaliação do produto caso houver
@@ -29,13 +35,13 @@
 		$Tamanho = new Tamanhos($Produtos[0]['tamanho']);
 		$Tamanhos = $Tamanho->retornaValores();
 
-		montaProduto($Produtos, $Avaliacoes, $Tamanhos);
+		montaProduto($Produtos, $Avaliacoes, $Tamanhos, $Favorito);
 	}else{
 		faltaProduto();
 	}
 
 	//-------------Funções
-	function montaProduto($Produtos, $Avaliacoes, $Tamanhos){
+	function montaProduto($Produtos, $Avaliacoes, $Tamanhos, $Favorito){
 		$Quant = 1;
 ?>
 			<section class="text-warning">
@@ -97,8 +103,17 @@
 					<input onchange="alteraQuant()" id="quantidade" class="form-control w-25 d-inline border" type="range" min="1" max="<?php echo($Produtos[0]['estoque']); ?>">
 					<div class="d-flex flex-wrap botoes">
 						<button class="border border-warning rounded m-1 p-3 bg-warning text-white font-weight-bold" onclick="comprar(<?php echo($_GET['Prod']) ?>)">Comprar</button>
-						<button class="border border-warning rounded m-1 p-3 bg-warning text-white font-weight-bold" onclick="favoritos(<?php echo($_GET['Prod']) ?>)">Favoritar
-							<i class="fa-regular fa-star"></i>
+						<button class="border border-warning rounded m-1 p-3 bg-warning text-white font-weight-bold" onclick="favorito(this, <?php echo($_GET['Prod']); ?>)">Favoritar
+						<?php
+							$Ret = false;
+
+							if(!is_null($Favorito)){
+								$Ret = $Favorito->retornaValores($_GET['Prod']);
+							}
+							//Valida se usuário tem o produto favoritado
+							$Class = $Ret ? 'fa-solid fa-star' : 'fa-regular fa-star';
+						?>
+							<i class="<?php echo($Class); ?>"></i>
 						</button>
 					</div>
 					<p class="mt-2 border p-1 rounded">
