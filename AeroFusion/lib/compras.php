@@ -427,9 +427,6 @@
 				public $Email = '',
 				public $Produtos = ''
 			){
-				//Prepara os produtos para valida os estoques
-				$this->Produtos = explode(';', $this->Produtos);
-
 				//Inicia conexão
 				try{
 					$this->conexao = new \IniciaServer();
@@ -441,7 +438,31 @@
 
 			//Métodos
 			public function abrePedido(){
-				$this->montaQuery(0);//Monta query para validar se existe estoques
+				$Ret = false;
+				$Total = 0;
+				$Prod = [];
+				try{
+					$this->montaQuery(0);//Monta query para validar se existe estoques
+					//Valida se os produtos selecionados tem disponibilidade
+					$this->stmt = $this->conexao->query($this->query);
+					$this->stmt = $this->stmt->fetchAll(\PDO::FETCH_ASSOC);
+					//Valida se o produtos selecionados tem estoque disponível
+					foreach ($this->stmt as $key => $value) {
+						if($value['disponibilidade'] != 'FALTA ESTOQUE'){
+							array($Prod, $value['id_prod']);//Adiciona produto ao pedido
+							$Total += $value['total_item'];//Soma o total do produto
+						}
+					}
+					
+					if(count($Prod)>0){
+						$this->montaQuery(1);//monta query para abrir pedido
+						
+					}
+				}catch(\PDOException $e){
+					echo $e->getMessage();
+				}finally{
+					return $Ret;
+				}
 			}
 			/*
 			*Metodo: montaQuery(Opção)
@@ -454,19 +475,28 @@
 					$this->query = "
 						SELECT 
 							car.id_car,
-						    car.id_prod,
-						    cli.email,
-						    cli.id,
-						    car.quant,
-						    car.data_car,
-						    car.id_tam
-						FROM
-							carrinho as car
-						INNER JOIN
-							cliente as cli ON cli.id = car.id_cliente
+						    prod.id_prod,
+						    CASE 
+						        WHEN prod.estoque >= car.quant THEN 'SIM'
+						        ELSE 'FALTA ESTOQUE'
+						    END AS disponibilidade,
+						  	FORMAT(CASE
+						        WHEN prod.promocao_ativo = 1 THEN prod.promocao * car.quant
+						        ELSE prod.preco * car.quant
+						    END, 2, 'pt_BR') AS total_item
+						FROM 
+						    carrinho AS car
+						INNER JOIN 
+						    cliente AS cli ON cli.id = car.id_cliente
+						INNER JOIN 
+						    produtos AS prod ON car.id_prod = prod.id_prod
 						WHERE 
-							car.id_prod IN($this->Produto)
-						    AND cli.email = '$this->Email'
+							car.id_prod IN($this->Produtos)
+						  AND cli.email = '$this->Email'
+					";
+				}else if($Val === 1){
+					$this->query = "
+						INSERT INTO pedidos()
 					";
 				}
 			}
