@@ -15,10 +15,11 @@
 
 	switch ($Opc) {
 		case '1':
-			$_SESSION['Produtos'] = $_POST['Prod'];
+			$_SESSION['Produtos'] = $_GET['Prod'];//Guarda os produtos selecionados pelo usuário
 			break;
 		case '2':
-			montaTela();
+			$Pedido = new solicitaPedido(Email: $_SESSION['Email'], Produtos: $_SESSION['Produtos']);
+			montaTela($Pedido->imprimePedido());
 			break;
 	}
 
@@ -26,14 +27,14 @@
 		//Monta tela responsavel por iniciar pedido
 		/*
 		$Endereco = new Endereco($_SESSION['Email']);	
-		$FormPagamento = new FormaPagamento();
+		$FormPagamento = new FormaPagamento();		*/
 		$Pedido = new solicitaPedido(Email: $_SESSION['Email'], Produtos: $_SESSION['Produtos']);
-		*/
+
 ?>
 	<section class="d-flex justify-content-center align-items-center p-1">
 		<article class="p-5 bg-warning border">
 			<?php
-
+			
 			?>
 		</article>
 		<article class="p-5 bg-white d-flex flex-column align-items-center text-warning">

@@ -447,11 +447,10 @@ function adicionarPedido() {
         for(nCont = 0; nCont <= produtosSelecionados.length -1; nCont++){
             parametros += "," + produtosSelecionados[nCont];
         }
-        parametros += "&Opc=1";//Carregar dados do pedidos
         parametros = encodeURIComponent(parametros.substr(1, parametros.length-1));
         //Chama o construtor de pedidos onde vai validar se cada produto ainda tem o estoque desejado pelo usuário
         ajax = new XMLHttpRequest();
-        ajax.open('POST', 'script/pedidos.php?Prod=' + parametros);
+        ajax.open('POST', 'script/pedidos.php?Prod=' + parametros + "&Opc=1");
         ajax.onreadystatechange = ()=>{
             telaCarregamento(false);
             if(ajax.readyState === 4){

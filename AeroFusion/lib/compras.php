@@ -410,7 +410,6 @@
 	namespace Pedido{
 		require_once('conexao.php');
 
-
 		/*
 		*Classes: solicitaPedido
 		*Descrição: Classe responsavel por criar o pedido para usuário
@@ -445,25 +444,13 @@
 			*Programador(a): Ighor Drummond
 			*/
 			public function imprimePedido(){
-				$Ret = false;
-				$Total = 0;
-				$Prod = [];
+				$Ret = null;
+				
 				try{
 					$this->montaQuery();//Monta query para validar se existe estoques
 					//Valida se os produtos selecionados tem disponibilidade
 					$this->stmt = $this->conexao->query($this->query);
-					$this->stmt = $this->stmt->fetchAll(\PDO::FETCH_ASSOC);
-					//Valida se o produtos selecionados tem estoque disponível
-					foreach ($this->stmt as $key => $value) {
-						if($value['disponibilidade'] != 'FALTA ESTOQUE'){
-							array($Prod, $value['id_prod']);//Adiciona produto ao pedido
-							$Total += $value['total_item'];//Soma o total do produto
-						}
-					}
-
-					if(count($Prod)>0){	
-											
-					}
+					$Ret = $this->stmt->fetchAll(\PDO::FETCH_ASSOC);
 				}catch(\PDOException $e){
 					echo $e->getMessage();
 				}finally{
