@@ -410,6 +410,7 @@
 	namespace Pedido{
 		require_once('conexao.php');
 
+
 		/*
 		*Classes: solicitaPedido
 		*Descrição: Classe responsavel por criar o pedido para usuário
@@ -437,12 +438,18 @@
 			}
 
 			//Métodos
-			public function abrePedido(){
+			/*
+			*Metodo: imprimePedido()
+			*Descrição: imprime os produtos selecionados no carrinho
+			*Data: 14/06/2024
+			*Programador(a): Ighor Drummond
+			*/
+			public function imprimePedido(){
 				$Ret = false;
 				$Total = 0;
 				$Prod = [];
 				try{
-					$this->montaQuery(0);//Monta query para validar se existe estoques
+					$this->montaQuery();//Monta query para validar se existe estoques
 					//Valida se os produtos selecionados tem disponibilidade
 					$this->stmt = $this->conexao->query($this->query);
 					$this->stmt = $this->stmt->fetchAll(\PDO::FETCH_ASSOC);
@@ -453,10 +460,9 @@
 							$Total += $value['total_item'];//Soma o total do produto
 						}
 					}
-					
-					if(count($Prod)>0){
-						$this->montaQuery(1);//monta query para abrir pedido
-						
+
+					if(count($Prod)>0){	
+											
 					}
 				}catch(\PDOException $e){
 					echo $e->getMessage();
@@ -465,40 +471,53 @@
 				}
 			}
 			/*
-			*Metodo: montaQuery(Opção)
-			*Descrição: Responsavel por monta as querys
+			*Metodo: montaQuery()
+			*Descrição: Responsavel por monta a query
 			*Data: 14/06/2024
 			*Programador(a): Ighor Drummond
 			*/
-			private function montaQuery($Val){
-				if($Val === 0){
-					$this->query = "
+			private function montaQuery(){
+				$this->query = "
 						SELECT 
-							car.id_car,
-						    prod.id_prod,
+						    cli.email,
+						    cli.id,
+						    car.id_car,
+						    car.id_prod,
+						    car.quant,
+						    car.data_car,
+						    car.id_tam,
+						    prod.nome,
+						    prod.preco,
+						    prod.estoque,
+                            img_prod.img1,
+						    FORMAT(CASE
+						        WHEN prod.promocao_ativo = 1 THEN prod.promocao * car.quant
+						        ELSE prod.preco * car.quant
+						    END, 2, 'pt_BR') AS total_item,
+						    FORMAT(SUM(CASE
+						        WHEN prod.promocao_ativo = 1 THEN prod.promocao * car.quant
+						        ELSE prod.preco * car.quant
+						    END) OVER(), 2, 'pt_BR') AS total_carrinho,
 						    CASE 
 						        WHEN prod.estoque >= car.quant THEN 'SIM'
 						        ELSE 'FALTA ESTOQUE'
-						    END AS disponibilidade,
-						  	FORMAT(CASE
-						        WHEN prod.promocao_ativo = 1 THEN prod.promocao * car.quant
-						        ELSE prod.preco * car.quant
-						    END, 2, 'pt_BR') AS total_item
+						    END AS disponibilidade
 						FROM 
 						    carrinho AS car
 						INNER JOIN 
 						    cliente AS cli ON cli.id = car.id_cliente
 						INNER JOIN 
 						    produtos AS prod ON car.id_prod = prod.id_prod
+						INNER JOIN  
+							imagens_prod as img_prod ON img_prod.id_prod = prod.id_prod
 						WHERE 
 							car.id_prod IN($this->Produtos)
 						  AND cli.email = '$this->Email'
+						  /*
+						HAVING 
+							disponibilidade <> 'FALTA ESTOQUE'
+							*/
 					";
-				}else if($Val === 1){
-					$this->query = "
-						INSERT INTO pedidos()
-					";
-				}
 			}
 		}
 	}

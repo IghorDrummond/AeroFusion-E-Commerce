@@ -447,6 +447,7 @@ function adicionarPedido() {
         for(nCont = 0; nCont <= produtosSelecionados.length -1; nCont++){
             parametros += "," + produtosSelecionados[nCont];
         }
+        parametros += "&Opc=1";//Carregar dados do pedidos
         parametros = encodeURIComponent(parametros.substr(1, parametros.length-1));
         //Chama o construtor de pedidos onde vai validar se cada produto ainda tem o estoque desejado pelo usuário
         ajax = new XMLHttpRequest();
@@ -455,11 +456,7 @@ function adicionarPedido() {
             telaCarregamento(false);
             if(ajax.readyState === 4){
                 if(ajax.status < 400){
-                    if(ajax.responseText.toString() === 'ESTOQUE'){
-                        alerta('Produto com estoque indisponível!', 0);
-                    }else{
-                        window.location.href = "pagamento.php";
-                    }
+                    window.location.href = "pagamento.php";
                 }else{
                     window.location.href = "error.php?Error=" + ajax.status.toString(); 
                 }

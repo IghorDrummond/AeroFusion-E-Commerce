@@ -14,6 +14,6 @@
 		</main>
 		<?php require_once('script/rodape.php'); ?>
 		<?php require_once('script/scripts.php'); ?>
-		<script type="text/javascript" src="js/produto.js"></script>
+		<script type="text/javascript" src="js/pagamento.js"></script>
 	</body>
 </html>
