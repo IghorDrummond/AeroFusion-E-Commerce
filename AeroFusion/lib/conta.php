@@ -162,6 +162,122 @@
 				}
 			}
 		}
+
+
+		/*
+		*Classe: Endereco
+		*Descrição: Responsavel por retornar ou incluir novos endereços
+		*Data: 15/06/2024
+		*Programador(a): Ighor Drummond
+		*/
+		class Endereco{
+			//Atributos
+			private $con = null;
+			private $query = null;
+			private $stmt = null;
+
+			//Construtor
+			public function __construct(
+				public $Email = '',
+			){
+				try{
+					$this->con = new \IniciaServer();
+					$this->con = $this->con->conexao();
+				}catch(\PDOException $e){
+					echo $e->getMessage();
+				}
+			}
+
+			//Métodos
+			/*
+			*Metodo: retornaError
+			*Descrição: Responsavel por recuperar endereços cadastrados do usuário
+			*Data: 15/06/2024
+			*Programador(a): Ighor Drummond
+			*/
+			public function getEndereco(){
+				$this->montaQuery(0);
+
+				try{
+					$this->stmt = $this->con->query($this->query);
+					$this->stmt = $this->stmt->fetchAll(\PDO::FETCH_ASSOC);
+				}catch(\PDOException $e){
+					echo $e->getMessage();
+				}finally{
+					return $this->stmt;
+				}
+			}
+
+			/*
+			*Metodo: setEndereco()
+			*Descrição: Responsavel por inserir um novo endereço para usuário
+			*Data: 15/06/2024
+			*Programador(a): Ighor Drummond
+			*/
+			public function setEndereco(
+				$Rua,
+				$Complemento,
+				$Cep,
+				$Referencia,
+				$Bairro,
+				$Uf,
+				$Cli,
+				$Numero,
+				$Cidade
+			){
+				$this->montaQuery(1);//Monta query para inserir novo endereço
+
+				try{
+					//Prepara a inserção de dados
+					$this->query .= "
+						VALUES('$Cidade', '$Referencia', '$Uf', '$Bairro', '$Rua', '$Cep', '$Numero', '$Complemento', $Cli)
+					";
+
+					$this->con->beginTransaction();
+					if( ($this->con->exec($this->query)) > 0 ){
+						$this->con->commit();
+					}else{
+						new \PDOException("Não Inseriu dados na query");
+					}
+				}catch(\PDOException $e){
+					echo $e->getMessage();
+					$this->con->rollback();
+				}
+			}
+
+			/*
+			*Metodo: montaQuery(Opção)
+			*Descrição: Responsavel por montar as querys
+			*Data: 15/06/2024
+			*Programador(a): Ighor Drummond
+			*/
+			private function montaQuery($Val){
+				if($Val === 0){
+					$this->query = "
+						SELECT
+							ende.cidade,
+						    ende.referencia,
+						    ende.uf,
+						    ende.bairro,
+						    ende.rua,
+						    ende.cep,
+						    ende.numero,
+						    ende.complemento,
+						    cli.id
+						FROM
+							endereco as ende
+						INNER JOIN
+							cliente as cli ON cli.id = ende.id_cliente
+						WHERE
+							cli.email = '$this->Email'
+					";
+				}else if($Val === 1){
+					$this->query = "
+						INSERT INTO endereco(cidade, referencia, uf, bairro, rua, cep, numero, complemento, id_cliente)
+					" . PHP_EOL;				
+				}
+			}
+		}
 	}
 
 	namespace Cadastro{
