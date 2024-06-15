@@ -18,6 +18,7 @@ var ajax = null;
 * Data: 14/06/2024
 */
 window.addEventListener('DOMContentLoaded', ()=>{
+    telaCarregamento(true);
     novoPedido();
 })
 //-------------------------------Funções
