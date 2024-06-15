@@ -60,7 +60,7 @@
 		<input type="checkbox" name="CarProd" value="<?php echo($Prod['id_car']) ?>" onchange="selecionarProduto()">
 		<div onclick="maisDetalhes(<?php echo($Prod['id_prod']) ?>)" onscroll="guardaScroll()" style="cursor: pointer;" title="Ver detalhes">
 			<img src="img/<?php echo($Prod['img']) ?>" width="120" height="120" class="img-fluid rounded">
-			<h6><?php echo(ucfirst(strtolower($Prod['produto']))) ?></h6>
+			<h6><?php echo( mb_convert_case($Prod['produto'], MB_CASE_TITLE, 'UTF-8') ) ?></h6>
 			Preço do item:R$ <?php echo($Prod['total_item']) ?>
 			<br>
 			Tamanho: <?php echo($Prod['tamanho']) ?>

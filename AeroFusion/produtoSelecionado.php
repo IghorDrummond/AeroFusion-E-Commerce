@@ -80,7 +80,7 @@
 					</div>
 				</article>
 				<article class="p-4 bg-white d-flex flex-column justify-content-center">
-					<h3 ><?php echo strtolower($Produtos[0]['nome']); ?></h3>
+					<h3 ><?php echo mb_convert_case($Produtos[0]['nome'], MB_CASE_TITLE, 'UTF-8'); ?></h3>
 					<h6 class="text-info">Categoria: <?php echo ucfirst(strtolower($Produtos[0]['categoria'])); ?></h6>
 					<h1 id="preco">R$ <?php echo ucfirst(strtolower($Produtos[0]['preco'])); ?></h1>
 					<p>

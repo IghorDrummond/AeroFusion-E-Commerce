@@ -43,7 +43,7 @@ if(isset($_SESSION['Login']) and $_SESSION['Login']){
 				if ($logado) {
 			?>
 					<img src="img/<?php echo ($_SESSION['Foto']); ?>" class="rounded-circle border border-dark img-fluid mr-2"
-						title="Usuário: <?php echo ($_SESSION['Nome']); ?>" width="30" heigth="30">
+						title="Usuário: <?php echo ( mb_convert_case($_SESSION['Nome'], MB_CASE_TITLE, 'UTF-8')); ?>" width="30" heigth="30">
 					<h6 class="mt-2">Olá, <?php echo ($_SESSION['Nome']); ?>!</h6>
 			<?php
 				} else {

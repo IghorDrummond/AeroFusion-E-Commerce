@@ -263,7 +263,8 @@
 						    ende.cep,
 						    ende.numero,
 						    ende.complemento,
-						    cli.id
+						    cli.id,
+						    ende.id_end
 						FROM
 							endereco as ende
 						INNER JOIN

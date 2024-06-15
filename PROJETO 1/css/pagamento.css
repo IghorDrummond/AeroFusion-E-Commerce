@@ -1,4 +1,3 @@
-
 main section{
 	-ms-flex-wrap: wrap;
 	    flex-wrap: wrap;
@@ -22,16 +21,41 @@ article{
 article form{
 	width: 50%;
 }
+.dropdown-menu{
+	max-height: 250px;
+	overflow: auto;
+}
+.dropdown-menu ul{
+	list-style-type: emojis;
+}
+@counter-style emojis{
+	system: cyclic;
+	symbols: 🧭 🛣️ 🏘️ 🏠 🌎 🏙️ 🗺️ ⛲ 🗽;
+	suffix: "";
+}
+
 /* Tela dos produtos */
 article:nth-child(1){
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
-	flex-direction: column;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	    -ms-flex-direction: column;
+	        flex-direction: column;
 }
 .area_produtos{
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
+	-webkit-box-orient: horizontal;
+	-webkit-box-direction: normal;
+	    -ms-flex-direction: row;
+	        flex-direction: row;
+	-ms-flex-wrap: wrap;
+	    flex-wrap: wrap;
 }
+
 
 /* Dispositivos extra small (telefones em modo retrato, com menos de 576px)*/
 @media (max-width: 767.98px) { 
