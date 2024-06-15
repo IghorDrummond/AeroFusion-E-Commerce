@@ -95,7 +95,7 @@
 					<?php
 						foreach ($Endereco->getEndereco() as $i => $End) {
 					?>	
-						<a class="dropdown-item" id="<?php echo($End['id_end']); ?>" data-title="Endereço <?php echo(($i+1)); ?>">
+						<a class="dropdown-item" id="<?php echo($End['id_end']); ?>" onclick="selecionaEndereco(this)" data-title="Endereço <?php echo(($i+1)); ?>">
 							<ul>
 								<li><strong>Endereço <?php echo ($i + 1); ?></strong></li>
 		                        <li>Rua: <?php echo mb_convert_case($End['rua'], MB_CASE_TITLE, 'UTF-8'); ?></li>

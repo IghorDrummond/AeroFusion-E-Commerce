@@ -4,6 +4,9 @@ var Tela = document.getElementsByTagName('main')[0];
 var carregamento = document.getElementById('tela_carregamento');
 var aviso = document.getElementsByClassName('alertas');
 var aviso_texto = document.getElementsByClassName('alerta_texto');
+var botao_end = null;
+//String
+var End = '';
 //Objeto
 var ajax = null;
 
@@ -74,12 +77,11 @@ function deletaItem(Item){
     ajax = new XMLHttpRequest();
     ajax.open('POST', 'script/pedidos.php?Opc=3&Prod=' + encodeURIComponent(Item));
     ajax.onreadystatechange = ()=>{
-        telaCarregamento(false);
         if(ajax.readyState === 4){
             if(ajax.status < 400){
                 novoPedido();//Chama para carregar os dados novamente sem o item
             }else{
-                window.location.href = "error.php?Error=" + ajax.status.toString();
+                window.location.href = "error.php?Error=" + encodeURIComponent(ajax.status.toString());
             }
         }
     }
@@ -92,7 +94,6 @@ Data: 15/06/2024
 Programador: Ighor Drummond
 */
 function novoPedido(){
-    telaCarregamento(true);//Carrega dados do pedido
     $.ajax({
         url: 'script/pedidos.php?Opc=2',
         method: 'GET',
@@ -100,10 +101,23 @@ function novoPedido(){
         success: function (data) {
             $(Tela).html(data); // Insere os dados no elemento main
             telaCarregamento(false); // Desliga a tela de carregamento
+            botao_end = document?.getElementsByClassName('dropdown-toggle')[0];
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alerta('Houve um erro ao carregar o seu pedido. Tente novamente ou mais tarde.', 0);
             telaCarregamento(false); // Desliga a tela de carregamento em caso de erro
         }
     });
+}
+/*
+Função: selecionaEndereco(Elemento)
+Descrição: Responsavel por selecionar o endereço
+Data: 15/06/2024
+Programador: Ighor Drummond
+*/
+function selecionaEndereco(element){
+    //Guarda o endereço selecionado
+    End = element.id;
+    //Ajusta o botão para o titulo correto
+    botao_end.textContent = element.getAttribute('data-title');
 }
