@@ -31,7 +31,7 @@
 
 	function montaTela(){
 		//Caso não houver produtos, ele retorna vazio
-		if(isset($_SESSION['Produtos']) and empty($_SESSION['Produtos'])){
+		if((isset($_SESSION['Produtos']) and empty($_SESSION['Produtos'])) or !isset($_SESSION['Produtos'])){
 			echo('<h1>Sem produtos...</h1>');
 			return null;
 		}
