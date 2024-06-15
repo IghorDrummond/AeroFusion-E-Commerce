@@ -22,12 +22,20 @@
 			$_SESSION['Produtos'] = $_GET['Prod'];//Guarda os produtos selecionados pelo usuário
 			break;
 		case '2':
-			$Pedido = new solicitaPedido(Email: $_SESSION['Email'], Produtos: $_SESSION['Produtos']);
-			montaTela($Pedido->imprimePedido());
+			montaTela();
+			break;
+		case '3':
+			removeProduto($_GET['Prod']);
 			break;
 	}
 
-	function montaTela($Dados){
+	function montaTela(){
+		//Caso não houver produtos, ele retorna vazio
+		if(isset($_SESSION['Produtos']) and empty($_SESSION['Produtos'])){
+			echo('<h1>Sem produtos...</h1>');
+			return null;
+		}
+
 		//Monta tela responsavel por iniciar pedido
 		$Endereco = new Endereco($_SESSION['Email']);	
 		$FormPagamento = new Pagamento();		
@@ -36,7 +44,7 @@
 	<section>
 		<article class="text-warning">
 			<?php
-				foreach ($Dados as $Prod) {
+				foreach ($Pedido->imprimePedido() as $Prod) {
 					$Class = $Prod['disponibilidade'] === 'FALTA ESTOQUE' ? 'bg-secondary' : 'bg-white';
 			?>
 			<div class="w-100 rounded area_produtos my-3 border border-secondary <?php echo($Class); ?> ">
@@ -58,7 +66,7 @@
 				</div>
 				<!-- Campo para operação -->
 				<div class="ml-auto">
-					<button class="btn btn-danger text-white font-weight-bold" onclick="deletarItem()">
+					<button class="btn btn-danger text-white font-weight-bold" onclick="deletaItem(<?php echo( $Prod['id_car'] ); ?>)">
 						Deletar <i class="fa-solid fa-trash-can"></i>
 					</button>
 					<div class="btn-group text-white font-weight-bold bg-primary" role="group" aria-label="quantidade_adicao">
@@ -131,5 +139,12 @@
 		</article>
 	</section>
 <?php
+	}
+
+	function removeProduto($Prod){
+		$aux = null;
+		$aux = explode(',', $_SESSION['Produtos']);
+		unset($aux[array_search($Prod, $aux)]);
+		$_SESSION['Produtos'] = implode(',', $aux);
 	}
 ?>
