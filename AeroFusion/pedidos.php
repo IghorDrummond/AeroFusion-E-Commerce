@@ -32,18 +32,26 @@
 
 ?>
 	<section>
-		<article>
+		<article class="text-warning">
 			<?php
 				foreach ($Dados as $Prod) {
+					$Class = $Prod['disponibilidade'] === 'FALTA ESTOQUE' ? 'bg-secondary' : 'bg-white';
 			?>
-			<div class="w-100 rounded d-flex flex-row justify-content-center">
-				<img src="img/<?php echo($Prod['img1']); ?>" align="left"class="rounded border img-fluid">
-				<h6><?php echo($Prod['nome']); ?></h6>
-				<br>
-				//Quantidade
-				//Habilidar se caso estiver fora de estoque
-				//Mostra valor da promoção caso estiver ativada neste produto
-				<h6><?php echo($Prod['total_item']); ?></h6>
+			<div class="w-100 rounded area_produtos my-3 <?php echo($Class); ?> ">
+				<img src="img/<?php echo($Prod['img1']); ?>" width="200" class="rounded img-fluid">
+				<div>
+					<h6><?php echo($Prod['nome']); ?></h6>
+					<h6>Quantidade: <?php echo($Prod['quant']) ?></h6>
+					<?php
+						if($Prod['promocao_ativo'] === 1){
+							echo "
+							De <del>R$ ". $Prod['preco'] . "</del> Para
+							<mark class='bg-transparent text-warning'>R$ ". $Prod['promocao'] ."</mark>
+							";
+						}
+					?>
+					<h6>Total do Item: R$ <?php echo($Prod['total_item']); ?></h6>
+				</div>
 			</div>
 			<?php
 				}

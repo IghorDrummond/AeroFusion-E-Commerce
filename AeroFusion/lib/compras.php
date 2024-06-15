@@ -476,6 +476,8 @@
 						    prod.nome,
 						    prod.preco,
 						    prod.estoque,
+						    prod.promocao_ativo,
+						    prod.promocao,
                             img_prod.img1,
 						    FORMAT(CASE
 						        WHEN prod.promocao_ativo = 1 THEN prod.promocao * car.quant
