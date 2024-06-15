@@ -56,6 +56,20 @@
 					?>
 					<h6>Total do Item: R$ <?php echo($Prod['total_item']); ?></h6>
 				</div>
+				<!-- Campo para operação -->
+				<div class="ml-auto">
+					<button class="btn btn-danger text-white font-weight-bold" onclick="deletarItem()">
+						Deletar <i class="fa-solid fa-trash-can"></i>
+					</button>
+					<div class="btn-group text-white font-weight-bold bg-primary" role="group" aria-label="quantidade_adicao">
+						<button class="btn btn-primary">
+							 +
+						</button>		
+						<span class="mx-2">8</span>		
+						<button type="button" class="btn btn-primary">-</button>	
+					</div>
+
+				</div>
 			</div>
 			<?php
 				}
