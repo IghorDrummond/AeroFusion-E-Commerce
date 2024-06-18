@@ -584,12 +584,12 @@
 		*/
 		class validaEstoque{
 			//Atributos
-			public $Quant = null;
-			public $Produto = null;
+			protected $Produto = null;
 			protected $IdCar = null;
 			protected $con = null;
 			protected $query = null;
 			protected $stmt = null;
+			protected $IdCli = null;
 
 			//Métodos
 			/*
@@ -601,23 +601,19 @@
 			public function verificaEstoque($IdCar, $Quant){
 				$Ret = false;
 
+				$this->IdCar = $IdCar;
 				try{
 					//Inicia conexão com o banco
 					$this->con = new \IniciaServer();
 					$this->con = $this->con->conexao();
 					//Recupera id do Produto
 					$this->montaQuery(1);
-					$this->stmt = $this->con->query($this->query);
-					$this->stmt = $this->stmt->fetchAll(\PDO::FETCH_ASSOC);
 					//Guarda Id do produto retornado
-					$this->Produto = $this->stmt[0]['id_prod'];
+					$this->Produto = $this->retornaValores()[0]['id_prod'];
 					//Monta a query responsavel por retorna a quantidade de estoque
 					$this->montaQuery(0);
-					//Retorna a quantidade de produto no estoque
-					$this->stmt = $this->con->query($this->query);
-					$this->stmt = $this->stmt->fetchAll(\PDO::FETCH_ASSOC);
 					//Retorna verdadeiro ou falso caso tiver estoque
-					$Ret = $this->stmt[0]['estoque'] >= $this->Quant ? true : false;
+ 					$Ret = $this->retornaValores()[0]['estoque'] >= (int)$Quant ? true : false;
 				}catch(\PDOException $e){
 					echo $e->getMessage();
 				}finally{
@@ -625,12 +621,12 @@
 				}
 			}
 			/*
-			*Metodo: montaQuery()
+			*Metodo: montaQuery(Opção)
 			*Descrição: Responsavel por monta a query
 			*Data: 18/06/2024
 			*Programador(a): Ighor Drummond
 			*/
-			private function montaQuery(){
+			private function montaQuery($Val){
 				if($Val === 0){
 					$this->query = "
 						SELECT
@@ -648,8 +644,19 @@
 							carrinho
 						WHERE 
 							id_car = $this->IdCar;
+							AND id_cliente = $this->IdCli
 					";
 				}
+			}
+			/*
+			*Metodo: retornaValores
+			*Descrição: Responsavel por retornar valores
+			*Data: 18/06/2024
+			*Programador(a): Ighor Drummond
+			*/
+			private function retornaValores(){
+				$this->stmt = $this->con->query($this->query);
+				return $this->stmt->fetchAll(\PDO::FETCH_ASSOC);				
 			}
 		}
 	}

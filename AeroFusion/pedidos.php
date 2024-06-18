@@ -75,11 +75,11 @@
 						Deletar <i class="fa-solid fa-trash-can"></i>
 					</button>
 					<div class="btn-group text-white font-weight-bold bg-primary" role="group">
-						<button class="btn btn-primary rounded" onclick="atualizaQuantidade('+', <?php echo($Prod['id_car']);?>)">
+						<button class="btn btn-primary rounded" onclick="atualizaQuantidade('+', <?php echo($Prod['id_car']);?>, this)">
 							+
 						</button>		
 						<span class="mx-2 quantidade_acao"><?php echo( $Prod['quant'] ); ?></span>		
-						<button type="button" class="btn btn-primary rounded" onclick="atualizaQuantidade('-', <?php echo($Prod['id_car']);?>)">
+						<button type="button" class="btn btn-primary rounded" onclick="atualizaQuantidade('-', <?php echo($Prod['id_car']);?>, this)">
 							-
 						</button>	
 					</div>

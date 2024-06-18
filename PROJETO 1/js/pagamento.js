@@ -4,7 +4,6 @@ var Tela = document.getElementsByTagName('main')[0];
 var carregamento = document.getElementById('tela_carregamento');
 var aviso = document.getElementsByClassName('alertas');
 var aviso_texto = document.getElementsByClassName('alerta_texto');
-var quantiade = null;
 var botao_end = null;
 //String
 var End = '';
@@ -104,7 +103,6 @@ function novoPedido(){
             $(Tela).html(data); // Insere os dados no elemento main
             telaCarregamento(false); // Desliga a tela de carregamento
             botao_end = document?.getElementsByClassName('dropdown-toggle')[0];
-            quantidade = document?.getElementsByClassName('quantidade_acao')[0];
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alerta('Houve um erro ao carregar o seu pedido. Tente novamente ou mais tarde.', 0);
@@ -132,9 +130,19 @@ Programador: Ighor Drummond
 */
 function atualizaQuantidade(Opc, IdCar, element){
     telaCarregamento(true);
+    var btnGroup = element.parentElement;
+    var Quantidade = btnGroup.querySelector('.quantidade_acao');
+
+    //Faz a adição do valor novo valor
+    if(Opc === '+'){
+        Quantidade.textContent = (parseInt(Quantidade.textContent) + 1).toString();
+    }else{
+        Quantidade.textContent = (parseInt(Quantidade.textContent) - 1).toString();
+    }
+
     ajax = new XMLHttpRequest();
 
-    ajax.open('POST', 'script/pedidos.php?Opc=4&IdCar=' + encodeURIComponent(IdCar));
+    ajax.open('POST', 'script/pedidos.php?Opc=4&IdCar=' + encodeURIComponent(IdCar) + '&Quant=' + encodeURIComponent(Quantidade.textContent));
 
     ajax.onreadystatechange = ()=>{
         telaCarregamento(false);
