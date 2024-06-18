@@ -4,6 +4,7 @@ var Tela = document.getElementsByTagName('main')[0];
 var carregamento = document.getElementById('tela_carregamento');
 var aviso = document.getElementsByClassName('alertas');
 var aviso_texto = document.getElementsByClassName('alerta_texto');
+var quantiade = null;
 var botao_end = null;
 //String
 var End = '';
@@ -103,6 +104,7 @@ function novoPedido(){
             $(Tela).html(data); // Insere os dados no elemento main
             telaCarregamento(false); // Desliga a tela de carregamento
             botao_end = document?.getElementsByClassName('dropdown-toggle')[0];
+            quantidade = document?.getElementsByClassName('quantidade_acao')[0];
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alerta('Houve um erro ao carregar o seu pedido. Tente novamente ou mais tarde.', 0);
@@ -121,4 +123,29 @@ function selecionaEndereco(element){
     End = element.id;
     //Ajusta o botão para o titulo correto
     botao_end.textContent = element.getAttribute('data-title');
+}
+/*
+Função: atualizaQuantidade(Operacao)
+Descrição: Responsavel por selecionar o endereço
+Data: 18/06/2024
+Programador: Ighor Drummond
+*/
+function selecionaEndereco(Opc){
+    telaCarregamento(true);
+    ajax = new XMLHttpRequest();
+
+    ajax.open('POST', 'script/pedidos.php?Opc=4&Prod=');
+
+    ajax.onreadystatechange = ()=>{
+        telaCarregamento(false);
+        if(ajax.readyState === 4){
+            if(ajax.status < 400){
+                novoPedido();//Atualiza o pedido novamente após atualização da quantidade
+            }else{
+                alerta('Ocorreu um erro ao adicionar uma nova quantidade. Error: ' + ajax.status.toString(), 0);
+            }
+        }
+    }
+
+    ajax.send();
 }

@@ -15,8 +15,6 @@
 			protected $stmt = null;
 			protected $IdCli = null;
 			protected $Data = null;
-			protected $Quant = null;
-			protected $IdCar = null;
 
 			//Construtor
 			public function __construct(
@@ -60,7 +58,7 @@
 							//Guarda a data atual do produto adicionado no carrinho
 							$this->Data = date('Y-m-d H:i:s');
 							//Monta Query para inserir valor
-							$this->montaQuery(4);
+							$this->montaQuery(3);
 							//Guarda valor
 							$this->conexao->beginTransaction();
 
@@ -81,29 +79,6 @@
 				}catch(\PDOException $e){
 					echo $e->getMessage();
 					$Ret = 'ERROR';
-				}finally{
-					return $Ret;
-				}
-			}
-			/*
-			*Metodo: atualizaQuantidade
-			*Descrição: Responsavel por atualiza a quantidade desejada no carrinho
-			*Data: 18/06/2024
-			*Programador(a): Ighor Drummond
-			*/
-			public function atualizaQuantidade($Quant, $Id){
-				$this->Quant = $Quant;
-				$this->IdCar = $Id;
-				$this->montaQuery(3);
-				$Ret = false;
-
-				try{
-					if($this->conexao->exec($this->Query) > 0){
-						$Ret = true;
-					}
-				}catch(\PDOException $e){
-					echo $e->getMessage();
-					$this->conexao->rollback();
 				}finally{
 					return $Ret;
 				}
@@ -159,18 +134,7 @@
 						WHERE 
 							email = '$this->Cliente'
 					";
-				}else if($Val === 3){
-					//Atualiza quantidade no carrinho
-					$this->Query = "	
-						UPDATE 
-							carrinho
-						SET
-							quant = $this->Quant
-						WHERE
-							id_car = $this->IdCar
-					";
-				}
-				else{
+				}else{
 					//Adiciona o produto ao carrinho
 					$this->Query = "
 						INSERT INTO carrinho(id_prod, id_cliente, quant, id_tam ,data_car)
@@ -446,6 +410,69 @@
 				}
 			}
 		}
+		/*
+		*Classes: atualizaCarrinho()
+		*Descrição: Classe responsavel por atualizar dados do carrinho
+		*Data: 18/06/2024
+		*Programador(a): Ighor Drummond
+		*/
+		class atualizaCarrinho{
+			//Atributo
+			protected $Query = null;
+			protected $conexao = null;
+			protected $stmt = null;
+
+			//Construtor
+			public function __construct(
+				public $IdCar = '',
+				public $Quant = ''
+			){
+				$this->conexao = new \IniciaServer();
+				$this->conexao = $this->conexao->conexao();
+			}
+			//Métodos
+			/*
+			*Metodo: atualizaQuantidade
+			*Descrição: Responsavel por atualiza a quantidade desejada no carrinho
+			*Data: 18/06/2024
+			*Programador(a): Ighor Drummond
+			*/
+			public function atualizaQuantidade($Quant, $Id){
+				$this->Quant = $Quant;
+				$this->IdCar = $Id;
+				$this->montaQuery();
+				$Ret = false;
+
+				try{
+					$this->conexao->beginTransaction();
+					if($this->conexao->exec($this->Query) > 0){
+						$this->conexao->commit();
+						$Ret = true;
+					}
+				}catch(\PDOException $e){
+					echo $e->getMessage();
+					$this->conexao->rollback();
+				}finally{
+					return $Ret;
+				}
+			}
+			/*
+			*Metodo: montaQuery()
+			*Descrição: Responsavel por monta a query
+			*Data: 18/06/2024
+			*Programador(a): Ighor Drummond
+			*/
+			private function montaQuery(){
+				$this->Query = "
+					UPDATE
+						carrinho
+					SET
+						quant = $this->Quant
+					WHERE
+						id_car = $this->IdCar
+				";
+			}
+		}
 	}
 
 	namespace Pedido{
@@ -594,7 +621,6 @@
 					return $Ret;
 				}
 			}
-
 			/*
 			*Metodo: montaQuery()
 			*Descrição: Responsavel por monta a query

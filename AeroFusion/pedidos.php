@@ -7,6 +7,7 @@
 	require_once('lib/conta.php');
 	require_once('lib/configuracao.php');
 	use Pedido\solicitaPedido;
+	use Pedido\validaEstoque;
 	use Acesso\Endereco;
 	use Pagamentos\Pagamento;
 	//Declaração de variaveis
@@ -26,6 +27,9 @@
 			break;
 		case '3':
 			removeProduto($_GET['Prod']);
+			break;
+		case '4':
+			atualizaQuantidade($_GET['Prod'], $_GET['Quant']);
 			break;
 	}
 
@@ -69,14 +73,15 @@
 					<button class="btn btn-danger text-white font-weight-bold" onclick="deletaItem(<?php echo( $Prod['id_car'] ); ?>)">
 						Deletar <i class="fa-solid fa-trash-can"></i>
 					</button>
-					<div class="btn-group text-white font-weight-bold bg-primary" role="group" aria-label="quantidade_adicao">
-						<button class="btn btn-primary">
-							 +
+					<div class="btn-group text-white font-weight-bold bg-primary" role="group" aria-label="<?php echo($Prod['id_car']) ?>">
+						<button class="btn btn-primary rounded" onclick="atualizaQuantidade('+')" data>
+							+
 						</button>		
-						<span class="mx-2">8</span>		
-						<button type="button" class="btn btn-primary">-</button>	
+						<span class="mx-2 quantidade_acao"><?php echo( $Prod['quant'] ); ?></span>		
+						<button type="button" class="btn btn-primary rounded" onclick="atualizaQuantidade('-')">
+							-
+						</button>	
 					</div>
-
 				</div>
 			</div>
 			<?php
@@ -146,5 +151,16 @@
 		$aux = explode(',', $_SESSION['Produtos']);
 		unset($aux[array_search($Prod, $aux)]);
 		$_SESSION['Produtos'] = implode(',', $aux);
+	}
+
+	function atualizaQuantidade($Prod, $Quant){
+		$Estoque = new validaEstoque();
+
+		//Valida se a quantidade inserida existe de acordo com o estoque
+		if($Estoque->verificaEstoque($Produto, $Quant)){
+			
+		}else{
+			echo "ESTOQUE";
+		}
 	}
 ?>
