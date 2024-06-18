@@ -104,6 +104,7 @@ function novoPedido(){
             $(Tela).html(data); // Insere os dados no elemento main
             telaCarregamento(false); // Desliga a tela de carregamento
             botao_end = document?.getElementsByClassName('dropdown-toggle')[0];
+            pagamento = document?.getElementById('compra').getElementsByTagName('select')[0];
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alerta('Houve um erro ao carregar o seu pedido. Tente novamente ou mais tarde.', 0);
@@ -177,9 +178,15 @@ function finalizarCompra(){
     event.preventDefault();
 
     //Valida se um endereço foi escolhido
-    if(botao_end.textContent.substr(0, 7).toUpperCase() === 'ENDEREÇO' ){
+    if(botao_end.textContent.substr(0, 8).toUpperCase() === 'ENDEREÇO' ){
         //Valida se foi escolhido um método de pagamento
-
+        if(pagamento.selectedIndex > 0){
+            
+        }else{
+            alerta('Escolha um método de pagamento.', 0);
+        }
+    }else{
+        alerta('Escolha um endereço.', 0);
     }
     /*
         abre um novo pedido com prazo de 7 dias para pagamento
