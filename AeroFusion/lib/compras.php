@@ -421,7 +421,8 @@
 			protected $Query = null;
 			protected $conexao = null;
 			protected $stmt = null;
-
+			protected $Email = null;
+			protected $IdCli = null;
 			//Construtor
 			public function __construct(
 				public $IdCar = '',
@@ -437,11 +438,17 @@
 			*Data: 18/06/2024
 			*Programador(a): Ighor Drummond
 			*/
-			public function atualizaQuantidade(){
-				$this->montaQuery();
+			public function atualizaQuantidade($Email){
+				$this->Email = $Email;
 				$Ret = false;
-
 				try{
+					//Recupera o Id do Cliente
+					$this->montaQuery(1);
+					$this->stmt = $this->conexao->query($this->Query);
+					$this->stmt = $this->stmt->fetchAll(\PDO::FETCH_ASSOC);
+					$this->IdCli = $this->stmt[0]['id'];
+					//Atualiza dados do carrinho
+					$this->montaQuery(0);
 					$this->conexao->beginTransaction();
 					if($this->conexao->exec($this->Query) > 0){
 						$this->conexao->commit();
@@ -455,20 +462,32 @@
 				}
 			}
 			/*
-			*Metodo: montaQuery()
+			*Metodo: montaQuery(Opc)
 			*Descrição: Responsavel por monta a query
 			*Data: 18/06/2024
 			*Programador(a): Ighor Drummond
 			*/
-			private function montaQuery(){
-				$this->Query = "
+			private function montaQuery($Val){
+				if($Val === 0){
+					$this->Query = "
 					UPDATE
 						carrinho
 					SET
 						quant = $this->Quant
 					WHERE
 						id_car = $this->IdCar
+						AND id_cliente = $this->IdCli
 				";
+				}else{
+					$this->Query = "
+					SELECT
+						id
+					FROM
+						cliente
+					WHERE
+						email = '$this->Email'
+					";
+				}
 			}
 		}
 	}
@@ -590,6 +609,7 @@
 			protected $query = null;
 			protected $stmt = null;
 			protected $IdCli = null;
+			protected $Email = null;
 
 			//Métodos
 			/*
@@ -598,16 +618,20 @@
 			*Data: 18/06/2024
 			*Programador(a): Ighor Drummond
 			*/
-			public function verificaEstoque($IdCar, $Quant){
+			public function verificaEstoque($IdCar, $Quant, $Email){
 				$Ret = false;
 
 				$this->IdCar = $IdCar;
+				$this->Email = $Email;
 				try{
 					//Inicia conexão com o banco
 					$this->con = new \IniciaServer();
 					$this->con = $this->con->conexao();
-					//Recupera id do Produto
+					//Recupera o Id do Cliente
 					$this->montaQuery(1);
+					$this->IdCli = $this->retornaValores()[0]['id'];
+					//Recupera id do Produto
+					$this->montaQuery(2);
 					//Guarda Id do produto retornado
 					$this->Produto = $this->retornaValores()[0]['id_prod'];
 					//Monta a query responsavel por retorna a quantidade de estoque
@@ -636,7 +660,17 @@
 						WHERE 	
 							prod.id_prod = $this->Produto
 					";
-				}else{
+				}else if($Val === 1){
+					$this->query = "
+						SELECT
+							id
+						FROM
+							cliente
+						WHERE
+							email = '$this->Email'
+					";
+				}
+				else{
 					$this->query = "
 						SELECT
 							id_prod

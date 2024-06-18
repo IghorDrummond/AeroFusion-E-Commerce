@@ -155,12 +155,12 @@
 	}
 
 	function atualizaQuantidade($IdCar, $Quant){
-		$Estoque = new validaEstoque();
+ 		$Estoque = new validaEstoque();
 
 		//Valida se a quantidade inserida existe de acordo com o estoque
-		if($Estoque->verificaEstoque($IdCar, $Quant)){
+		if($Estoque->verificaEstoque($IdCar, $Quant, $_SESSION['Email'])){
 			$Carrinho = new atualizaCarrinho(IdCar: $IdCar, Quant: $Quant);
-			$Carrinho->atualizaQuantidade();
+			$Carrinho->atualizaQuantidade($_SESSION['Email']);
 		}else{
 			echo "ESTOQUE";
 		}
