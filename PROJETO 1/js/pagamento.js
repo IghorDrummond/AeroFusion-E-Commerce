@@ -5,6 +5,7 @@ var carregamento = document.getElementById('tela_carregamento');
 var aviso = document.getElementsByClassName('alertas');
 var aviso_texto = document.getElementsByClassName('alerta_texto');
 var botao_end = null;
+var pagamento = null;
 //String
 var End = '';
 //Objeto
@@ -65,7 +66,7 @@ function fecharAlerta(alerta) {
     aviso[alerta].classList.add('d-none');
 }
 /*
-Função: deletarItem()
+Função: deletarItem(Id do Carrinho)
 Descrição: Responsavel por deletar items do carrinho e do pedido
 Data: 15/06/2024
 Programador: Ighor Drummond
@@ -124,33 +125,33 @@ function selecionaEndereco(element){
 }
 /*
 Função: atualizaQuantidade(Operacao, Id do carrinho, Elemento do Html)
-Descrição: Responsavel por selecionar o endereço
+Descrição: Responsavel por aumentar ou diminuir a quantidade do item desejado
 Data: 18/06/2024
 Programador: Ighor Drummond
 */
 function atualizaQuantidade(Opc, IdCar, element){
-    telaCarregamento(true);
+    //telaCarregamento(true);
     var btnGroup = element.parentElement;
-    var Quantidade = btnGroup.querySelector('.quantidade_acao');
+    var Quantidade = btnGroup.querySelector('.quantidade_acao').textContent;
 
     //Faz a adição do valor novo valor
     if(Opc === '+'){
-        Quantidade.textContent = (parseInt(Quantidade.textContent) + 1).toString();
+        Quantidade = (parseInt(Quantidade) + 1).toString();
     }else{
-        if(parseInt(Quantidade.textContent) === 1){
+        if(parseInt(Quantidade) === 1){
             deletaItem(IdCar);//Apaga do carrinho o produto
             return false;
         }else{
-            Quantidade.textContent = (parseInt(Quantidade.textContent) - 1).toString();
+            Quantidade = (parseInt(Quantidade) - 1).toString();
         }
     }
 
     ajax = new XMLHttpRequest();
 
-    ajax.open('POST', 'script/pedidos.php?Opc=4&IdCar=' + encodeURIComponent(IdCar) + '&Quant=' + encodeURIComponent(Quantidade.textContent));
+    ajax.open('POST', 'script/pedidos.php?Opc=4&IdCar=' + encodeURIComponent(IdCar) + '&Quant=' + encodeURIComponent(Quantidade));
 
     ajax.onreadystatechange = ()=>{
-        telaCarregamento(false);
+        //telaCarregamento(false);
         if(ajax.readyState === 4){
             if(ajax.status < 400){
                 novoPedido();//Atualiza o pedido novamente após atualização da quantidade
@@ -164,4 +165,25 @@ function atualizaQuantidade(Opc, IdCar, element){
     }
 
     ajax.send();
+}
+/*
+Função: finalizarCompra()
+Descrição: Responsavel por finalizar a compra e abrir um novo pedido no banco de dados
+Data: 18/06/2024
+Programador: Ighor Drummond
+*/
+function finalizarCompra(){
+    //Impede de recarregar a página
+    event.preventDefault();
+
+    //Valida se um endereço foi escolhido
+    if(botao_end.textContent.substr(0, 7).toUpperCase() === 'ENDEREÇO' ){
+        //Valida se foi escolhido um método de pagamento
+
+    }
+    /*
+        abre um novo pedido com prazo de 7 dias para pagamento
+        caso passar desse prazo de 7 dias ele apaga o pedido existente
+        também apagar os itens existentes no carrinho após finalizar a criação do novo pedido
+    */
 }

@@ -90,7 +90,7 @@
 			?>
 		</article>
 		<article class="p-5 bg-white d-flex flex-column align-items-center text-warning">
-			<form>
+			<form onsubmit="finalizarCompra()">
 				<h1>Total: R$ <?php echo($Prod['total_carrinho']); ?></h1>
 				<h6>Escolha um endereço</h6>
 				<div class="dropdown">
