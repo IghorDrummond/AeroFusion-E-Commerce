@@ -70,7 +70,7 @@ Descrição: Responsavel por deletar items do carrinho e do pedido
 Data: 15/06/2024
 Programador: Ighor Drummond
 */
-function deletaItem(){
+function deletaItem(Item){
     telaCarregamento(true);
     //Apaga da session o produto
     //Apaga do carrinho o produto
@@ -137,7 +137,12 @@ function atualizaQuantidade(Opc, IdCar, element){
     if(Opc === '+'){
         Quantidade.textContent = (parseInt(Quantidade.textContent) + 1).toString();
     }else{
-        Quantidade.textContent = (parseInt(Quantidade.textContent) - 1).toString();
+        if(parseInt(Quantidade.textContent) === 1){
+            deletaItem(IdCar);//Apaga do carrinho o produto
+            return false;
+        }else{
+            Quantidade.textContent = (parseInt(Quantidade.textContent) - 1).toString();
+        }
     }
 
     ajax = new XMLHttpRequest();
@@ -149,6 +154,9 @@ function atualizaQuantidade(Opc, IdCar, element){
         if(ajax.readyState === 4){
             if(ajax.status < 400){
                 novoPedido();//Atualiza o pedido novamente após atualização da quantidade
+                if(ajax.responseText  === 'ESTOQUE'){
+                    alerta('Limite máximo do estoque atingido!', 0);
+                }
             }else{
                 alerta('Ocorreu um erro ao adicionar uma nova quantidade. Error: ' + ajax.status.toString(), 0);
             }
