@@ -437,9 +437,7 @@
 			*Data: 18/06/2024
 			*Programador(a): Ighor Drummond
 			*/
-			public function atualizaQuantidade($Quant, $Id){
-				$this->Quant = $Quant;
-				$this->IdCar = $Id;
+			public function atualizaQuantidade(){
 				$this->montaQuery();
 				$Ret = false;
 
@@ -588,6 +586,7 @@
 			//Atributos
 			public $Quant = null;
 			public $Produto = null;
+			protected $IdCar = null;
 			protected $con = null;
 			protected $query = null;
 			protected $stmt = null;
@@ -599,17 +598,21 @@
 			*Data: 18/06/2024
 			*Programador(a): Ighor Drummond
 			*/
-			public function verificaEstoque($Produto, $Quant){
+			public function verificaEstoque($IdCar, $Quant){
 				$Ret = false;
 
 				try{
 					//Inicia conexão com o banco
 					$this->con = new \IniciaServer();
 					$this->con = $this->con->conexao();
-					//Guarda valores passados por parametros
-					$this->Produto = $Produto;
-					//Monta a query responsavel
-					$this->montaQuery();
+					//Recupera id do Produto
+					$this->montaQuery(1);
+					$this->stmt = $this->con->query($this->query);
+					$this->stmt = $this->stmt->fetchAll(\PDO::FETCH_ASSOC);
+					//Guarda Id do produto retornado
+					$this->Produto = $this->stmt[0]['id_prod'];
+					//Monta a query responsavel por retorna a quantidade de estoque
+					$this->montaQuery(0);
 					//Retorna a quantidade de produto no estoque
 					$this->stmt = $this->con->query($this->query);
 					$this->stmt = $this->stmt->fetchAll(\PDO::FETCH_ASSOC);
@@ -628,14 +631,25 @@
 			*Programador(a): Ighor Drummond
 			*/
 			private function montaQuery(){
-				$this->query = "
-					SELECT
-						prod.estoque
-					FROM
-						produtos as prod
-					WHERE 	
-						prod.id_prod = $this->Produto
-				";
+				if($Val === 0){
+					$this->query = "
+						SELECT
+							prod.estoque
+						FROM
+							produtos as prod
+						WHERE 	
+							prod.id_prod = $this->Produto
+					";
+				}else{
+					$this->query = "
+						SELECT
+							id_prod
+						FROM
+							carrinho
+						WHERE 
+							id_car = $this->IdCar;
+					";
+				}
 			}
 		}
 	}

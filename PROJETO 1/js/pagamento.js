@@ -71,7 +71,7 @@ Descrição: Responsavel por deletar items do carrinho e do pedido
 Data: 15/06/2024
 Programador: Ighor Drummond
 */
-function deletaItem(Item){
+function deletaItem(){
     telaCarregamento(true);
     //Apaga da session o produto
     //Apaga do carrinho o produto
@@ -125,16 +125,16 @@ function selecionaEndereco(element){
     botao_end.textContent = element.getAttribute('data-title');
 }
 /*
-Função: atualizaQuantidade(Operacao)
+Função: atualizaQuantidade(Operacao, Id do carrinho, Elemento do Html)
 Descrição: Responsavel por selecionar o endereço
 Data: 18/06/2024
 Programador: Ighor Drummond
 */
-function selecionaEndereco(Opc){
+function atualizaQuantidade(Opc, IdCar, element){
     telaCarregamento(true);
     ajax = new XMLHttpRequest();
 
-    ajax.open('POST', 'script/pedidos.php?Opc=4&Prod=');
+    ajax.open('POST', 'script/pedidos.php?Opc=4&IdCar=' + encodeURIComponent(IdCar));
 
     ajax.onreadystatechange = ()=>{
         telaCarregamento(false);

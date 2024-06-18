@@ -6,6 +6,7 @@
 	require_once('lib/compras.php');
 	require_once('lib/conta.php');
 	require_once('lib/configuracao.php');
+	use Compra\atualizaCarrinho;
 	use Pedido\solicitaPedido;
 	use Pedido\validaEstoque;
 	use Acesso\Endereco;
@@ -29,7 +30,7 @@
 			removeProduto($_GET['Prod']);
 			break;
 		case '4':
-			atualizaQuantidade($_GET['Prod'], $_GET['Quant']);
+			atualizaQuantidade($_GET['IdCar'], $_GET['Quant']);
 			break;
 	}
 
@@ -73,12 +74,12 @@
 					<button class="btn btn-danger text-white font-weight-bold" onclick="deletaItem(<?php echo( $Prod['id_car'] ); ?>)">
 						Deletar <i class="fa-solid fa-trash-can"></i>
 					</button>
-					<div class="btn-group text-white font-weight-bold bg-primary" role="group" aria-label="<?php echo($Prod['id_car']) ?>">
-						<button class="btn btn-primary rounded" onclick="atualizaQuantidade('+')" data>
+					<div class="btn-group text-white font-weight-bold bg-primary" role="group">
+						<button class="btn btn-primary rounded" onclick="atualizaQuantidade('+', <?php echo($Prod['id_car']);?>)">
 							+
 						</button>		
 						<span class="mx-2 quantidade_acao"><?php echo( $Prod['quant'] ); ?></span>		
-						<button type="button" class="btn btn-primary rounded" onclick="atualizaQuantidade('-')">
+						<button type="button" class="btn btn-primary rounded" onclick="atualizaQuantidade('-', <?php echo($Prod['id_car']);?>)">
 							-
 						</button>	
 					</div>
@@ -153,12 +154,13 @@
 		$_SESSION['Produtos'] = implode(',', $aux);
 	}
 
-	function atualizaQuantidade($Prod, $Quant){
+	function atualizaQuantidade($IdCar, $Quant){
 		$Estoque = new validaEstoque();
 
 		//Valida se a quantidade inserida existe de acordo com o estoque
-		if($Estoque->verificaEstoque($Produto, $Quant)){
-			
+		if($Estoque->verificaEstoque($IdCar, $Quant)){
+			$Carrinho = new atualizaCarrinho(IdCar: $IdCar, Quant: $Quant);
+			$Carrinho->atualizaQuantidade();
 		}else{
 			echo "ESTOQUE";
 		}
