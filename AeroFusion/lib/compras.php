@@ -15,6 +15,8 @@
 			protected $stmt = null;
 			protected $IdCli = null;
 			protected $Data = null;
+			protected $Quant = null;
+			protected $IdCar = null;
 
 			//Construtor
 			public function __construct(
@@ -58,7 +60,7 @@
 							//Guarda a data atual do produto adicionado no carrinho
 							$this->Data = date('Y-m-d H:i:s');
 							//Monta Query para inserir valor
-							$this->montaQuery(3);
+							$this->montaQuery(4);
 							//Guarda valor
 							$this->conexao->beginTransaction();
 
@@ -79,6 +81,29 @@
 				}catch(\PDOException $e){
 					echo $e->getMessage();
 					$Ret = 'ERROR';
+				}finally{
+					return $Ret;
+				}
+			}
+			/*
+			*Metodo: atualizaQuantidade
+			*Descrição: Responsavel por atualiza a quantidade desejada no carrinho
+			*Data: 18/06/2024
+			*Programador(a): Ighor Drummond
+			*/
+			public function atualizaQuantidade($Quant, $Id){
+				$this->Quant = $Quant;
+				$this->IdCar = $Id;
+				$this->montaQuery(3);
+				$Ret = false;
+
+				try{
+					if($this->conexao->exec($this->Query) > 0){
+						$Ret = true;
+					}
+				}catch(\PDOException $e){
+					echo $e->getMessage();
+					$this->conexao->rollback();
 				}finally{
 					return $Ret;
 				}
@@ -134,7 +159,18 @@
 						WHERE 
 							email = '$this->Cliente'
 					";
-				}else{
+				}else if($Val === 3){
+					//Atualiza quantidade no carrinho
+					$this->Query = "	
+						UPDATE 
+							carrinho
+						SET
+							quant = $this->Quant
+						WHERE
+							id_car = $this->IdCar
+					";
+				}
+				else{
 					//Adiciona o produto ao carrinho
 					$this->Query = "
 						INSERT INTO carrinho(id_prod, id_cliente, quant, id_tam ,data_car)
@@ -331,7 +367,12 @@
 				";
 			}
 		}
-
+		/*
+		*Classes: ApagarItem()
+		*Descrição: Classe responsavel por apagar item do carrinho
+		*Data: 01/06/2024
+		*Programador(a): Ighor Drummond
+		*/
 		class ApagarItem{
 			//Atributos
 			protected $conexao = null;
@@ -508,6 +549,67 @@
 							disponibilidade <> 'FALTA ESTOQUE'
 							*/
 					";
+			}
+		}
+		/*
+		*Classes: validaEstoque
+		*Descrição: Classe responsavel por validar estoque de um produto
+		*Data: 18/06/2024
+		*Programador(a): Ighor Drummond
+		*/
+		class validaEstoque{
+			//Atributos
+			public $Quant = null;
+			public $Produto = null;
+			protected $con = null;
+			protected $query = null;
+			protected $stmt = null;
+
+			//Métodos
+			/*
+			*Metodo: verificaEstoque()
+			*Descrição: Responsavel por verificar se tem a quantidade desejada no estoque do produto
+			*Data: 18/06/2024
+			*Programador(a): Ighor Drummond
+			*/
+			public function verificaEstoque($Produto, $Quant){
+				$Ret = false;
+
+				try{
+					//Inicia conexão com o banco
+					$this->con = new \IniciaServer();
+					$this->con = $this->con->conexao();
+					//Guarda valores passados por parametros
+					$this->Produto = $Produto;
+					//Monta a query responsavel
+					$this->montaQuery();
+					//Retorna a quantidade de produto no estoque
+					$this->stmt = $this->con->query($this->query);
+					$this->stmt = $this->stmt->fetchAll(\PDO::FETCH_ASSOC);
+					//Retorna verdadeiro ou falso caso tiver estoque
+					$Ret = $this->stmt[0]['estoque'] >= $this->Quant ? true : false;
+				}catch(\PDOException $e){
+					echo $e->getMessage();
+				}finally{
+					return $Ret;
+				}
+			}
+
+			/*
+			*Metodo: montaQuery()
+			*Descrição: Responsavel por monta a query
+			*Data: 18/06/2024
+			*Programador(a): Ighor Drummond
+			*/
+			private function montaQuery(){
+				$this->query = "
+					SELECT
+						prod.estoque
+					FROM
+						produtos as prod
+					WHERE 	
+						prod.id_prod = $this->Produto
+				";
 			}
 		}
 	}
