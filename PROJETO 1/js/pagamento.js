@@ -182,7 +182,11 @@ function finalizarCompra(){
         //Valida se foi escolhido um método de pagamento
         if(pagamento.selectedIndex > 0){
             ajax = new XMLHttpRequest();
-            ajax.open('POST', 'script/pedidos.php?Opc=5&Pagamento=' + encodeURIComponent() + '&Endereco=' + encodeURIComponent());
+            ajax.open('POST', 'script/pedidos.php?Opc=5&Pagamento=' + encodeURIComponent(pagamento.selectedIndex) + '&Endereco=' + encodeURIComponent(End));
+            ajax.onreadystatechange = ()=>{
+                
+            }
+            ajax.send();
         }else{
             alerta('Escolha um método de pagamento.', 0);
         }

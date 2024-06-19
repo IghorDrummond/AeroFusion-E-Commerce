@@ -757,12 +757,12 @@
 				try{
 					date_default_timezone_set('America/Sao_Paulo');//Configura data e hora do servidor
 					//Responsavel por retorna os IDs dos produtos correspondente ao carrinho do usuário
-					$this->Produtos = explode(',', $this->Produtos);
+					/*$this->Produtos = explode(',', $this->Produtos);
 					foreach ($this->Produtos as $Prod) {
 						$Aux .= $Prod . ',';
 					}
 					$Aux = substr($Aux, 0, strlen($Aux) -1);//Remove a ultima vírgula
-					$this->Produtos = $Aux;
+					$this->Produtos = $Aux;*/
 					$this->montaQuery(0);//Monta query para retorna os items do pedido
 					$this->getDados();//Recupera os dados
 					//Valida se trouxe os dados correspondentes
@@ -917,7 +917,7 @@
 				}else if($Opc === 3){
 					$this->query = "
 						INSERT INTO pedidos(valor_total, data_pedido, id_cliente, id_end, status, id_form)
-						VALUES($this->Total, '$this->Data', $this->IdCli, $this->Endereco, ". strval(STATUS) .", $this->Pagamento)
+						VALUES($this->Total, '$this->Data', $this->IdCli, $this->Endereco, ". strval(self::STATUS) .", $this->Pagamento)
 					";
 				}else if($Opc === 4){
 					$this->query = "

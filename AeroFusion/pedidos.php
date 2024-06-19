@@ -21,7 +21,7 @@
 	$FormPagamento = null;	
 
 	//Finaliza operação caso usuário não estiver logado no sistema
-	if(!isse($_SESSION['Login']) or !$_SESSION['Login']){
+	if(!isset($_SESSION['Login']) or !$_SESSION['Login']){
 		die();
 	}
 
