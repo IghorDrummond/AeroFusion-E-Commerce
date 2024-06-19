@@ -712,6 +712,7 @@
 			protected $IdPed = null;
 			protected $IdProd = null;
 			protected $semEstoque = null;
+			protected $Data = null;
 			private $Total = null;
 			private $Quant = null;
 
@@ -762,19 +763,28 @@
 					if(isset($this->stmt[0]['id_cliente'])){
 						$this->IdCli = $this->stmt[0]['id_cliente'];//Recebe o Id do Cliente
 						$this->Total = $this->stmt[0]['total_carrinho'];//Recebe o total do pedido
-
-						//Vai dar a baixa na quantidade dos produtos
+						$this->Data = date('Y-m-d H:i:s');//Guarda data do novo pedido
+						//Cria um novo pedido com os dados informados
+						$this->montaQuery(3);
+						$this->pushDados();
+						$this->IdPed = $this->con->lastInsertId();//Recupera o id do novo pedido
+						//Vai dar a baixa na quantidade dos produtos e adicionar o item do pedido
 						foreach ($this->stmt as $Dados) {
 							if($Dados['disponibilidade'] === 'SIM'){
+								//Da baixa no produto
 								$this->Quant = strval(abs((int)$Dados['quant'] - (int)$Dados['estoque']));
 								$this->IdProd = $Dados['id_prod'];
 								$this->montaQuery(1);//Monta query para dar a baixa no estoque dos produtos
-								$this->pushDados();//Atualiza estoque dos produtos
+								$this->pushDados();//Atualiza estoque do produto
+								//Adiciona produto ao item do pedido
+								$this->montaQuery(4);
+								$this->query .= PHP_EOL . "VALUES($this->IdProd, $this->IdPed," . $Dados['quant'] . ", " . $Dados['total_item'] . ")"; 
+								$this->pushDados();
 							}else{
 								array_push($this->semEstoque, $Dados['id_prod']);
 							}
 						}
-						//Apaga os produtos do carrinho após boletar o pedido
+						//Apaga os produtos do carrinho após "boletar" o pedido
 						$this->montaQuery(2);
 						$this->pushDados();
 					}
@@ -885,6 +895,15 @@
 							carrinho
 						WHERE
 							id_car IN($this->Produtos)
+					";
+				}else if($Opc === 3){
+					$this->query = "
+						INSERT INTO pedidos(valor_total, data_pedido, id_cliente, id_end, status, id_form)
+						VALUES($this->Total, '$this->Data', $this->IdCli, $this->Endereco, ". strval(STATUS) .", $this->Pagamento)
+					";
+				}else if($Opc === 4){
+					$this->query = "
+						INSERT INTO item_pedidos(id_prod, id_ped, quant, preco_item)
 					";
 				}
 			}

@@ -181,7 +181,8 @@ function finalizarCompra(){
     if(botao_end.textContent.substr(0, 8).toUpperCase() === 'ENDEREÇO' ){
         //Valida se foi escolhido um método de pagamento
         if(pagamento.selectedIndex > 0){
-            
+            ajax = new XMLHttpRequest();
+            ajax.open('POST', 'script/pedidos.php?Opc=5&Pagamento=' + encodeURIComponent() + '&Endereco=' + encodeURIComponent());
         }else{
             alerta('Escolha um método de pagamento.', 0);
         }

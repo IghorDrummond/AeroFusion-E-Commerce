@@ -211,6 +211,7 @@ CREATE TABLE status(
 
 #INSIRINDO SETORES NA TABELA SETORES
 INSERT INTO status(nome) VALUES('Pendente');
+INSERT INTO status(nome) VALUES('Aguardando Envio');
 INSERT INTO status(nome) VALUES('Transportando');
 INSERT INTO status(nome) VALUES('Saiu para entrega');
 INSERT INTO status(nome) VALUES('Entregue');
@@ -248,6 +249,8 @@ CREATE TABLE item_pedidos(
     id_iped int primary key auto_increment not null,
     id_prod int not null,
     id_ped int not null,
+    quant int not null,
+    preco_item float(8,2) not null,
     FOREIGN KEY (id_prod) REFERENCES produtos(id_prod),
     FOREIGN KEY (id_ped) REFERENCES pedidos(id_ped)
 );
