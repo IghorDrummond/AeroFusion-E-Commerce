@@ -149,7 +149,7 @@
                 try{
                     $this->montaQuery();
                     $this->stmt = $this->conexao->query($this->query);
-                    $Ret = $this->stmt->fetchAll(\PDO::FETCH_ASSOC);
+                    $Ret = $this->stmt->fetch(\PDO::FETCH_ASSOC);
                 }catch(\PDOException $e){
                     echo $e->getMessage();
                 }finally{

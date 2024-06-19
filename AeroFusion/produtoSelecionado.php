@@ -32,7 +32,7 @@
 		$Avaliacao = new AvalicaoProduto($_GET['Prod']);
 		$Avaliacoes = $Avaliacao->retornaValores();
 		//Monta tamanhos disponiveis para esse par de tênis
-		$Tamanho = new Tamanhos($Produtos[0]['tamanho']);
+		$Tamanho = new Tamanhos($Produtos['tamanho']);
 		$Tamanhos = $Tamanho->retornaValores();
 
 		montaProduto($Produtos, $Avaliacoes, $Tamanhos, $Favorito);
@@ -51,17 +51,17 @@
 						<div class="carousel-inner">
 							<!-- Inicio das Imagens -->
 							<div class="carousel-item active">
-								<img class="d-block m-auto img-fluid" src="img/<?php echo($Produtos[0]['img1']); ?>">
+								<img class="d-block m-auto img-fluid" src="img/<?php echo($Produtos['img1']); ?>">
 							</div>
 						<?php
 							for($nCont = 2; $nCont <= 5; $nCont++) {
-								if($Produtos[0]['img'. strval($nCont)] === ''){
+								if($Produtos['img'. strval($nCont)] === ''){
 									continue;
 								}
 								$Quant++;
 						?>
 							<div class="carousel-item">
-								<img class="d-block m-auto img-fluid " src="img/<?php echo($Produtos[0]['img' . strval($nCont)]); ?>">
+								<img class="d-block m-auto img-fluid " src="img/<?php echo($Produtos['img' . strval($nCont)]); ?>">
 							</div>
 						<?php
 							}
@@ -81,16 +81,16 @@
 					</div>
 				</article>
 				<article class="p-4 bg-white d-flex flex-column justify-content-center">
-					<h3 ><?php echo mb_convert_case($Produtos[0]['nome'], MB_CASE_TITLE, 'UTF-8'); ?></h3>
-					<h6 class="text-info">Categoria: <?php echo ucfirst(strtolower($Produtos[0]['categoria'])); ?></h6>
+					<h3 ><?php echo mb_convert_case($Produtos['nome'], MB_CASE_TITLE, 'UTF-8'); ?></h3>
+					<h6 class="text-info">Categoria: <?php echo ucfirst(strtolower($Produtos['categoria'])); ?></h6>
 					<?php
 						//Valida se o produto está disponivel
-						if($Produtos[0]['disponibilidade'] === 'SIM'){
+						if($Produtos['disponibilidade'] === 'SIM'){
 					?>
-					<h1 id="preco">R$ <?php echo ucfirst(strtolower($Produtos[0]['preco'])); ?></h1>
+					<h1 id="preco">R$ <?php echo ucfirst(strtolower($Produtos['preco'])); ?></h1>
 					<p>
 						ou<br>
-						12x de <span id="parcela">R$ <?php print(number_format( (float)$Produtos[0]['preco'] / 12, 2)) ?></span> sem juros!
+						12x de <span id="parcela">R$ <?php print(number_format( (float)$Produtos['preco'] / 12, 2)) ?></span> sem juros!
 					</p>
 					Escolha um tamanho:
 					<div class="d-flex w-100 rounded p-1">
@@ -105,7 +105,7 @@
 						?>
 					</div>
 					<h6 id="quantidade_texto">Quant: 1</h6>
-					<input onchange="alteraQuant()" id="quantidade" class="form-control w-25 d-inline border" type="range" min="1" max="<?php echo($Produtos[0]['estoque']); ?>">
+					<input onchange="alteraQuant()" id="quantidade" class="form-control w-25 d-inline border" type="range" min="1" max="<?php echo($Produtos['estoque']); ?>">
 					<div class="d-flex flex-wrap botoes">
 						<button class="border border-warning rounded m-1 p-3 bg-warning text-white font-weight-bold" onclick="comprar(<?php echo($_GET['Prod']) ?>)">Comprar</button>
 						<button class="border border-warning rounded m-1 p-3 bg-warning text-white font-weight-bold" onclick="favorito(this, <?php echo($_GET['Prod']); ?>)">Favoritar
@@ -122,7 +122,7 @@
 						</button>
 					</div>
 					<p class="mt-2 border p-1 rounded">
-						<?php echo ucfirst(strtolower($Produtos[0]['descricao'])); ?>		
+						<?php echo ucfirst(strtolower($Produtos['descricao'])); ?>		
 					</p>
 					<?php
 						}else{
@@ -131,9 +131,12 @@
 						Este produto está temporariamente esgotado.
 					</h1>
 					<h4 class="text-secondary text-center">
-					Pedimos desculpas pelo inconveniente. <br>
-					Por favor, verifique novamente em breve ou entre em contato conosco para mais informações.
+						Pedimos desculpas pelo inconveniente. <br>
+						Por favor, verifique novamente em breve ou entre em contato conosco para mais informações.
 					</h4>
+					<p class="text-lg-left text-center mt-2">
+						Ultimo preço registrado deste produto: R$ <?php echo($Produtos['preco']); ?>
+					</p>
 					<?php
 						}
 					?>
