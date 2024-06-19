@@ -852,7 +852,7 @@
 						            FROM carrinho AS car_inner
 						            INNER JOIN produtos AS prod_inner ON car_inner.id_prod = prod_inner.id_prod
 						            WHERE car_inner.id_cliente = car.id_cliente
-						              AND car_inner.id_car IN(35, 36, 37)
+						              AND car_inner.id_car IN($this->Produtos)
 						              AND prod_inner.estoque >= car_inner.quant
 						        ), 2, 'pt_BR'
 						    ) AS total_carrinho,
@@ -867,8 +867,8 @@
 						INNER JOIN 
 						    produtos AS prod ON car.id_prod = prod.id_prod
 						WHERE 
-						    cli.email = 'ighordrummond2001@gmail.com'
-						    AND car.id_car IN(35, 36, 37)
+						    cli.email = '$this->Email'
+						    AND car.id_car IN($this->Produtos)
 					";
 				}else if($Opc === 1){
 					$this->query = "
