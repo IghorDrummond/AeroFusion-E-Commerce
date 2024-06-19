@@ -750,12 +750,13 @@
 				$Ret = [
     				"Inclusão" => false,
     				"sem_estoque" => "",
-    				"Pedido" => "" 
+    				"Pedido" => "",
+    				"Total" => 0.0 
 				];
 
 				try{
-					date_default_timezone_set('America/Sao_Paulo');//Configura data e horas do servidor
-					//Responsavel por Auxorna os IDs dos produtos correspondente ao carrinho do usuário
+					date_default_timezone_set('America/Sao_Paulo');//Configura data e hora do servidor
+					//Responsavel por retorna os IDs dos produtos correspondente ao carrinho do usuário
 					$this->Produtos = explode(',', $this->Produtos);
 					foreach ($this->Produtos as $Prod) {
 						$Aux .= $Prod . ',';
@@ -767,8 +768,11 @@
 					//Valida se trouxe os dados correspondentes
 					if(isset($this->stmt[0]['id_cliente'])){
 						$this->IdCli = $this->stmt[0]['id_cliente'];//Recebe o Id do Cliente
-						$this->Total = $this->stmt[0]['total_carrinho'];//Recebe o total do pedido
-						$this->Data = date('Y-m-d H:i:s');//Guarda data do novo pedido
+						//Recebe o total do pedido
+						$this->Total = $this->stmt[0]['total_carrinho'];
+						$Ret['Total'] = $this->stmt[0]['total_carrinho'];
+						//Guarda data do novo pedido
+						$this->Data = date('Y-m-d H:i:s');
 						//Cria um novo pedido com os dados informados
 						$this->montaQuery(3);
 						$this->pushDados();
@@ -793,9 +797,11 @@
 								$this->montaQuery(2);
 								$this->pushDados();
 							}else{
-								$Ret['semEstoque'] .= $Dados['id_prod'] . ";";//Guarda Produto sem estoque
+								$Ret['sem_estoque'] .= $Dados['id_prod'] . ";";//Guarda Produto sem estoque
 							}
 						}
+						//Formata produtos sem estoque caso houver
+						$Ret['sem_estoque'] = strlen($Ret['sem_estoque']) > 0 ? substr($Ret['sem_estoque'], 0, strlen($Ret['sem_estoque']) -1) : '';
 						//Retorna operação concluída
 						$Ret['Inclusão'] = true;
  					}
