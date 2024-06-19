@@ -18,7 +18,12 @@
 	//Objeto
 	$Pedido = null;
 	$Endereco = null;
-	$FormPagamento = null;
+	$FormPagamento = null;	
+
+	//Finaliza operação caso usuário não estiver logado no sistema
+	if(!isse($_SESSION['Login']) or $_SESSION['Login'] === false){
+		die();
+	}
 
 	switch ($Opc) {
 		case '1':
@@ -171,9 +176,11 @@
 	}
 
 	function novoPedido(){
-		$Pedido = new novoPedido();
-
-		if($Pedido->setPedido()){
+		//Cria objeto para inserir novo pedido
+		$Pedido = new novoPedido(Email: $_SESSION['Email'], $_SESSION['Produtos'], $_GET['Endereco'], $_GET['Pagamento']);
+		//Cadastra novo pedido
+		$Ret = $Pedido->setPedido()
+		if($Ret['Inclusão']){
 			echo 'S';
 		}else{
 			echo 'N';
