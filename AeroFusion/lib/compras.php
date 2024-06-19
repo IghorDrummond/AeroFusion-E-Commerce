@@ -762,12 +762,11 @@
 						$this->Data = date('Y-m-d H:i:s');
 						// Cria um novo pedido com os dados informados
 						$this->montaQuery(3);
-						$this->pushDados();
-						
-						//verifica se a inserção foi bem-sucedida
-						$this->IdPed = $this->con->lastInsertId();
-						if ($this->IdPed > 0) {
-							$Ret['Pedido'] = $this->IdPed; // Insere dados no idPedido
+						$this->con->beginTransaction();
+						if ($this->con->exec($this->query) > 0) {
+							$this->IdPed = $this->con->lastInsertId();
+							$this->con->commit();
+							$Ret['Pedido'] = $this->IdPed; // Insere o id do novo pedido feito
 						} else {
 							throw new \PDOException("Falha ao inserir o pedido.");
 						}
@@ -801,6 +800,7 @@
 					}
 				} catch (\PDOException $e) {
 					echo $e->getMessage();
+					$this->con->rollBack();
 					$this->__destruct();
 				} finally {
 					return $Ret;
@@ -820,8 +820,7 @@
 			private function pushDados() {
 				try {
 					$this->con->beginTransaction();
-					$linhaAfetadas = $this->con->exec($this->query);
-					if ($linhaAfetadas > 0) {
+					if ( $this->con->exec($this->query)> 0) {
 						$this->con->commit();
 						return true;
 					} else {

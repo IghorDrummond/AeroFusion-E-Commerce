@@ -174,6 +174,7 @@ Data: 18/06/2024
 Programador: Ighor Drummond
 */
 function finalizarCompra(){
+    telaCarregamento(true);
     //Impede de recarregar a página
     event.preventDefault();
 
@@ -184,7 +185,14 @@ function finalizarCompra(){
             ajax = new XMLHttpRequest();
             ajax.open('POST', 'script/pedidos.php?Opc=5&Pagamento=' + encodeURIComponent(pagamento.selectedIndex) + '&Endereco=' + encodeURIComponent(End));
             ajax.onreadystatechange = ()=>{
-                
+                telaCarregamento(false);
+                if(ajax.readyState === 4){
+                    if(ajax.status < 400){
+                        window
+                    }else{
+                        window.location.href =  "error.php?Error=" + ajax.status.toString();
+                    }
+                }
             }
             ajax.send();
         }else{
@@ -193,9 +201,4 @@ function finalizarCompra(){
     }else{
         alerta('Escolha um endereço.', 0);
     }
-    /*
-        abre um novo pedido com prazo de 7 dias para pagamento
-        caso passar desse prazo de 7 dias ele apaga o pedido existente
-        também apagar os itens existentes no carrinho após finalizar a criação do novo pedido
-    */
 }

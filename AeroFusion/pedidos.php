@@ -96,6 +96,10 @@
 			</div>
 			<?php
 				}
+
+				if(!isset($Prod['total_carrinho'])){
+					return null;
+				}
 			?>
 		</article>
 		<article class="p-5 bg-white d-flex flex-column align-items-center text-warning">
