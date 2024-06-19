@@ -242,8 +242,7 @@
 				INNER JOIN 
 					tamanho as tam ON tam.id_tam = car.id_tam
 				WHERE  
-					prod.estoque > 0
-					AND cli.email = '$this->Cliente'
+					cli.email = '$this->Cliente'
 				GROUP BY
 					prod.id_prod, 
 					prod.nome, 

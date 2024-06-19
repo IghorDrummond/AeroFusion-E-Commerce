@@ -54,10 +54,22 @@
 			<i onclick="fecharCarrinho()" class="fa-solid fa-x w-100 border border-warning rounded text-center mb-auto"></i>
 			<div id="carrinho_produtos" class="mt-1" onscroll="guardaScroll()">';
 			foreach ($Produtos as $Prod) {
+				//Valida se o produto que está no carrinho está fora de estoque
+				$Class = $Prod['estoque'] < $Prod['quant'] ? 'bg-secondary' : 'bg-white';
 ?>
-	<div class="d-flex border border-warning p-1 flex-column align-items-center text-center p-2">
+	<div class="d-flex border border-warning p-1 flex-column align-items-center text-center p-2 <?php echo($Class) ?>">
+		<?php
+			if($Prod['estoque'] >= $Prod['quant']){
+		?>		
 		Selecionar para comprar
 		<input type="checkbox" name="CarProd" value="<?php echo($Prod['id_car']) ?>" onchange="selecionarProduto()">
+		<?php
+			}else{
+		?>
+		<h6>Estoque insuficiente. <br> Por favor, ajuste a quantidade clicando em 'Modificar itens do carrinho' ou remova o produto do seu carrinho.</h6>
+		<?php
+			}
+		?>
 		<div onclick="maisDetalhes(<?php echo($Prod['id_prod']) ?>)" onscroll="guardaScroll()" style="cursor: pointer;" title="Ver detalhes">
 			<img src="img/<?php echo($Prod['img']) ?>" width="120" height="120" class="img-fluid rounded">
 			<h6><?php echo( mb_convert_case($Prod['produto'], MB_CASE_TITLE, 'UTF-8') ) ?></h6>
