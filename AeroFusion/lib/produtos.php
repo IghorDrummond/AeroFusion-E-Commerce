@@ -177,7 +177,11 @@
                         img_prod.img3,
                         img_prod.img4,
                         img_prod.img5,
-                        cat.nome_cat as categoria
+                        cat.nome_cat as categoria,
+						CASE 
+						    WHEN prod.estoque > 0 THEN 'SIM'
+						    ELSE 'FALTA ESTOQUE'
+						END AS disponibilidade 
                     FROM 
                         produtos as prod
                     INNER JOIN
@@ -185,8 +189,7 @@
                     INNER JOIN
                         categoria as cat ON cat.id_cat = prod.id_cat
                     WHERE
-                        prod.estoque > 0
-                        AND prod.id_prod = $this->ID                  
+                        prod.id_prod = $this->ID                  
                 ";
             }
         }

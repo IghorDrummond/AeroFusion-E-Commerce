@@ -43,6 +43,7 @@
 	//-------------Funções
 	function montaProduto($Produtos, $Avaliacoes, $Tamanhos, $Favorito){
 		$Quant = 1;
+		
 ?>
 			<section class="text-warning">
 				<article>
@@ -82,6 +83,10 @@
 				<article class="p-4 bg-white d-flex flex-column justify-content-center">
 					<h3 ><?php echo mb_convert_case($Produtos[0]['nome'], MB_CASE_TITLE, 'UTF-8'); ?></h3>
 					<h6 class="text-info">Categoria: <?php echo ucfirst(strtolower($Produtos[0]['categoria'])); ?></h6>
+					<?php
+						//Valida se o produto está disponivel
+						if($Produtos[0]['disponibilidade'] === 'SIM'){
+					?>
 					<h1 id="preco">R$ <?php echo ucfirst(strtolower($Produtos[0]['preco'])); ?></h1>
 					<p>
 						ou<br>
@@ -119,6 +124,19 @@
 					<p class="mt-2 border p-1 rounded">
 						<?php echo ucfirst(strtolower($Produtos[0]['descricao'])); ?>		
 					</p>
+					<?php
+						}else{
+					?>
+					<h1 class="text-center">
+						Este produto está temporariamente esgotado.
+					</h1>
+					<h4 class="text-secondary text-center">
+					Pedimos desculpas pelo inconveniente. <br>
+					Por favor, verifique novamente em breve ou entre em contato conosco para mais informações.
+					</h4>
+					<?php
+						}
+					?>
 				</article>
 			</section>
 			<section class="bg-warning border border-top border-warning">
