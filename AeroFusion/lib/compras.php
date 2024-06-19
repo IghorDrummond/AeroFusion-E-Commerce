@@ -711,6 +711,7 @@
 			protected $IdCli = null;
 			protected $IdPed = null;
 			protected $IdProd = null;
+			protected $IdCar = null;
 			protected $semEstoque = null;
 			protected $Data = null;
 			private $Total = null;
@@ -746,7 +747,11 @@
 			*/
 			public function setPedido(){
 				$Aux = '';
-				$Ret = false;
+				$Ret = [
+    				"Inclusão" => false,
+    				"sem_estoque" => "",
+    				"Pedido" => "" 
+				];
 
 				try{
 					date_default_timezone_set('America/Sao_Paulo');//Configura data e horas do servidor
@@ -768,6 +773,7 @@
 						$this->montaQuery(3);
 						$this->pushDados();
 						$this->IdPed = $this->con->lastInsertId();//Recupera o id do novo pedido
+						$Ret['Pedido'] = $this->IdPed;//Insere dados no idPedido
 						//Vai dar a baixa na quantidade dos produtos e adicionar o item do pedido
 						foreach ($this->stmt as $Dados) {
 							if($Dados['disponibilidade'] === 'SIM'){
@@ -776,18 +782,23 @@
 								$this->IdProd = $Dados['id_prod'];
 								$this->montaQuery(1);//Monta query para dar a baixa no estoque dos produtos
 								$this->pushDados();//Atualiza estoque do produto
+
 								//Adiciona produto ao item do pedido
 								$this->montaQuery(4);
 								$this->query .= PHP_EOL . "VALUES($this->IdProd, $this->IdPed," . $Dados['quant'] . ", " . $Dados['total_item'] . ")"; 
 								$this->pushDados();
+
+								//Apaga produto do carrinho do cliente
+								$this->IdCar = $Dados['id_car'];
+								$this->montaQuery(2);
+								$this->pushDados();
 							}else{
-								array_push($this->semEstoque, $Dados['id_prod']);
+								$Ret['semEstoque'] .= $Dados['id_prod'] . ";";//Guarda Produto sem estoque
 							}
 						}
-						//Apaga os produtos do carrinho após "boletar" o pedido
-						$this->montaQuery(2);
-						$this->pushDados();
-					}
+						//Retorna operação concluída
+						$Ret['Inclusão'] = true;
+ 					}
 				}catch(\PDOException $e){
 					echo $e->getMessage();
 					$this->__destruct();
@@ -894,7 +905,8 @@
 						DELETE FROM
 							carrinho
 						WHERE
-							id_car IN($this->Produtos)
+							id_car = $this->IdCar
+							AND id_cliente = $this->IdCli
 					";
 				}else if($Opc === 3){
 					$this->query = "
