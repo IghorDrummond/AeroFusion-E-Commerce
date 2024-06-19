@@ -31,7 +31,7 @@ O AeroFusion, com seu uso inovador de Three.js para animações 3D e uma base ro
 <blockquote cite="https://aerofusion1.000webhostapp.com/index.php">
 	O site Aerofusion já está disponível online, porém, encontra-se em fase de desenvolvimento. Como resultado, é possível que ocorram bugs, erros ortográficos e falta de conteúdos complementares.
 	Portanto, é aconselhável ter em mente que, devido ao estado de desenvolvimento, a experiência no site Aerofusion pode ser impactada por esses fatores temporários.
-	<a href="https://aerofusion1.000webhostapp.com/index.php" title="Aero Fusion Online">Acessar Site </a> - data da ultima atualização do site online <time>2024-06-12</time>
+	<a href="https://aerofusion1.000webhostapp.com/index.php" title="Aero Fusion Online">Acessar Site </a> - data da ultima atualização do site online <time>2024-06-12</time>.
 </blockquote>					
 <h4>Desenvolvido pelas Linguangens:</h4>
 <ul>
