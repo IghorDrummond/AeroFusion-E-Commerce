@@ -188,7 +188,15 @@ function finalizarCompra(){
                 telaCarregamento(false);
                 if(ajax.readyState === 4){
                     if(ajax.status < 400){
-                        window
+                        switch(ajax.responseText.trim()){
+                            case 'S':
+                                //Atualiza para página para pagar o pedido
+                                window.location.reload();
+                                break;
+                            case 'N':
+                                alerta('Houve um erro interno em nosso servidor. Tente novamente ou mais tarde.', 0);
+                                break;
+                        }
                     }else{
                         window.location.href =  "error.php?Error=" + ajax.status.toString();
                     }
