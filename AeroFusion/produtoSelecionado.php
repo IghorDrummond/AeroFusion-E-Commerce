@@ -86,11 +86,25 @@
 					<?php
 						//Valida se o produto está disponivel
 						if($Produtos['disponibilidade'] === 'SIM'){
+							//Valida se o produto tem uma promoção ativada
+							if($Produtos['promocao_ativo'] != 1){
+
 					?>
-					<h1 id="preco">R$ <?php echo ucfirst(strtolower($Produtos['preco'])); ?></h1>
+						<h1 id="preco">R$ <?php echo $Produtos['preco']; ?></h1>
+					<?php
+							}else{
+					?>	
+						<span><del>R$ <?php echo $Produtos['preco']; ?></del></span>
+						<h1 id="preco">
+							R$ <?php echo $Produtos['promocao']; ?>
+							<span class="bandeira_promocao badge badge-pill badge-dark">Promoção</span>
+						 </h1>
+					<?php
+							}
+					?>
 					<p>
 						ou<br>
-						12x de <span id="parcela">R$ <?php print(number_format( (float)$Produtos['preco'] / 12, 2)) ?></span> sem juros!
+						12x de <span id="parcela">R$ <?php print(number_format( ($Produtos['promocao_ativo'] === 1 ? (float)$Produtos['promocao'] :  (float)$Produtos['preco']) / 12, 2)) ?></span> sem juros!
 					</p>
 					Escolha um tamanho:
 					<div class="d-flex w-100 rounded p-1">
@@ -135,7 +149,7 @@
 						Por favor, verifique novamente em breve ou entre em contato conosco para mais informações.
 					</h4>
 					<p class="text-lg-left text-center mt-2">
-						Ultimo preço registrado deste produto: R$ <?php echo($Produtos['preco']); ?>
+						Último preço registrado deste produto: R$ <?php echo($Produtos['preco']); ?>
 					</p>
 					<?php
 						}

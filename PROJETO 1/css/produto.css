@@ -29,6 +29,12 @@ section:nth-child(1) img{
 article:nth-child(2){
 	height: 100% !important;
 }
+/* Bandeira de promoção */
+.bandeira_promocao{
+	font-size: 0.4em !important;
+	-webkit-animation: pulsar 2s infinite;
+	        animation: pulsar 2s infinite;
+}
 /* Botões de compras */
 .botoes button{
 	width: 25%;
@@ -44,6 +50,33 @@ article:nth-child(2){
 section:nth-child(2){
 	overflow: auto;
 	max-height: 30vh;
+}
+
+/* Animações */
+@-webkit-keyframes pulsar{
+	0%{
+		-webkit-transform: scale(1);
+		        transform: scale(1);
+	}50%{
+		-webkit-transform: scale(1.2);
+		        transform: scale(1.2);
+	}100%{
+		-webkit-transform: scale(1);
+		        transform: scale(1);
+	}
+}
+@keyframes pulsar{
+	0%{
+		-webkit-transform: scale(1);
+		        transform: scale(1);
+	}
+	50%{
+		-webkit-transform: scale(1.1);
+		        transform: scale(1.1);
+	}100%{
+		-webkit-transform: scale(1);
+		        transform: scale(1);
+	}
 }
 
 /* Dispositivos extra small (telefones em modo retrato, com menos de 576px)*/
