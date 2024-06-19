@@ -1,3 +1,4 @@
+<?php require_once('script/valida_pag_pagamento.php'); ?>
 <!DOCTYPE html>
 <html>
 	<head>
