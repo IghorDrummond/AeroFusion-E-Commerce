@@ -73,6 +73,13 @@
 		<div onclick="maisDetalhes(<?php echo($Prod['id_prod']) ?>)" onscroll="guardaScroll()" style="cursor: pointer;" title="Ver detalhes">
 			<img src="img/<?php echo($Prod['img']) ?>" width="120" height="120" class="img-fluid rounded">
 			<h6><?php echo( mb_convert_case($Prod['produto'], MB_CASE_TITLE, 'UTF-8') ) ?></h6>
+			<?php
+				//Valida se tem promoção ativa para este item
+				if($Prod['promocao_ativo'] === 1){
+					echo('<span class="bandeira_promocao_carrinho badge badge-pill badge-dark">Promoção</span><br>');
+					echo('<del>R$ '. $Prod['preco'] .'</del><br>');
+				}
+			?>
 			Preço do item:R$ <?php echo($Prod['total_item']) ?>
 			<br>
 			Tamanho: <?php echo($Prod['tamanho']) ?>

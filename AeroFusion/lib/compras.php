@@ -208,6 +208,7 @@
 					prod.estoque,
 					prod.promocao,
 					prod.promocao_ativo,
+					prod.preco,
 					cli.nome,
 					car.quant,
 					car.id_car,

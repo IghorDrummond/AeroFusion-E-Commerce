@@ -9,7 +9,7 @@
 	$Indicador = 0;
 	$quantFotos = 0;
 	//Array
-	$Produtos = [];
+	$Produto = [];
 	$Avaliacoes = [];
 	$Tamanhos = [];
 	//Objetos
@@ -21,27 +21,27 @@
 
 	//Escopo==============
 	$Produto = new Produto($_GET['Prod']);
-	$Produtos = $Produto->retornaValores();
+	$Produto = $Produto->retornaValores();
 
 	if(isset($_SESSION['Login']) and $_SESSION['Login']){
 		$Favorito = new Favoritos(Email: $_SESSION['Email']);//Inicia objeto favoritos
 	}
 
-	if($Produtos != false){
+	if($Produto != false){
 		//Monta avaliação do produto caso houver
 		$Avaliacao = new AvalicaoProduto($_GET['Prod']);
 		$Avaliacoes = $Avaliacao->retornaValores();
 		//Monta tamanhos disponiveis para esse par de tênis
-		$Tamanho = new Tamanhos($Produtos['tamanho']);
+		$Tamanho = new Tamanhos($Produto['tamanho']);
 		$Tamanhos = $Tamanho->retornaValores();
 
-		montaProduto($Produtos, $Avaliacoes, $Tamanhos, $Favorito);
+		montaProduto($Produto, $Avaliacoes, $Tamanhos, $Favorito);
 	}else{
 		faltaProduto();
 	}
 
 	//-------------Funções
-	function montaProduto($Produtos, $Avaliacoes, $Tamanhos, $Favorito){
+	function montaProduto($Produto, $Avaliacoes, $Tamanhos, $Favorito){
 		$Quant = 1;
 		
 ?>
@@ -51,17 +51,17 @@
 						<div class="carousel-inner">
 							<!-- Inicio das Imagens -->
 							<div class="carousel-item active">
-								<img class="d-block m-auto img-fluid" src="img/<?php echo($Produtos['img1']); ?>">
+								<img class="d-block m-auto img-fluid" src="img/<?php echo($Produto['img1']); ?>">
 							</div>
 						<?php
 							for($nCont = 2; $nCont <= 5; $nCont++) {
-								if($Produtos['img'. strval($nCont)] === ''){
+								if($Produto['img'. strval($nCont)] === ''){
 									continue;
 								}
 								$Quant++;
 						?>
 							<div class="carousel-item">
-								<img class="d-block m-auto img-fluid " src="img/<?php echo($Produtos['img' . strval($nCont)]); ?>">
+								<img class="d-block m-auto img-fluid " src="img/<?php echo($Produto['img' . strval($nCont)]); ?>">
 							</div>
 						<?php
 							}
@@ -81,22 +81,22 @@
 					</div>
 				</article>
 				<article class="p-4 bg-white d-flex flex-column justify-content-center">
-					<h3 ><?php echo mb_convert_case($Produtos['nome'], MB_CASE_TITLE, 'UTF-8'); ?></h3>
-					<h6 class="text-info">Categoria: <?php echo ucfirst(strtolower($Produtos['categoria'])); ?></h6>
+					<h3 ><?php echo mb_convert_case($Produto['nome'], MB_CASE_TITLE, 'UTF-8'); ?></h3>
+					<h6 class="text-info">Categoria: <?php echo ucfirst(strtolower($Produto['categoria'])); ?></h6>
 					<?php
 						//Valida se o produto está disponivel
-						if($Produtos['disponibilidade'] === 'SIM'){
+						if($Produto['disponibilidade'] === 'SIM'){
 							//Valida se o produto tem uma promoção ativada
-							if($Produtos['promocao_ativo'] != 1){
+							if($Produto['promocao_ativo'] != 1){
 
 					?>
-						<h1 id="preco">R$ <?php echo $Produtos['preco']; ?></h1>
+						<h1 id="preco">R$ <?php echo $Produto['preco']; ?></h1>
 					<?php
 							}else{
 					?>	
-						<span><del>R$ <?php echo $Produtos['preco']; ?></del></span>
+						<span><del>R$ <?php echo $Produto['preco']; ?></del></span>
 						<h1 id="preco">
-							R$ <?php echo $Produtos['promocao']; ?>
+							R$ <?php echo $Produto['promocao']; ?>
 							<span class="bandeira_promocao badge badge-pill badge-dark">Promoção</span>
 						 </h1>
 					<?php
@@ -104,7 +104,7 @@
 					?>
 					<p>
 						ou<br>
-						12x de <span id="parcela">R$ <?php print(number_format( ($Produtos['promocao_ativo'] === 1 ? (float)$Produtos['promocao'] :  (float)$Produtos['preco']) / 12, 2)) ?></span> sem juros!
+						12x de <span id="parcela">R$ <?php print(number_format( ($Produto['promocao_ativo'] === 1 ? (float)$Produto['promocao'] :  (float)$Produto['preco']) / 12, 2)) ?></span> sem juros!
 					</p>
 					Escolha um tamanho:
 					<div class="d-flex w-100 rounded p-1">
@@ -119,7 +119,7 @@
 						?>
 					</div>
 					<h6 id="quantidade_texto">Quant: 1</h6>
-					<input onchange="alteraQuant()" id="quantidade" class="form-control w-25 d-inline border" type="range" min="1" max="<?php echo($Produtos['estoque']); ?>">
+					<input onchange="alteraQuant()" id="quantidade" class="form-control w-25 d-inline border" type="range" min="1" max="<?php echo($Produto['estoque']); ?>">
 					<div class="d-flex flex-wrap botoes">
 						<button class="border border-warning rounded m-1 p-3 bg-warning text-white font-weight-bold" onclick="comprar(<?php echo($_GET['Prod']) ?>)">Comprar</button>
 						<button class="border border-warning rounded m-1 p-3 bg-warning text-white font-weight-bold" onclick="favorito(this, <?php echo($_GET['Prod']); ?>)">Favoritar
@@ -136,7 +136,7 @@
 						</button>
 					</div>
 					<p class="mt-2 border p-1 rounded">
-						<?php echo ucfirst(strtolower($Produtos['descricao'])); ?>		
+						<?php echo ucfirst(strtolower($Produto['descricao'])); ?>		
 					</p>
 					<?php
 						}else{
@@ -149,7 +149,7 @@
 						Por favor, verifique novamente em breve ou entre em contato conosco para mais informações.
 					</h4>
 					<p class="text-lg-left text-center mt-2">
-						Último preço registrado deste produto: R$ <?php echo($Produtos['preco']); ?>
+						Último preço registrado deste produto: R$ <?php echo($Produto['preco']); ?>
 					</p>
 					<?php
 						}

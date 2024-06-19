@@ -85,6 +85,12 @@
 	overflow: auto;
 	white-space: pre-line !important;		
 }
+
+.bandeira_promocao_carrinho{
+	-webkit-animation: pulsar 2s infinite;
+	        animation: pulsar 2s infinite;
+}
+
 /* Barra de Pesquisa */
 #Pesquisa{
 	border: none;
@@ -418,6 +424,32 @@ footer i:not(:hover){
     100% { 
     	color: red; 
     }
+}
+
+@-webkit-keyframes pulsar{
+	0%{
+		-webkit-transform: scale(1);
+		        transform: scale(1);
+	}50%{
+		-webkit-transform: scale(1.2);
+		        transform: scale(1.2);
+	}100%{
+		-webkit-transform: scale(1);
+		        transform: scale(1);
+	}
+}
+@keyframes pulsar{
+	0%{
+		-webkit-transform: scale(1);
+		        transform: scale(1);
+	}
+	50%{
+		-webkit-transform: scale(1.1);
+		        transform: scale(1.1);
+	}100%{
+		-webkit-transform: scale(1);
+		        transform: scale(1);
+	}
 }
 
 /* Dispositivos extra small (telefones em modo retrato, com menos de 576px)*/
