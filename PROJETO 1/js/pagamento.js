@@ -131,7 +131,7 @@ Data: 18/06/2024
 Programador: Ighor Drummond
 */
 function atualizaQuantidade(Opc, IdCar, element){
-    //telaCarregamento(true);
+    telaCarregamento(true);
     var btnGroup = element.parentElement;
     var Quantidade = btnGroup.querySelector('.quantidade_acao').textContent;
 
@@ -152,7 +152,7 @@ function atualizaQuantidade(Opc, IdCar, element){
     ajax.open('POST', 'script/pedidos.php?Opc=4&IdCar=' + encodeURIComponent(IdCar) + '&Quant=' + encodeURIComponent(Quantidade));
 
     ajax.onreadystatechange = ()=>{
-        //telaCarregamento(false);
+        telaCarregamento(false);
         if(ajax.readyState === 4){
             if(ajax.status < 400){
                 novoPedido();//Atualiza o pedido novamente após atualização da quantidade

@@ -9,6 +9,7 @@
 	use Compra\atualizaCarrinho;
 	use Pedido\solicitaPedido;
 	use Pedido\validaEstoque;
+	use Pedido\novoPedido;
 	use Acesso\Endereco;
 	use Pagamentos\Pagamento;
 	//Declaração de variaveis
@@ -31,6 +32,9 @@
 			break;
 		case '4':
 			atualizaQuantidade($_GET['IdCar'], $_GET['Quant']);
+			break;
+		case '5':
+			novoPedido();
 			break;
 	}
 
@@ -163,6 +167,16 @@
 			$Carrinho->atualizaQuantidade($_SESSION['Email']);
 		}else{
 			echo "ESTOQUE";
+		}
+	}
+
+	function novoPedido(){
+		$Pedido = new novoPedido();
+
+		if($Pedido->setPedido()){
+			echo 'S';
+		}else{
+			echo 'N';
 		}
 	}
 ?>

@@ -595,6 +595,7 @@
 					";
 			}
 		}
+
 		/*
 		*Classes: validaEstoque
 		*Descrição: Classe responsavel por validar estoque de um produto
@@ -691,6 +692,189 @@
 			private function retornaValores(){
 				$this->stmt = $this->con->query($this->query);
 				return $this->stmt->fetchAll(\PDO::FETCH_ASSOC);				
+			}
+		}
+
+		/*
+		*Classes: novoPedido
+		*Descrição: 
+		*Data: 19/06/2024
+		*Programador(a): Ighor Drummond
+		*/
+		class novoPedido{
+			//Constantes
+			const STATUS = 1;
+			//Atributos
+			protected $con =null;
+			protected $stmt = null;
+			protected $query = null;
+			protected $IdCli = null;
+			protected $IdPed = null;
+			protected $IdProd = null;
+			protected $semEstoque = null;
+			private $Total = null;
+			private $Quant = null;
+
+			//Construtor
+			public function __construct(
+				public $Email = '',
+				public $Produtos = '',
+				public $Endereco = '',
+				public $Pagamento = ''
+			){
+				try{
+					$this->con = new \IniciaServer();
+					$this->con = $this->con->conexao();
+				}catch(\PDOException $e){
+					echo $e->getMessage();
+					$this->__destruct();
+				}
+			}
+
+			//Destruidor
+			public function __destruct(){
+				return false;
+			}
+
+			//Métodos
+			/*
+			*Metodo: montaQuery(Opc)
+			*Descrição: Responsavel por montar as querys
+			*Data: 19/06/2024
+			*Programador(a): Ighor Drummond
+			*/
+			public function setPedido(){
+				$Aux = '';
+				$Ret = false;
+
+				try{
+					date_default_timezone_set('America/Sao_Paulo');//Configura data e horas do servidor
+					//Responsavel por Auxorna os IDs dos produtos correspondente ao carrinho do usuário
+					$this->Produtos = explode(',', $this->Produtos);
+					foreach ($this->Produtos as $Prod) {
+						$Aux .= $Prod . ',';
+					}
+					$Aux = substr($Aux, 0, strlen($Aux) -1);//Remove a ultima vírgula
+					$this->Produtos = $Aux;
+					$this->montaQuery(0);//Monta query para retorna os items do pedido
+					$this->getDados();//Recupera os dados
+					//Valida se trouxe os dados correspondentes
+					if(isset($this->stmt[0]['id_cliente'])){
+						$this->IdCli = $this->stmt[0]['id_cliente'];//Recebe o Id do Cliente
+						$this->Total = $this->stmt[0]['total_carrinho'];
+
+						//Vai dar a baixa na quantidade dos produtos após 
+						foreach ($this->stmt as $Dados) {
+							if($Dados['disponibilidade'] === 'SIM'){
+								$this->Quant = strval(abs((int)$Dados['quant'] - (int)$Dados['estoque']));
+								$this->IdProd = $Dados['id_prod'];
+								$this->montaQuery(1);//Monta query para dar a baixa no estoque dos produtos
+								$this->pushDados();
+							}else{
+								array_push($this->semEstoque, $Dados['id_prod']);
+							}
+						}
+					}
+				}catch(\PDOException $e){
+					echo $e->getMessage();
+					$this->con->rollback();
+					$this->__destruct();
+				}finally{
+					return $Ret;
+				}
+			}
+			/*
+			*Metodo: montaQuery(Opc)
+			*Descrição: Responsavel por montar as querys
+			*Data: 19/06/2024
+			*Programador(a): Ighor Drummond
+			*/
+			private function getDados(){
+				try{
+					$this->stmt = $this->con->query($this->query);
+					$this->stmt = $this->stmt->fetchAll(\PDO::FETCH_ASSOC);
+				}catch(\PDOException $e){
+					echo $e->getMessage();
+					$this->__destruct();
+				}
+			}
+			/*
+			*Metodo: pushDados()
+			*Descrição: Responsavel por atualizar ou executar dados no MySQL
+			*Data: 19/06/2024
+			*Programador(a): Ighor Drummond
+			*/
+			private function pushDados(){
+				try{
+					if(($this->con->exec($this->query)) > 0){
+						return true;
+					}
+				}catch(\PDOException $e){
+					echo $e->getMessage();
+					return false;
+				}
+			}
+			/*
+			*Metodo: montaQuery(Opc)
+			*Descrição: Responsavel por montar as querys
+			*Data: 19/06/2024
+			*Programador(a): Ighor Drummond
+			*/
+			private function montaQuery($Opc){
+				if($Opc === 0){
+					$this->query = "
+						SELECT 
+						    cli.email,
+						    cli.id as id_cliente,
+						    car.id_car,
+						    car.id_prod,
+						    car.quant,
+						    prod.estoque,
+						    FORMAT(
+						        CASE
+						            WHEN prod.promocao_ativo = 1 THEN prod.promocao * car.quant
+						            ELSE prod.preco * car.quant
+						        END, 2, 'pt_BR'
+						    ) AS total_item,
+						    FORMAT(
+						        (
+						            SELECT SUM(
+						                CASE
+						                    WHEN prod_inner.promocao_ativo = 1 THEN prod_inner.promocao * car_inner.quant
+						                    ELSE prod_inner.preco * car_inner.quant
+						                END
+						            )
+						            FROM carrinho AS car_inner
+						            INNER JOIN produtos AS prod_inner ON car_inner.id_prod = prod_inner.id_prod
+						            WHERE car_inner.id_cliente = car.id_cliente
+						              AND car_inner.id_car IN(35, 36, 37)
+						              AND prod_inner.estoque >= car_inner.quant
+						        ), 2, 'pt_BR'
+						    ) AS total_carrinho,
+						    CASE 
+						        WHEN prod.estoque >= car.quant THEN 'SIM'
+						        ELSE 'FALTA ESTOQUE'
+						    END AS disponibilidade
+						FROM 
+						    carrinho AS car
+						INNER JOIN 
+						    cliente AS cli ON cli.id = car.id_cliente
+						INNER JOIN 
+						    produtos AS prod ON car.id_prod = prod.id_prod
+						WHERE 
+						    cli.email = 'ighordrummond2001@gmail.com'
+						    AND car.id_car IN(35, 36, 37)
+					";
+				}else if($Opc === 1){
+					$this->query = "
+						UPDATE 
+							produtos
+						SET
+							estoque = $this->Quant
+						WHERE
+							id_prod = $this->IdProd
+					";
+				}
 			}
 		}
 	}
