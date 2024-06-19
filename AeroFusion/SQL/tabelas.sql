@@ -216,7 +216,7 @@ INSERT INTO status(nome) VALUES('Transportando');
 INSERT INTO status(nome) VALUES('Saiu para entrega');
 INSERT INTO status(nome) VALUES('Entregue');
 INSERT INTO status(nome) VALUES('Cancelado');
-[ ]
+
 #CRIANDO TABELA DE FORMA DE PAGAMENTO
 CREATE TABLE forma_pagamento(
     id_form int primary key auto_increment not null,

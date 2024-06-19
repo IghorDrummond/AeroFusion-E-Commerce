@@ -701,11 +701,11 @@
 		*Data: 19/06/2024
 		*Programador(a): Ighor Drummond
 		*/
-		class novoPedido{
-			//Constantes
+		class novoPedido {
+			// Constantes
 			const STATUS = 1;
-			//Atributos
-			protected $con =null;
+			// Atributos
+			protected $con = null;
 			protected $stmt = null;
 			protected $query = null;
 			protected $IdCli = null;
@@ -716,188 +716,170 @@
 			protected $Data = null;
 			private $Total = null;
 			private $Quant = null;
-
-			//Construtor
+		
+			// Construtor
 			public function __construct(
 				public $Email = '',
 				public $Produtos = '',
 				public $Endereco = '',
 				public $Pagamento = ''
-			){
-				try{
+			) {
+				try {
 					$this->con = new \IniciaServer();
 					$this->con = $this->con->conexao();
-				}catch(\PDOException $e){
+				} catch (\PDOException $e) {
 					echo $e->getMessage();
 					$this->__destruct();
 				}
 			}
-
-			//Destruidor
-			public function __destruct(){
+		
+			// Destruidor
+			public function __destruct() {
 				return false;
 			}
-
-			//Métodos
-			/*
-			*Metodo: montaQuery(Opc)
-			*Descrição: Responsavel por montar as querys
-			*Data: 19/06/2024
-			*Programador(a): Ighor Drummond
-			*/
-			public function setPedido(){
-				$Aux = '';
+		
+			// Métodos
+			public function setPedido() {
 				$Ret = [
-    				"Inclusão" => false,
-    				"sem_estoque" => "",
-    				"Pedido" => "",
-    				"Total" => 0.0 
+					"Inclusão" => false,
+					"sem_estoque" => "",
+					"Pedido" => "",
+					"Total" => 0.0
 				];
-
-				try{
-					date_default_timezone_set('America/Sao_Paulo');//Configura data e hora do servidor
-					//Responsavel por retorna os IDs dos produtos correspondente ao carrinho do usuário
-					/*$this->Produtos = explode(',', $this->Produtos);
-					foreach ($this->Produtos as $Prod) {
-						$Aux .= $Prod . ',';
-					}
-					$Aux = substr($Aux, 0, strlen($Aux) -1);//Remove a ultima vírgula
-					$this->Produtos = $Aux;*/
-					$this->montaQuery(0);//Monta query para retorna os items do pedido
-					$this->getDados();//Recupera os dados
-					//Valida se trouxe os dados correspondentes
-					if(isset($this->stmt[0]['id_cliente'])){
-						$this->IdCli = $this->stmt[0]['id_cliente'];//Recebe o Id do Cliente
-						//Recebe o total do pedido
-						$this->Total = $this->stmt[0]['total_carrinho'];
-						$Ret['Total'] = $this->stmt[0]['total_carrinho'];
-						//Guarda data do novo pedido
+		
+				try {
+					date_default_timezone_set('America/Sao_Paulo'); // Configura data e hora do servidor
+					// Responsável por retorna os IDs dos produtos correspondente ao carrinho do usuário
+					$this->montaQuery(0); // Monta query para retorna os items do pedido
+					$this->getDados(); // Recupera os dados
+					// Valida se trouxe os dados correspondentes
+					if (isset($this->stmt[0]['id_cliente'])) {
+						$this->IdCli = strval($this->stmt[0]['id_cliente']); // Recebe o Id do Cliente
+						// Recebe o total do pedido
+						$this->Total = str_replace(',', '.', $this->stmt[0]['total_carrinho']);
+						$Ret['Total'] = $this->Total;
+						// Guarda data do novo pedido
 						$this->Data = date('Y-m-d H:i:s');
-						//Cria um novo pedido com os dados informados
+						// Cria um novo pedido com os dados informados
 						$this->montaQuery(3);
 						$this->pushDados();
-						$this->IdPed = $this->con->lastInsertId();//Recupera o id do novo pedido
-						$Ret['Pedido'] = $this->IdPed;//Insere dados no idPedido
-						//Vai dar a baixa na quantidade dos produtos e adicionar o item do pedido
+						
+						//verifica se a inserção foi bem-sucedida
+						$this->IdPed = $this->con->lastInsertId();
+						if ($this->IdPed > 0) {
+							$Ret['Pedido'] = $this->IdPed; // Insere dados no idPedido
+						} else {
+							throw new \PDOException("Falha ao inserir o pedido.");
+						}
+						
+						// Vai dar a baixa na quantidade dos produtos e adicionar o item do pedido
 						foreach ($this->stmt as $Dados) {
-							if($Dados['disponibilidade'] === 'SIM'){
-								//Da baixa no produto
+							if ($Dados['disponibilidade'] === 'SIM') {
+								// Da baixa no produto
 								$this->Quant = strval(abs((int)$Dados['quant'] - (int)$Dados['estoque']));
 								$this->IdProd = $Dados['id_prod'];
-								$this->montaQuery(1);//Monta query para dar a baixa no estoque dos produtos
-								$this->pushDados();//Atualiza estoque do produto
-
-								//Adiciona produto ao item do pedido
+								$this->montaQuery(1); // Monta query para dar a baixa no estoque dos produtos
+								$this->pushDados(); // Atualiza estoque do produto
+		
+								// Adiciona produto ao item do pedido
 								$this->montaQuery(4);
-								$this->query .= PHP_EOL . "VALUES($this->IdProd, $this->IdPed," . $Dados['quant'] . ", " . $Dados['total_item'] . ")"; 
+								$this->query .= PHP_EOL . "VALUES($this->IdProd, $this->IdPed," . $Dados['quant'] . ", " . str_replace(',', '.', $Dados['total_item']) . ")";
 								$this->pushDados();
-
-								//Apaga produto do carrinho do cliente
+		
+								// Apaga produto do carrinho do cliente
 								$this->IdCar = $Dados['id_car'];
 								$this->montaQuery(2);
 								$this->pushDados();
-							}else{
-								$Ret['sem_estoque'] .= $Dados['id_prod'] . ";";//Guarda Produto sem estoque
+							} else {
+								$Ret['sem_estoque'] .= $Dados['id_prod'] . ";"; // Guarda Produto sem estoque
 							}
 						}
-						//Formata produtos sem estoque caso houver
-						$Ret['sem_estoque'] = strlen($Ret['sem_estoque']) > 0 ? substr($Ret['sem_estoque'], 0, strlen($Ret['sem_estoque']) -1) : '';
-						//Retorna operação concluída
+						// Formata produtos sem estoque caso houver
+						$Ret['sem_estoque'] = strlen($Ret['sem_estoque']) > 0 ? substr($Ret['sem_estoque'], 0, strlen($Ret['sem_estoque']) - 1) : '';
+						// Retorna operação concluída
 						$Ret['Inclusão'] = true;
- 					}
-				}catch(\PDOException $e){
+					}
+				} catch (\PDOException $e) {
 					echo $e->getMessage();
 					$this->__destruct();
-				}finally{
+				} finally {
 					return $Ret;
 				}
 			}
-			/*
-			*Metodo: montaQuery(Opc)
-			*Descrição: Responsavel por montar as querys
-			*Data: 19/06/2024
-			*Programador(a): Ighor Drummond
-			*/
-			private function getDados(){
-				try{
+		
+			private function getDados() {
+				try {
 					$this->stmt = $this->con->query($this->query);
 					$this->stmt = $this->stmt->fetchAll(\PDO::FETCH_ASSOC);
-				}catch(\PDOException $e){
+				} catch (\PDOException $e) {
 					echo $e->getMessage();
 					$this->__destruct();
 				}
 			}
-			/*
-			*Metodo: pushDados()
-			*Descrição: Responsavel por atualizar ou executar dados no MySQL
-			*Data: 19/06/2024
-			*Programador(a): Ighor Drummond
-			*/
-			private function pushDados(){
-				try{
+		
+			private function pushDados() {
+				try {
 					$this->con->beginTransaction();
-					if(($this->con->exec($this->query)) > 0){
+					$linhaAfetadas = $this->con->exec($this->query);
+					if ($linhaAfetadas > 0) {
 						$this->con->commit();
 						return true;
+					} else {
+						throw new \PDOException("Falha ao dar push no dado.");
 					}
-				}catch(\PDOException $e){
+				} catch (\PDOException $e) {
 					echo $e->getMessage();
 					$this->con->rollback();
 					return false;
 				}
 			}
-			/*
-			*Metodo: montaQuery(Opc)
-			*Descrição: Responsavel por montar as querys
-			*Data: 19/06/2024
-			*Programador(a): Ighor Drummond
-			*/
-			private function montaQuery($Opc){
-				if($Opc === 0){
+		
+			private function montaQuery($Opc) {
+				if ($Opc === 0) {
 					$this->query = "
 						SELECT 
-						    cli.email,
-						    cli.id as id_cliente,
-						    car.id_car,
-						    car.id_prod,
-						    car.quant,
-						    prod.estoque,
-						    FORMAT(
-						        CASE
-						            WHEN prod.promocao_ativo = 1 THEN prod.promocao * car.quant
-						            ELSE prod.preco * car.quant
-						        END, 2, 'pt_BR'
-						    ) AS total_item,
-						    FORMAT(
-						        (
-						            SELECT SUM(
-						                CASE
-						                    WHEN prod_inner.promocao_ativo = 1 THEN prod_inner.promocao * car_inner.quant
-						                    ELSE prod_inner.preco * car_inner.quant
-						                END
-						            )
-						            FROM carrinho AS car_inner
-						            INNER JOIN produtos AS prod_inner ON car_inner.id_prod = prod_inner.id_prod
-						            WHERE car_inner.id_cliente = car.id_cliente
-						              AND car_inner.id_car IN($this->Produtos)
-						              AND prod_inner.estoque >= car_inner.quant
-						        ), 2, 'pt_BR'
-						    ) AS total_carrinho,
-						    CASE 
-						        WHEN prod.estoque >= car.quant THEN 'SIM'
-						        ELSE 'FALTA ESTOQUE'
-						    END AS disponibilidade
+							cli.email,
+							cli.id as id_cliente,
+							car.id_car,
+							car.id_prod,
+							car.quant,
+							prod.estoque,
+							FORMAT(
+								CASE
+									WHEN prod.promocao_ativo = 1 THEN prod.promocao * car.quant
+									ELSE prod.preco * car.quant
+								END, 2, 'pt_BR'
+							) AS total_item,
+							FORMAT(
+								(
+									SELECT SUM(
+										CASE
+											WHEN prod_inner.promocao_ativo = 1 THEN prod_inner.promocao * car_inner.quant
+											ELSE prod_inner.preco * car_inner.quant
+										END
+									)
+									FROM carrinho AS car_inner
+									INNER JOIN produtos AS prod_inner ON car_inner.id_prod = prod_inner.id_prod
+									WHERE car_inner.id_cliente = car.id_cliente
+									  AND car_inner.id_car IN($this->Produtos)
+									  AND prod_inner.estoque >= car_inner.quant
+								), 2, 'pt_BR'
+							) AS total_carrinho,
+							CASE 
+								WHEN prod.estoque >= car.quant THEN 'SIM'
+								ELSE 'FALTA ESTOQUE'
+							END AS disponibilidade
 						FROM 
-						    carrinho AS car
+							carrinho AS car
 						INNER JOIN 
-						    cliente AS cli ON cli.id = car.id_cliente
+							cliente AS cli ON cli.id = car.id_cliente
 						INNER JOIN 
-						    produtos AS prod ON car.id_prod = prod.id_prod
+							produtos AS prod ON car.id_prod = prod.id_prod
 						WHERE 
-						    cli.email = '$this->Email'
-						    AND car.id_car IN($this->Produtos)
+							cli.email = '$this->Email'
+							AND car.id_car IN($this->Produtos)
 					";
-				}else if($Opc === 1){
+				} else if ($Opc === 1) {
 					$this->query = "
 						UPDATE 
 							produtos
@@ -906,7 +888,7 @@
 						WHERE
 							id_prod = $this->IdProd
 					";
-				}else if($Opc === 2){
+				} else if ($Opc === 2) {
 					$this->query = "
 						DELETE FROM
 							carrinho
@@ -914,17 +896,17 @@
 							id_car = $this->IdCar
 							AND id_cliente = $this->IdCli
 					";
-				}else if($Opc === 3){
+				} else if ($Opc === 3) {
 					$this->query = "
 						INSERT INTO pedidos(valor_total, data_pedido, id_cliente, id_end, status, id_form)
 						VALUES($this->Total, '$this->Data', $this->IdCli, $this->Endereco, ". strval(self::STATUS) .", $this->Pagamento)
 					";
-				}else if($Opc === 4){
+				} else if ($Opc === 4) {
 					$this->query = "
 						INSERT INTO item_pedidos(id_prod, id_ped, quant, preco_item)
 					";
 				}
 			}
-		}
+		}		
 	}
 ?>
