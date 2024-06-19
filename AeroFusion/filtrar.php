@@ -77,7 +77,19 @@
 				?>
 				<i class="<?php echo($Class); ?>"></i>
 		</span>
+		<?php
+			if($Prod['promocao_ativo'] === 1){
+		?>
+		<br>
+		<i><del>De R$ <?php echo($Prod['Preco']) ?></del></i>
+		<span class="d-inline mt-1 text-success">Por R$ <?php echo(strval($Prod['promocao'])) ?></span>
+		<?php
+			}else{ 
+		?>
 		<span class="d-block mt-1">R$ <?php echo(strval($Prod['Preco'])) ?></span>
+		<?php
+			}
+		?>
 	</div>
 <?php
 			}

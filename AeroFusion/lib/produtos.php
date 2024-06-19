@@ -45,6 +45,8 @@
                         cat.nome_cat as Categoria,
                         prod.preco as Preco,
                         prod.tamanho as tamanho,
+                        prod.promocao,
+                        prod.promocao_ativo,
                         img_prod.img1 as img1,
                         img_prod.img2 as img2,
                         img_prod.img3 as img3,
@@ -96,8 +98,10 @@
                 }
                 //Valida se há uma ordenação de preço inserido
                 if(!empty($this->Preco)){
-                    $query .= PHP_EOL . " ORDER BY " . PHP_EOL . 'prod.preco ' . ($this->Preco === 'Alto' ? 'DESC' : 'ASC'); 
+                    $query .= PHP_EOL . " ORDER BY ";
+                    $query .= PHP_EOL . " CASE WHEN prod.promocao_ativo = 1 THEN prod.promocao ELSE prod.preco END ". ($this->Preco === 'Alto' ? 'DESC' : 'ASC');
                 }
+                //CASE WHEN prod.promocao_ativo = 1 THEN prod.promocao ELSE prod.preco END ASC
                 if(!empty($this->Data)){
                     //Validas e já foi colocado ORDER BY dentro da query
                     if(stripos($query, 'ORDER BY') === false){

@@ -80,7 +80,19 @@
 				?>
 				<i class="<?php echo($Class); ?>"></i>
 		</span>
-		<span class="d-block mt-1">R$ <?php echo(strval($Produtos[$nCont2]['Preco'])) ?></span>
+		<?php
+			if($Produtos[$nCont2] ['promocao_ativo'] === 1){
+		?>
+		<br>
+		<i><del>De R$ <?php echo($Produtos[$nCont2] ['Preco']) ?></del></i>
+		<span class="d-inline mt-1 text-success">Por R$ <?php echo(strval($Produtos[$nCont2] ['promocao'])) ?></span>
+		<?php
+			}else{ 
+		?>
+		<span class="d-block mt-1">R$ <?php echo(strval($Produtos[$nCont2] ['Preco'])) ?></span>
+		<?php
+			}
+		?>
 	</div>
 <?php
 		}

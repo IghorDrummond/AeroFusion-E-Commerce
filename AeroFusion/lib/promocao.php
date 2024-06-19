@@ -49,6 +49,8 @@
                         prod.preco as Preco,
                         prod.id_prod as IdProd,
                         prod.estoque as Estoque,
+                        prod.promocao,
+                        prod.promocao_ativo,
                         cat.nome_cat as Categoria,
                         img_prod.img1,
                         img_prod.img2,
@@ -64,9 +66,9 @@
                     WHERE 
                         prod.estoque > 0
                     ORDER BY
-                        prod.Preco ASC
+                        CASE WHEN prod.promocao_ativo = 1 THEN prod.promocao ELSE prod.preco END ASC
                     LIMIT
-                        12
+                        12;
                 ";
             }
         }
