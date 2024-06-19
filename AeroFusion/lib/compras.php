@@ -761,23 +761,25 @@
 					//Valida se trouxe os dados correspondentes
 					if(isset($this->stmt[0]['id_cliente'])){
 						$this->IdCli = $this->stmt[0]['id_cliente'];//Recebe o Id do Cliente
-						$this->Total = $this->stmt[0]['total_carrinho'];
+						$this->Total = $this->stmt[0]['total_carrinho'];//Recebe o total do pedido
 
-						//Vai dar a baixa na quantidade dos produtos após 
+						//Vai dar a baixa na quantidade dos produtos
 						foreach ($this->stmt as $Dados) {
 							if($Dados['disponibilidade'] === 'SIM'){
 								$this->Quant = strval(abs((int)$Dados['quant'] - (int)$Dados['estoque']));
 								$this->IdProd = $Dados['id_prod'];
 								$this->montaQuery(1);//Monta query para dar a baixa no estoque dos produtos
-								$this->pushDados();
+								$this->pushDados();//Atualiza estoque dos produtos
 							}else{
 								array_push($this->semEstoque, $Dados['id_prod']);
 							}
 						}
+						//Apaga os produtos do carrinho após boletar o pedido
+						$this->montaQuery(2);
+						$this->pushDados();
 					}
 				}catch(\PDOException $e){
 					echo $e->getMessage();
-					$this->con->rollback();
 					$this->__destruct();
 				}finally{
 					return $Ret;
@@ -806,11 +808,14 @@
 			*/
 			private function pushDados(){
 				try{
+					$this->con->beginTransaction();
 					if(($this->con->exec($this->query)) > 0){
+						$this->con->commit();
 						return true;
 					}
 				}catch(\PDOException $e){
 					echo $e->getMessage();
+					$this->con->rollback();
 					return false;
 				}
 			}
@@ -873,6 +878,13 @@
 							estoque = $this->Quant
 						WHERE
 							id_prod = $this->IdProd
+					";
+				}else if($Opc === 2){
+					$this->query = "
+						DELETE FROM
+							carrinho
+						WHERE
+							id_car IN($this->Produtos)
 					";
 				}
 			}
