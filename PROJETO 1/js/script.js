@@ -61,12 +61,13 @@ var buscarProduto = () => {
 if (img) {
     img.onclick = abreConfig;
 }
+
 //Configura a barra de pesquisa
 Pesquisa.onfocus = abrePesq;//Para abrir a pesquisa
-Pesquisa.onchange = () => {
+Pesquisa.onkeyup = buscarProduto;//Para pesquisar o produto
+Pesquisa.onchange = ()=>{
     fecharPesq();
 }
-Pesquisa.onkeyup = buscarProduto;
 // ------------------------- Eventos
 /*
 * Evento: click
@@ -79,7 +80,7 @@ window.addEventListener('click', function (event) {
         fecharConfig();
     }
     if (caixaPesq && !caixaPesq.contains(event.target) && event.target !== Pesquisa) {
-        fecharPesq();
+        //fecharPesq();
     }
     if (categoria[0] && categoria[0].classList.contains('d-flex') && window.clientWidth >= 1200) {
         desligaCab();
@@ -227,6 +228,11 @@ function reajusta() {
         dialogWidth = carrinho.offsetWidth;
         carrinho.style.left = (rect.left + rect.width / 2 - dialogWidth / 2) + 'px';
         carrinho.style.top = (rect.bottom + 15) + 'px';
+    }else{
+        rect = iconeCarrinho[1].getBoundingClientRect();
+        // Para telas menores que 1200 pixels, ajuste para o canto esquerdo
+        carrinho.style.left = '0px';
+        carrinho.style.top = (rect.bottom + 15) + 'px';
     }
 
     //Valida se o menu e categoria estão abertos para desligar o menu e manter categoria em aberto
@@ -307,17 +313,27 @@ function fecharPesq() {
 * Data: 26/05/2024
 */
 function abreCarrinho(carShop) {
-    //Carrega dados do carrinho
+    // Carrega dados do carrinho
     $('#carrinho').load('script/carrinho.php?Opc=1');
-    // Obtenha a posição da imagem
+
+    // Obtenha a posição do ícone do carrinho
     let rect = iconeCarrinho[carShop].getBoundingClientRect();
-    let dialogWidth = carrinho.offsetWidth;
-    carrinho.style.left = (rect.left + rect.width / 2 - dialogWidth / 2) + 'px';
-    carrinho.style.top = (rect.bottom + 15) + 'px';
+
+    if (window.innerWidth < 993) {
+        // Para telas menores que 1200 pixels, ajuste para o canto esquerdo
+        carrinho.style.left = '0px';
+        carrinho.style.top = (rect.bottom + 15) + 'px';
+    }else{
+        let dialogWidth = carrinho.offsetWidth;
+        let dialogHeight = carrinho.offsetHeight;
+        // Define a posição padrão para telas maiores ou iguais a 1200 pixels
+        carrinho.style.left = (rect.left + rect.width / 2 - dialogWidth / 2) + 'px';
+        carrinho.style.top = (rect.bottom + 15) + 'px';
+    }
+
     carrinho.style.visibility = 'visible'; // Altera visibilidade
     carrinho.show();
-};
-/*
+}/*
 Função: telaCarregamento(controle de liga ou desliga)   
 Descrição: Responsavel por ligar e desligar tela de carregamento
 Data: 19/05/2024

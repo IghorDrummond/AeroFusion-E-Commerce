@@ -130,9 +130,6 @@ if(isset($_SESSION['Login']) and $_SESSION['Login']){
 				<li class="d-flex justify-content-center align-items-center mr-2 ">
 					<i class="fa-solid fa-cart-shopping fa-lg" style="color: orange;" onclick="abreCarrinho(0)"></i>
 					<span class="d-block badge badge-primary mt-1">0</span>
-					<!--Caixa do Carrinho -->
-					<dialog id="carrinho" class="rounded border border-warning">
-					</dialog>
 					<!-- Fim da caixa do carrinho -->
 				</li>
 				<li class="nav-item d-flex justify-content-center align-items-center ">
@@ -181,6 +178,7 @@ if(isset($_SESSION['Login']) and $_SESSION['Login']){
 			</div>
 		</nav>
 		<!-- Fim da Navegação do Cabeçalho -->
+		
 		<!-- Barra de Pesquisa -->
 		<form class="form-inline float-lg-right d-inline-block mt-2" onsubmit="pesquisar()">
 			<input id="Pesquisa" type="text" class="w-75" placeholder="Pesquisar..." required>
@@ -188,8 +186,14 @@ if(isset($_SESSION['Login']) and $_SESSION['Login']){
 				<i class="fa-solid fa-magnifying-glass"></i>
 			</button>
 		</form>
+
+		<!-- Caixa de Pesquisa -->
 		<dialog id="caixaPesq" class="rounded border border-warning">
 			Esperando sua Pesquisa...
+		</dialog>
+
+		<!--Caixa do Carrinho -->
+		<dialog id="carrinho" class="rounded border border-warning">
 		</dialog>
 	</div>
 
