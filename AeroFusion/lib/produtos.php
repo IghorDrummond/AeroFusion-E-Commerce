@@ -16,10 +16,11 @@
             public $Data = '';
             public $Query = '';
             public $Produto = '';
+            public $Promocao = false;
             protected $stmt = null;
 
             //Construtor
-            public function __construct($Preco, $Data, $Categoria, $Tamanho, $Produto){
+            public function __construct($Preco, $Data, $Categoria, $Tamanho, $Produto, $Promocao){
                 $this->Conexao = new \IniciaServer();
                 $this->Conexao = $this->Conexao->conexao();
                 //Recebe valores para filtrar produtos
@@ -28,6 +29,7 @@
                 $this->Categoria = $Categoria;
                 $this->Tamanho = $Tamanho;
                 $this->Produto = $Produto;
+                $this->Promocao = $Promocao;
             }
             
             //Métodos
@@ -95,6 +97,10 @@
                 //Valida se há um nome do produto inserido
                 if(!empty($this->Produto)){
                     $query .= PHP_EOL . "AND prod.nome LIKE '%" . $this->Produto . "%'"; 
+                }
+                //Valida se usuário ativou pesquisa para promoção
+                if($this->Promocao){
+                    $query .= PHP_EOL . "AND prod.promocao_ativo = true"; 
                 }
                 //Valida se há uma ordenação de preço inserido
                 if(!empty($this->Preco)){

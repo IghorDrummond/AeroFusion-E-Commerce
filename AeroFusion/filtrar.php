@@ -14,13 +14,15 @@
 	$Preco = isset($_GET['preco']) ? $_GET['preco'] : '';
 	$Data = isset($_GET['data']) ? $_GET['data'] : '';
 	$Tamanho = isset($_GET['tamanho']) ? $_GET['tamanho'] : '';
+	//Booleano
+	$Promocao = isset($_GET['promocao']) ? true : false;
 	//Array
 	$Produtos = [];
     //Ojeto
     $Filtros = null;
 	$Favoritos = null;
     //--------Escopo
-    $Filtro = new Filtrar($Preco, $Data, $Categoria, $Tamanho, $Produto);
+    $Filtro = new Filtrar($Preco, $Data, $Categoria, $Tamanho, $Produto, $Promocao);
     $Produtos = $Filtro->retornaValores();
 	//Valida se está favorito os produtos
 	if(isset($_SESSION['Login']) and $_SESSION['Login']){

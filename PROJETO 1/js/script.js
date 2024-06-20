@@ -221,6 +221,7 @@ function reajusta() {
         configuracao.style.left = (rect.left + rect.width / 2 - dialogWidth / 2) + 'px';
         configuracao.style.top = rect.bottom + 'px';
     }
+
     // Ajusta Posição do carrinho
     if (window.innerWidth >= 993) {
         // Obtenha a posição da imagem
@@ -228,11 +229,11 @@ function reajusta() {
         dialogWidth = carrinho.offsetWidth;
         carrinho.style.left = (rect.left + rect.width / 2 - dialogWidth / 2) + 'px';
         carrinho.style.top = (rect.bottom + 15) + 'px';
+        carrinho.style.transform = 'translateX(0)'; // Centraliza horizontalmente
     }else{
-        rect = iconeCarrinho[1].getBoundingClientRect();
-        // Para telas menores que 1200 pixels, ajuste para o canto esquerdo
-        carrinho.style.left = '0px';
-        carrinho.style.top = (rect.bottom + 15) + 'px';
+        carrinho.style.left = '50%';
+        carrinho.style.transform = 'translateX(-50%)'; // Centraliza horizontalmente
+        carrinho.style.top = '10px'; // Distância do topo da página
     }
 
     //Valida se o menu e categoria estão abertos para desligar o menu e manter categoria em aberto
@@ -320,9 +321,10 @@ function abreCarrinho(carShop) {
     let rect = iconeCarrinho[carShop].getBoundingClientRect();
 
     if (window.innerWidth < 993) {
-        // Para telas menores que 1200 pixels, ajuste para o canto esquerdo
-        carrinho.style.left = '0px';
-        carrinho.style.top = (rect.bottom + 15) + 'px';
+        // Para telas menores que 993, ajuste para o centro
+        carrinho.style.left = '50%';
+        carrinho.style.transform = 'translateX(-50%)'; // Centraliza horizontalmente
+        carrinho.style.top = '10px'; // Distância do topo da página
     }else{
         let dialogWidth = carrinho.offsetWidth;
         let dialogHeight = carrinho.offsetHeight;
@@ -370,7 +372,11 @@ Data: 29/05/2024
 Programador: Ighor Drummond
 */
 function selecionaCategoria(Categoria) {
-    window.location.href = 'pesquisa.php?categoria=' + encodeURIComponent(Categoria);
+    if(Categoria != 'promocao'){
+        window.location.href = 'pesquisa.php?categoria=' + encodeURIComponent(Categoria);
+    }
+
+    window.location.href = "pesquisa.php?promocao=true";
 }
 /*
 Função: pesquisaProduto()
