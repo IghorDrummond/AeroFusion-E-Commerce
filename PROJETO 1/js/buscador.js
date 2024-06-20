@@ -2,8 +2,8 @@
 //Elementos
 var checkboxes = document.querySelectorAll('input[type="checkbox"]');
 //Array
-var Valores = ['', '', '', ''];
-var param = ['preco', 'data', 'categoria', 'tamanho'];
+var Valores = ['', '' ,'', '', ''];
+var param = ['preco', 'promocao' ,'data', 'categoria', 'tamanho'];
 
 //----------------Eventos
 /*
@@ -48,14 +48,17 @@ function guardaValor(i, nome){
             //Valores[0] = Valor[i].value;
             Valores[0] = Valor[i].value;
             break;
-        case 'data':
+        case 'promocao':
             Valores[1] = Valor[i].value;
             break;
-        case 'categoria':
+        case 'data':
             Valores[2] = Valor[i].value;
             break;
-        case 'tamanho':
+        case 'categoria':
             Valores[3] = Valor[i].value;
+            break;
+        case 'tamanho':
+            Valores[4] = Valor[i].value;
             break; 
     }
 }

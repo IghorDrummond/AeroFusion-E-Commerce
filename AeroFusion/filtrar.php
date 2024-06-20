@@ -15,7 +15,7 @@
 	$Data = isset($_GET['data']) ? $_GET['data'] : '';
 	$Tamanho = isset($_GET['tamanho']) ? $_GET['tamanho'] : '';
 	//Booleano
-	$Promocao = isset($_GET['promocao']) ? true : false;
+	$Promocao = isset($_GET['promocao']) && $_GET['promocao'] === 'true' ? true : false;
 	//Array
 	$Produtos = [];
     //Ojeto
@@ -63,7 +63,7 @@
 					?>
 				</div>
 			</div>
-			<h6 class="font-weight-bold"><?php print(ucfirst(strtolower($Prod['Produto']))) ?></h6>
+			<h6 class="font-weight-bold"><?php print( mb_convert_case($Prod['Produto'], MB_CASE_TITLE, 'UTF-8')) ?></h6>
 		</div>
 		<span class="d-inline-block text-info"><?php print(ucfirst($Prod['Categoria'])) ?></span>
 		<span class="d-inline-block w-50 text-right" onclick="favorito(this, <?php echo(strval($Prod['IdProd'])) ?> )">

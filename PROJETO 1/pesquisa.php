@@ -20,6 +20,10 @@
 						<input type="checkbox" name="preco" value="Baixo">Preço Baixo
 					</li>
 					<li>
+						Ultimas Promoções:<br>
+						<input type="checkbox" name="promocao" value="true">Promoções
+					</li>		
+					<li>
 						Data de Lançamento:<br>
 						<input type="checkbox" name="data" value="Recente">Recente
 						<br>
