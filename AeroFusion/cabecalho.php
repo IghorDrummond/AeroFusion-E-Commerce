@@ -27,7 +27,7 @@ $categoria->__destruct();//Destrói o objeto após seu uso
 
 //Carrega Tags Html com as Categorias existentes
 foreach ($listaCategoria as $cat) {
-	$categoriaHtml .= "<a onclick='selecionaCategoria(" . '"' . $cat['nome_cat'] . '"' . ")' class='text-warning p-1'>" . $cat['nome_cat'] . "</a>" . PHP_EOL;
+	$categoriaHtml .= "<a onclick='selecionaCategoria(" . '"' .   $cat['nome_cat'] . '"' . ")' class='text-warning p-1'>" . mb_convert_case($cat['nome_cat'] , MB_CASE_TITLE, 'UTF-8') . "</a>" . PHP_EOL;
 }
 
 if(isset($_SESSION['Login']) and $_SESSION['Login']){
@@ -169,7 +169,7 @@ if(isset($_SESSION['Login']) and $_SESSION['Login']){
 			<div class="d-flex d-lg-none justify-content-between align-items-center w-100">
 				<div>
 					<!-- Carrinho -->
-					<i class="fa-solid fa-cart-shopping fa-lg" style="color: orange;" onclick="abreCarrinho(1)"></i>
+					<i class="carrinho_mobile fa-solid fa-cart-shopping fa-lg" style="color: orange;" onclick="abreCarrinho(1)"></i>
 					<span class="d-block badge badge-primary">0</span>
 				</div>
 				<a class="navbar-brand d-lg-none d-block m-auto" href="index.php">

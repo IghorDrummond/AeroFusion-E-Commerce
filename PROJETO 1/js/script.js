@@ -81,7 +81,7 @@ window.addEventListener('click', function (event) {
     if (caixaPesq && !caixaPesq.contains(event.target) && event.target !== Pesquisa) {
         fecharPesq();
     }
-    if (categoria[0] && categoria[0].classList.contains('d-flex')) {
+    if (categoria[0] && categoria[0].classList.contains('d-flex') && window.clientWidth >= 1200) {
         desligaCab();
     }
 });
@@ -118,11 +118,7 @@ if (configuracao) {
         configuracao.close();
     });
 }
-if (carrinho) {
-    carrinho.addEventListener('scroll', () => {
-        alert(carrinho.scrollHeight);
-    });
-}
+
 /*
 * Evento: change - input name Produto
 * Descrição: Salva produtos para acionar um novo pedido
@@ -146,8 +142,6 @@ document.querySelectorAll('input[name="CarProd"]').forEach(checkbox => {
             //remove valor do input caso o mesmo não existir mais no carrinho
             produtosSelecionados = produtosSelecionados.filter(item => item !== event.target.value);
         }
-
-        console.log(produtosSelecionados);
     });
 });
 
@@ -180,8 +174,15 @@ function fecharAlerta(alerta) {
 * Data: 20/05/2024
 */
 function ligaCab() {
+    var menu = document.getElementById('navegacao');
+
+    //Valida se o menu está aberto para desligar ele e abrir a categoria
+    if (window.innerWidth < 1200 && menu.classList.contains('show')) {
+        menu.classList.remove('show');
+    }
+
     categoria[0].classList.remove('d-none');
-    categoria[0].classList.add('d-flex');
+    categoria[0].classList.add('d-flex');   
 }
 
 /*
@@ -208,6 +209,8 @@ function desligaCab() {
 function reajusta() {
     var dialogWidth = null;
     var rect = null;
+    var menu = document?.getElementById('navegacao');
+
     if (img) {
         // Obtenha a posição da imagem
         rect = img.getBoundingClientRect();
@@ -224,6 +227,15 @@ function reajusta() {
         dialogWidth = carrinho.offsetWidth;
         carrinho.style.left = (rect.left + rect.width / 2 - dialogWidth / 2) + 'px';
         carrinho.style.top = (rect.bottom + 15) + 'px';
+    }
+
+    //Valida se o menu e categoria estão abertos para desligar o menu e manter categoria em aberto
+    if(menu){
+        if(window.innerWidth < 1200){
+            if(menu.classList.contains('show') && categoria[0].classList.contains('d-flex')){
+                menu.classList.remove('show');//Desliga categoria
+            }
+        }
     }
 
     // Ajusta Posição da caixa de pesquisa
