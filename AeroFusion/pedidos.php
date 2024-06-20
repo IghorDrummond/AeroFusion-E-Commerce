@@ -46,7 +46,7 @@
 	function montaTela(){
 		//Caso não houver produtos, ele retorna vazio
 		if((isset($_SESSION['Produtos']) and empty($_SESSION['Produtos'])) or !isset($_SESSION['Produtos'])){
-			echo('<h1>Sem produtos...</h1>');
+			semProdutos();
 			return null;
 		}
 
@@ -190,4 +190,21 @@
 			echo 'N';
 		}
 	}
+
+	function semProdutos(){
+?>
+	<section>
+		<article class="bg-white border border-info d-flex flex-column align-items-center justify-content-center text-center p-2 w-100">
+			<h1 class="text-warning">
+				Sem Produtos para continuar...
+			</h1>
+			<p class="text-info">
+				Lamentamos informar que seu pedido atual está sem produtos selecionados, por isso não podemos prosseguir com a compra. Para continuar explorando nossa variedade de produtos ou iniciar uma nova pesquisa, recomendamos visitar nossa página de pesquisa de produtos ou retornar à página principal.
+			</p>
+			<a class="btn btn-info text-white text-center font-weight-bold my-1" href="pesquisa.php">Conheçer nossos Produtos</a>
+			<a class="btn btn-info text-white text-center font-weight-bold" href="index.php">Voltar para página Inicial</a>
+		</article>
+	</section>
+<?php
+	} 
 ?>
