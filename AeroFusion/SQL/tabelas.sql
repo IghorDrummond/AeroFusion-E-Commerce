@@ -68,7 +68,7 @@ CREATE TABLE categoria(
 INSERT INTO categoria(nome_cat) VALUES('infantil');
 INSERT INTO categoria(nome_cat) VALUES('masculino');
 INSERT INTO categoria(nome_cat) VALUES('feminino');
-INSERT INTO categoria(nome_cat) VALUES('promocao');
+INSERT INTO categoria(nome_cat) VALUES('promoção');
 
 #CRIANDO A TABELA DE TAMANHOS
 CREATE TABLE tamanho(
@@ -227,7 +227,6 @@ CREATE TABLE forma_pagamento(
 INSERT INTO forma_pagamento(forma_pag) VALUES('PIX');
 INSERT INTO forma_pagamento(forma_pag) VALUES('CARTÃO');
 INSERT INTO forma_pagamento(forma_pag) VALUES('BOLETO');
-INSERT INTO forma_pagamento(forma_pag) VALUES('PARCELAMENTO');
 
 #CRIANDO TABELA DE PEDIDOS DE COMPRA
 CREATE TABLE pedidos(

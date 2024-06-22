@@ -372,7 +372,7 @@ Data: 29/05/2024
 Programador: Ighor Drummond
 */
 function selecionaCategoria(Categoria) {
-    if(Categoria != 'promocao'){
+    if(Categoria != 'promoção'){
         window.location.href = 'pesquisa.php?categoria=' + encodeURIComponent(Categoria);
     }else{
         window.location.href = "pesquisa.php?promocao=true";
