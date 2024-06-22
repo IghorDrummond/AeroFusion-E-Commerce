@@ -136,7 +136,7 @@
 						</button>
 					</div>
 					<p class="mt-2 border p-1 rounded">
-						<?php echo ucfirst(strtolower($Produto['descricao'])); ?>		
+						<?php echo ucfirst(mb_convert_case($Produto['descricao'], MB_CASE_FOLD, 'UTF-8')); ?>		
 					</p>
 					<?php
 						}else{

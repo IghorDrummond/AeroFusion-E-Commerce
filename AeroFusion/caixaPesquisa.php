@@ -7,7 +7,7 @@
 	//Objeto
 	$Filtrar = null;
 
-	$Filtrar = new Filtrar('', '', '', '', strtoupper($_GET['Produto']));
+	$Filtrar = new Filtrar('', '', '', '', strtoupper($_GET['Produto']), false);
 	$Produto = $Filtrar->retornaValores();
 
 	if(count($Produto) === 0){
