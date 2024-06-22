@@ -1,0 +1,12 @@
+/* Configuração Geral */
+section, 
+article
+{
+	height: 70vh;
+	max-height: 70vh;
+	overflow: auto;
+}
+/* Conteúdo */
+section{
+	 position: relative;
+}
