@@ -201,7 +201,7 @@ if(isset($_SESSION['Login']) and $_SESSION['Login']){
 	<div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
 		<div class="carousel-inner">
 			<div class="carousel-item active novidade-cabecalho">
-				Frete Gratís para todo o páis.
+				Frete Gratís para todo o país.
 			</div>
 			<div class="carousel-item novidade-cabecalho">
 				50% de Desconto em peças únicas.

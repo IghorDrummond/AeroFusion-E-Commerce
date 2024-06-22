@@ -565,6 +565,7 @@
 						    prod.promocao,
 						    prod.estoque,
                             img_prod.img1,
+                            tam.nome_tam,
 						    FORMAT(CASE
 						        WHEN prod.promocao_ativo = 1 THEN prod.promocao * car.quant
 						        ELSE prod.preco * car.quant
@@ -585,13 +586,11 @@
 						    produtos AS prod ON car.id_prod = prod.id_prod
 						INNER JOIN  
 							imagens_prod as img_prod ON img_prod.id_prod = prod.id_prod
+						INNER JOIN 
+							tamanho as tam ON tam.id_tam = car.id_tam
 						WHERE 
 							car.id_car IN($this->Produtos)
-						  AND cli.email = '$this->Email'
-						  /*
-						HAVING 
-							disponibilidade <> 'FALTA ESTOQUE'
-							*/
+							AND cli.email = '$this->Email'
 					";
 			}
 		}

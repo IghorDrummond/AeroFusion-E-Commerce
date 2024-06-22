@@ -100,14 +100,14 @@
                 }
                 //Valida se usuário ativou pesquisa para promoção
                 if($this->Promocao){
-                    $query .= PHP_EOL . "AND prod.promocao_ativo = true"; 
+                    $query .= PHP_EOL . "AND prod.promocao_ativo = 1"; 
                 }
                 //Valida se há uma ordenação de preço inserido
                 if(!empty($this->Preco)){
                     $query .= PHP_EOL . " ORDER BY ";
                     $query .= PHP_EOL . " CASE WHEN prod.promocao_ativo = 1 THEN prod.promocao ELSE prod.preco END ". ($this->Preco === 'Alto' ? 'DESC' : 'ASC');
                 }
-                //CASE WHEN prod.promocao_ativo = 1 THEN prod.promocao ELSE prod.preco END ASC
+                //Valida se há uma ordenação de data inserido
                 if(!empty($this->Data)){
                     //Validas e já foi colocado ORDER BY dentro da query
                     if(stripos($query, 'ORDER BY') === false){

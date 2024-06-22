@@ -374,9 +374,9 @@ Programador: Ighor Drummond
 function selecionaCategoria(Categoria) {
     if(Categoria != 'promocao'){
         window.location.href = 'pesquisa.php?categoria=' + encodeURIComponent(Categoria);
+    }else{
+        window.location.href = "pesquisa.php?promocao=true";
     }
-
-    window.location.href = "pesquisa.php?promocao=true";
 }
 /*
 Função: pesquisaProduto()

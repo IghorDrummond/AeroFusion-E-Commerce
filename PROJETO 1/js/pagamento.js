@@ -174,7 +174,6 @@ Data: 18/06/2024
 Programador: Ighor Drummond
 */
 function finalizarCompra(){
-    telaCarregamento(true);
     //Impede de recarregar a página
     event.preventDefault();
 
@@ -182,6 +181,7 @@ function finalizarCompra(){
     if(botao_end.textContent.substr(0, 8).toUpperCase() === 'ENDEREÇO' ){
         //Valida se foi escolhido um método de pagamento
         if(pagamento.selectedIndex > 0){
+            telaCarregamento(true);
             ajax = new XMLHttpRequest();
             ajax.open('POST', 'script/pedidos.php?Opc=5&Pagamento=' + encodeURIComponent(pagamento.selectedIndex) + '&Endereco=' + encodeURIComponent(End));
             ajax.onreadystatechange = ()=>{

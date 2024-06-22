@@ -61,19 +61,20 @@
 				foreach ($Pedido->imprimePedido() as $Prod) {
 					$Class = $Prod['disponibilidade'] === 'FALTA ESTOQUE' ? 'bg-secondary' : 'bg-white';
 			?>
-			<div class="w-100 rounded area_produtos my-3 border border-secondary <?php echo($Class); ?> ">
+			<div class="w-100 rounded area_produtos my-3 border border-secondary p-2 <?php echo($Class); ?> ">
 				<img src="img/<?php echo($Prod['img1']); ?>" width="200" class="rounded img-fluid">
 				<div>
 					<h6><?php echo( mb_convert_case($Prod['nome'], MB_CASE_TITLE, 'UTF-8') ); ?></h6>
 					<h6>Quantidade: <?php echo($Prod['quant']) ?></h6>
+					<span>Tamanho: <?php echo($Prod['nome_tam']); ?></span><br>
 					<?php
 						if($Prod['promocao_ativo'] === 1){
-							echo "Preço: 
-							<del>R$ ". $Prod['preco'] . "</del> Para
+							echo "Preço Solitário: 
+							De <del>R$ ". $Prod['preco'] . "</del> Por
 							<mark class='bg-transparent text-warning'>R$ ". $Prod['promocao'] ."</mark>
 							";
 						}else{
-							echo "Preço: R$ ". $Prod['preco'];							
+							echo "Preço Solitário: R$ ". $Prod['preco'];							
 						}
 					?>
 					<h6>Total do Item: R$ <?php echo($Prod['total_item']); ?></h6>
@@ -186,6 +187,7 @@
 		$Ret = $Pedido->setPedido();
 		if($Ret['Inclusão']){
 			echo 'S';
+			unset($_SESSION['Produtos']);//Apaga o registro de produtos
 		}else{
 			echo 'N';
 		}
