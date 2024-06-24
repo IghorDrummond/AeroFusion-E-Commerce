@@ -210,3 +210,29 @@ function finalizarCompra(){
         alerta('Escolha um endereço.', 0);
     }
 }
+/*
+Função: adicionarEnd()
+Descrição: chama tela de adicionar um novo endereço
+Data: 24/06/2024
+Programador: Ighor Drummond
+*/
+function adicionarEnd(){
+    telaCarregamento(true);
+    //Carrega arquivo para adição para html
+    $.get('script/HTML/htmlAdicionarEnd.php', function(data) {
+            telaCarregamento(false);
+            $('body').append(data);
+        }).fail(function(xhr) {
+        alerta("Ocorreu um erro: " + xhr.status + " " + xhr.statusText, 0);
+        telaCarregamento(false);
+    });
+}
+/*
+Função: fecharEnd()
+Descrição: apaga a tela end da página html
+Data: 24/06/2024
+Programador: Ighor Drummond
+*/
+function fecharEnd(){
+    $('.end_body').remove();
+}

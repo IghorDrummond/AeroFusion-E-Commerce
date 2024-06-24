@@ -132,7 +132,7 @@
 						}
 					?>
 					<a class="dropdown-item" >
-						<h6>
+						<h6 onclick="adicionarEnd()">
 							➕ Adicionar Endereço
 						</h6>
 					</a>

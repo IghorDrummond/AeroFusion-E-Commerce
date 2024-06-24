@@ -1,69 +1,99 @@
-main section{
-	-ms-flex-wrap: wrap;
-	    flex-wrap: wrap;
-	display: -webkit-box;
-	display: -ms-flexbox;
-	display: flex;
-	-webkit-box-pack: center;
-	    -ms-flex-pack: center;
-	        justify-content: center;
-	-webkit-box-align: center;
-	    -ms-flex-align: center;
-	        align-items: center;
-	        background: url('../img/fundo.png');
+/* Estrutura principal */
+main section {
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    background: url('../img/fundo.png');
 }
+
 /* Configura as duas telas dividas */
-article{
-	width: 50%;
-	min-height: 50vh;
-	max-height: 70vh;
+article {
+    width: 50%;
+    min-height: 50vh;
+    max-height: 70vh;
 }
-/*Tela de pagamento*/
-article form{
-	width: 50%;
+
+/* Tela de pagamento */
+article form {
+    width: 50%;
 }
-.dropdown-menu{
-	max-height: 250px;
-	overflow: auto;
+
+.dropdown-menu {
+    max-height: 250px;
+    overflow: auto;
 }
-.dropdown-menu ul{
-	list-style-type: emojis;
+
+.dropdown-menu ul {
+    list-style-type: emojis;
 }
-@counter-style emojis{
-	system: cyclic;
-	symbols: 🧭 🛣️ 🏘️ 🏠 🌎 🏙️ 🗺️ ⛲ 🗽;
-	suffix: "";
+
+@counter-style emojis {
+    system: cyclic;
+    symbols: 🧭 🛣️ 🏘️ 🏠 🌎 🏙️ 🗺️ ⛲ 🗽;
+    suffix: "";
 }
 
 /* Tela dos produtos */
-article:nth-child(1){
-	display: -webkit-box;
-	display: -ms-flexbox;
-	display: flex;
-	-webkit-box-orient: vertical;
-	-webkit-box-direction: normal;
-	    -ms-flex-direction: column;
-	        flex-direction: column;
-	overflow: auto;
-}
-.area_produtos{
-	display: -webkit-box;
-	display: -ms-flexbox;
-	display: flex;
-	-webkit-box-orient: horizontal;
-	-webkit-box-direction: normal;
-	    -ms-flex-direction: row;
-	        flex-direction: row;
-	-ms-flex-wrap: wrap;
-	    flex-wrap: wrap;
+article:nth-child(1) {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    overflow: auto;
 }
 
+.area_produtos {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
 
-/* Dispositivos extra small (telefones em modo retrato, com menos de 576px)*/
+/* Tela de adição de endereço */
+.end_body {
+    position: fixed;
+    z-index: 1;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+    -webkit-animation: surgir 2s;
+            animation: surgir 2s;
+    top: 0;
+    left: 0;
+}
+.end_dados {
+    width: 50%;
+}
+
+/* Dispositivos extra small (telefones em modo retrato, com menos de 576px) */
 @media (max-width: 767.98px) { 
-	article,
-	article form
-	{
-		width: 100%;
-	}
+    article,
+    article form {
+        width: 100%;
+    }
+    .end_body,
+    .end_dados {
+        height: auto;
+    }
+    .end_dados {
+        width: 90%;
+    }
 }
