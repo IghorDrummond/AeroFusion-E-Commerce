@@ -18,7 +18,7 @@
 									<label for="Celular">Insira seu numero de celular: <span class="text-danger">*</span></label>
 									<input type="text" name="Celular" class="form-control" onkeypress="mascaraCel()" placeholder="(XX) XXXXX-XXXX" maxlength="15" required>
 									<label for="Senha">Insira sua Senha: </label>
-									<input type="password" maxlengthlength="12" name="Senha" onkeyup="senhaValid()" required pattern="(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\W+)(?=^.{8,50}$).*$" class="form-control">
+									<input type="password" maxlength="12" name="Senha" onkeyup="senhaValid()" required pattern="(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\W+)(?=^.{8,50}$).*$" class="form-control">
 									<label for="ConfirmeSenha">Confirme sua Senha: </label>
 									<input type="password" maxlength="12" name="ConfirmeSenha" required pattern="(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\W+)(?=^.{8,50}$).*$" class="form-control">
 									<ul id="confereSenha">
