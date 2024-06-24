@@ -46,10 +46,10 @@
                 $this->Query = "
                     SELECT 
                         prod.nome as Produto,
-                        prod.preco as Preco,
+                        FORMAT(prod.preco, 2, 'pt_BR') as Preco,
                         prod.id_prod as IdProd,
                         prod.estoque as Estoque,
-                        prod.promocao,
+                        FORMAT(prod.promocao, 2, 'pt_BR') as promocao,
                         prod.promocao_ativo,
                         cat.nome_cat as Categoria,
                         img_prod.img1,
