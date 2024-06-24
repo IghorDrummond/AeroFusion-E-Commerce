@@ -65,7 +65,7 @@
 					?>
 				</div>
 			</div>
-			<h6 class="font-weight-bold"><?php print(ucfirst(strtolower($Produtos[$nCont2]['Produto']))) ?></h6>
+			<h6 class="font-weight-bold"><?php print mb_convert_case($Produtos[$nCont2]['Produto'], MB_CASE_TITLE, 'UTF-8') ?></h6>
 		</div>
 		<span class="d-inline-block text-info"><?php print(ucfirst($Produtos[$nCont2]['Categoria'])) ?></span>
 		<span class="d-inline-block w-50 text-right" onclick="favorito(this, <?php echo(strval($Produtos[$nCont2]['IdProd'])) ?> )">
