@@ -67,8 +67,8 @@ article:nth-child(1) {
 
 /* Tela de adição de endereço */
 .end_body {
-    position: fixed;
-    z-index: 1;
+    position: absolute;
+    z-index: 999;
     width: 100vw;
     height: 100vh;
     background: rgba(0, 0, 0, 0.5);

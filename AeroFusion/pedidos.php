@@ -41,6 +41,9 @@
 		case '5':
 			novoPedido();
 			break;
+		case '6':
+			cadastrarEnd();
+			break;
 	}
 
 	function montaTela(){
@@ -209,4 +212,8 @@
 	</section>
 <?php
 	} 
+
+	function cadastrarEnd(){
+		$Endereco = new Endereco($_SESSION['Email']);
+	}
 ?>

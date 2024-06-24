@@ -236,3 +236,35 @@ Programador: Ighor Drummond
 function fecharEnd(){
     $('.end_body').remove();
 }
+/*
+Função: cadastrarEnd()
+Descrição: apaga a tela end da página html
+Data: 24/06/2024
+Programador: Ighor Drummond
+*/
+function cadastrarEnd(){
+    event.preventDefault();
+
+    ajax = new XMLHttpRequest();
+
+    ajax.open('POST', 'script/pedido.php?Opc=6');
+
+    ajax.onreadystatechange = ()=>{
+        if(ajax.readyState === 4){
+            if(ajax.status < 400){
+                switch(ajax.responseText.trim()){
+                    case 'OK':
+                        novoPedido();
+                        break;
+                    default:
+                        alerta('Ocorreu um erro interno em nosso servidor. tente novamente ou mais tarde.', 0);
+                        break;
+                }
+            }else{
+                window.location.href = "error.php?Error="  ajax.status.toString();
+            }
+        }
+    }
+
+    ajax.send();
+}
