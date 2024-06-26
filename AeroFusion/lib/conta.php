@@ -212,45 +212,47 @@
 			*Data: 15/06/2024
 			*Programador(a): Ighor Drummond
 			*/
-			public function setEndereco( $Rua, $Complemento, $Cep, $Referencia, $Bairro, $Uf, $Numero, $Cidade){
-				$Ret = false;
-				$EndExiste = false;
+			public function setEndereco( $Rua, $Complemento, $Cep, $Referencia, $Bairro, $Uf, $Numero, $Cidade){				$EndExiste = false;
 
 				try{
-					//Valida se o endereço já existe
-					$this->montaQuery(0);
-					$this->stmt = $this->retornaValores();
-					
-					foreach ($this->stmt as $end) {
-						if($end['cep'] === $Cep){
-							if($end['numero'] === (int)$Numero and trim($end['rua']) === trim(strtoupper($Rua))){
+					//Valida se foi passado os endereço corretamente
+					if(!empty($Rua) and !empty($Cep) and !empty($Bairro) and !empty($Uf) and !empty($Numero) and !empty($Cidade)){
+
+						//Valida se o endereço já existe
+						$this->montaQuery(0);
+						$this->stmt = $this->retornaValores();
+						
+						foreach ($this->stmt as $end) {
+							if($end['cep'] === $Cep and trim(strtoupper($end['rua'])) === trim(strtoupper($Rua)) and strval($end['numero']) === $Numero ){
 								$EndExiste = true;
 								break;
 							}
 						}
-					}
-					/*
-					//Se caso o endereço não existir, ele adiciona o mesmo
-					if(!$EndExiste){
-						$this->montaQuery(1);//Monta query para inserir novo endereço
-						//Prepara a inserção de dados
-						$this->query .= "
-							VALUES('$Cidade', '$Referencia', '$Uf', '$Bairro', '$Rua', '$Cep', '$Numero', '$Complemento', $this->IdCli)
-						";
-	
-						$this->con->beginTransaction();
-						if( ($this->con->exec($this->query)) > 0 ){
-							$this->con->commit();
-							$Ret = true;
+						
+						//Se caso o endereço não existir, ele adiciona o mesmo
+						if(!$EndExiste){
+							$this->montaQuery(1);//Monta query para inserir novo endereço
+							//Prepara a inserção de dados
+							$this->query .= "
+								VALUES('$Cidade', '$Referencia', '$Uf', '$Bairro', '$Rua', '$Cep', '$Numero', '$Complemento', $this->IdCli)
+							";
+		
+							$this->con->beginTransaction();
+							if( ($this->con->exec($this->query)) > 0 ){
+								$this->con->commit();
+								echo 'OK';
+							}else{
+								throw new \PDOException("Não Inseriu dados na query");
+							}
 						}else{
-							throw new \PDOException("Não Inseriu dados na query");
+							echo 'EXISTE';
 						}
-					}*/
+					}else{
+						echo 'FALTADADOS';
+					}
 				}catch(\PDOException $e){
 					echo $e->getMessage();
 					$this->con->rollback();
-				}finally{
-					return $Ret; 
 				}
 			}
 

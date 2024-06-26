@@ -269,6 +269,12 @@ function cadastrarEnd(event){
                     case 'OK':
                         novoPedido();
                         break;
+                    case 'EXISTE':
+                        alerta('Endereço já cadastrado! Por favor, informe um endereço diferente.', 0);
+                        break;
+                    case 'FALTADADOS':
+                        alerta('Cep inválido! Por favor, preencha com um código postal válido.', 0);
+                        break;
                     default:
                         alerta('Ocorreu um erro interno em nosso servidor. tente novamente ou mais tarde.', 0);
                         break;
