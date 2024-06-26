@@ -1079,9 +1079,9 @@ namespace Pedido {
 						echo "INVALIDO";
 					}
 				}
-
-				return $this->Total;
 			}
+
+			return $this->Total;
 		}
 		/*
 		 *Metodo: getDados()
