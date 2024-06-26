@@ -721,7 +721,8 @@
 				public $Email = '',
 				public $Produtos = '',
 				public $Endereco = '',
-				public $Pagamento = ''
+				public $Pagamento = '',
+				public $Cupom = ''
 			) {
 				try {
 					$this->con = new \IniciaServer();
@@ -738,12 +739,19 @@
 			}
 		
 			// Métodos
+			/*
+			*Metodo: setPedidos
+			*Descrição: Responsavel por adicionar novo pedido
+			*Data: 18/06/2024
+			*Programador(a): Ighor Drummond
+			*/
 			public function setPedido() {
 				$Ret = [
 					"Inclusão" => false,
 					"sem_estoque" => "",
 					"Pedido" => "",
-					"Total" => 0.0
+					"Total" => 0.0,
+					"Cupom" => ''
 				];
 		
 				try {
@@ -759,6 +767,32 @@
 						$Ret['Total'] = $this->Total;
 						// Guarda data do novo pedido
 						$this->Data = date('Y-m-d H:i:s');
+						//Valida se tem cupom e se o mesmo está ativo para o produto
+						if(!empty($this->Cupom)){
+							$aux = $this->stmt;//Guarda produtos numa variavel auxiliar
+							$this->montaQuery(5);
+							//Faz a busca do cupom
+							$this->getDados();
+							//Valida se o cupom está ativo
+							if(isset($this->stmt[0]['cupom_ativo']) and $this->stmt[0]['cupom_ativo'] === 1){
+								//Valida a data de validade do cupom se ela já passou
+								if($this->validaData($this->stmt[0]['data_validade'])){
+									//Percorre os cada produto valido no cupom e valida se existe no carrinho para aplicar desconto no total
+									for($nCont = 0; $nCont <= count($this->stmt) -1; $nCont++){
+										for($nCont2 = 0; $nCont2 <= count($aux) -1; $nCont2++){
+											if($this->stmt[$nCont]['id_prod'] === $aux[$nCont2]['id_prod']){
+												//Subtraí o total pelo o valor do produto
+												$this->Total = strval((float)$this->Total - ((float)$this->stmt[$nCont]['valor_desconto'] * $aux[$nCont2]['quant']));
+												$Ret['Cupom'] = $this->Cupom;
+											}
+										}
+									}
+									$Ret['Total'] = $this->Total;
+								}
+							}else{
+								$this->Cupom = "";//Apaga cupom pois o mesmo ou não existe ou não está ativo
+							}
+						}
 						// Cria um novo pedido com os dados informados
 						$this->montaQuery(3);
 						$this->con->beginTransaction();
@@ -805,7 +839,12 @@
 					return $Ret;
 				}
 			}
-		
+			/*
+			*Metodo: getDados()
+			*Descrição: Responsavel por receber dados da consulta
+			*Data: 18/06/2024
+			*Programador(a): Ighor Drummond
+			*/
 			private function getDados() {
 				try {
 					$this->stmt = $this->con->query($this->query);
@@ -815,7 +854,12 @@
 					$this->__destruct();
 				}
 			}
-		
+			/*
+			*Metodo: pushDados()
+			*Descrição: Responsavel por cadastrar dados no banco
+			*Data: 18/06/2024
+			*Programador(a): Ighor Drummond
+			*/		
 			private function pushDados() {
 				try {
 					$this->con->beginTransaction();
@@ -831,7 +875,12 @@
 					return false;
 				}
 			}
-		
+			/*
+			*Metodo: montaQuery(Opção)
+			*Descrição: Responsavel por montar as querys
+			*Data: 18/06/2024
+			*Programador(a): Ighor Drummond
+			*/			
 			private function montaQuery($Opc) {
 				if ($Opc === 0) {
 					$this->query = "
@@ -896,14 +945,40 @@
 					";
 				} else if ($Opc === 3) {
 					$this->query = "
-						INSERT INTO pedidos(valor_total, data_pedido, id_cliente, id_end, status, id_form)
-						VALUES($this->Total, '$this->Data', $this->IdCli, $this->Endereco, ". strval(self::STATUS) .", $this->Pagamento)
+						INSERT INTO pedidos(valor_total, data_pedido, id_cliente, id_end, status, id_form, )
+						VALUES($this->Total, '$this->Data', $this->IdCli, $this->Endereco, ". strval(self::STATUS) .", $this->Pagamento, '$this->Cupom')
 					";
 				} else if ($Opc === 4) {
 					$this->query = "
 						INSERT INTO item_pedidos(id_prod, id_ped, quant, preco_item)
 					";
+				}else if ($Opc === 5){
+					$this->query = "
+					SELECT
+						REPLACE(nome_cupom, ' ', '') as nome_cupom,
+						cupom_ativo,
+						data_inicio,
+						data_validade,
+						valor_desconto,
+						id_prod
+					FROM
+						cupons
+					WHERE
+						nome_cupom = '$this->Cupom'
+					";
 				}
+			}
+			/*
+			*Metodo: validaData(Data de vencimento do cupom)
+			*Descrição: Responsavel por validar se já está vencido o cupom
+			*Data: 26/06/2024
+			*Programador(a): Ighor Drummond
+			*/
+			private function validaData($Data){
+				// Valida se a data de validade é menor que a data atual 
+				$DataFinal = strtotime($Data);
+				$DataAtual = strtotime(date('Y-m-d H:i:s'));
+				$DataAtual > $DataFinal ? true : false;
 			}
 		}		
 	}

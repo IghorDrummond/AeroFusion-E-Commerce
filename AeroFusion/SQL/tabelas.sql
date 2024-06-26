@@ -239,6 +239,7 @@ CREATE TABLE pedidos(
     id_end int not null,
     status int not null,
     id_form int not null,
+    nome_cupom varchar(20) default '',
     FOREIGN KEY (id_cliente) REFERENCES cliente(id),
     FOREIGN KEY (status) REFERENCES status(id_sta),
     FOREIGN KEY (id_end) REFERENCES endereco(id_end),

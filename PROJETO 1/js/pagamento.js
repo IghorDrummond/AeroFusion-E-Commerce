@@ -6,6 +6,7 @@ var aviso = document.getElementsByClassName('alertas');
 var aviso_texto = document.getElementsByClassName('alerta_texto');
 var botao_end = null;
 var pagamento = null;
+var Cupom = null;
 //String
 var End = '';
 //Objeto
@@ -107,6 +108,7 @@ function novoPedido(){
             telaCarregamento(false); // Desliga a tela de carregamento
             botao_end = document?.getElementsByClassName('dropdown-toggle')[0];
             pagamento = document?.getElementById('compra').getElementsByTagName('select')[0];
+            Cupom = document?.getElementsByName('cupom')[0];
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alerta('Houve um erro ao carregar o seu pedido. Tente novamente ou mais tarde.', 0);
@@ -185,7 +187,7 @@ function finalizarCompra(){
         if(pagamento.selectedIndex > 0){
             telaCarregamento(true);
             ajax = new XMLHttpRequest();
-            ajax.open('POST', 'script/pedidos.php?Opc=5&Pagamento=' + encodeURIComponent(pagamento.selectedIndex) + '&Endereco=' + encodeURIComponent(End));
+            ajax.open('POST', 'script/pedidos.php?Opc=5&Pagamento=' + encodeURIComponent(pagamento.selectedIndex) + '&Endereco=' + encodeURIComponent(End) + '&Cupom=' + encodeURIComponent(Cupom.value));
             ajax.onreadystatechange = ()=>{
                 telaCarregamento(false);
                 if(ajax.readyState === 4){
@@ -334,7 +336,6 @@ function buscaEndereco(){
                 }
             }
         }
-
         jsonHttp.send();
     }
 }

@@ -185,7 +185,7 @@
 
 	function novoPedido(){
 		//Cria objeto para inserir novo pedido
-		$Pedido = new novoPedido(Email: $_SESSION['Email'], Produtos: $_SESSION['Produtos'],Endereco:  $_GET['Endereco'], Pagamento: $_GET['Pagamento']);
+		$Pedido = new novoPedido(Email: $_SESSION['Email'], Produtos: $_SESSION['Produtos'],Endereco:  $_GET['Endereco'], Pagamento: $_GET['Pagamento'], Cupom: $_GET['Cupom']);
 		//Cadastra novo pedido
 		$Ret = $Pedido->setPedido();
 		if($Ret['Inclusão']){
