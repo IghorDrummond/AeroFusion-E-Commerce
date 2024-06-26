@@ -10,6 +10,7 @@
 	use Pedido\solicitaPedido;
 	use Pedido\validaEstoque;
 	use Pedido\novoPedido;
+	use Pedido\validaCupom;
 	use Acesso\Endereco;
 	use Pagamentos\Pagamento;
 	//Declaração de variaveis
@@ -43,6 +44,9 @@
 			break;
 		case '6':
 			cadastrarEnd();
+			break;
+		case '7':
+			ativaCupom();
 			break;
 	}
 
@@ -157,7 +161,7 @@
 				<input type="submit" class="btn btn-warning text-center text-white font-weight-bold p-2 rounded mt-3 w-100" value="Comprar">
 				<hr>
 				<h6 class="mt-2">Tem um cupom? Insira aqui:</h6>
-				<input  name="cupom" class="form-control rounded" placeholder=".....">				
+				<input  name="cupom" class="form-control rounded" placeholder="....." onchange="validaCupom()">				
 			</form>
 		</article>
 	</section>
@@ -231,5 +235,10 @@
 		}else{
 			echo 'ERROR';
 		}
+	}
+
+	function ativaCupom(){
+		$Cupom  = new validaCupom(Email: $_SESSION['Email'], Produtos: $_SESSION['Produtos'], Cupom: $_GET['Cupom']);
+		echo $Cupom->validaCupom();
 	}
 ?>

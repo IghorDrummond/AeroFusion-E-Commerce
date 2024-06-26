@@ -1048,14 +1048,15 @@ namespace Pedido {
 		 */
 		public function validaCupom()
 		{
-			$this->montaQuery(0);
+			$Ret = '';
+			$this->montaQuery(1);
 			$this->getDados();
 
 			if (isset($this->stmt[0]['total_carrinho'])) {
 				$aux = $this->stmt;//Guarda todos os produtos do pedido
 				$this->Total = $aux[0]['total_carrinho'];//Guarda total do carrinho
 				//Prepara para validar cupom
-				$this->montaQuery(1);	
+				$this->montaQuery(0);	
 				$this->getDados();
 				//Valida se tem cupom e se o mesmo está ativo para o produto
 				if (isset($this->stmt[0]['nome_cupom'])) {
@@ -1072,16 +1073,17 @@ namespace Pedido {
 									}
 								}
 							}
+							$Ret = "Total: R$ " . $this->Total;
 						}else{
-							echo 'VENCIDO';
+							$Ret =  'VENCIDO';
 						}
 					} else {
-						echo "INVALIDO";
+						$Ret = "INVALIDO";
 					}
 				}
 			}
 
-			return $this->Total;
+			return $Ret;
 		}
 		/*
 		 *Metodo: getDados()

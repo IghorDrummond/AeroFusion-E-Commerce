@@ -22,9 +22,7 @@ var ajax = null;
 window.addEventListener('DOMContentLoaded', ()=>{
     telaCarregamento(true);
     novoPedido();
-})
-
-
+});
 //-------------------------------Funções
 /*
 Função: telaCarregamento(controle de liga ou desliga)   
@@ -338,4 +336,45 @@ function buscaEndereco(){
         }
         jsonHttp.send();
     }
+}
+/*
+Função: validaCupom()
+Descrição: Valida o cupom e atualiza total
+Data: 26/06/2024
+Programador: Ighor Drummond   
+*/
+function validaCupom(){
+    var param = document.getElementsByName('cupom')[0].value
+
+    if(param === ''){
+        return null;
+    }
+    //Inicia uma requisição ajax
+    ajax = new XMLHttpRequest();
+
+    ajax.open('POST', 'script/pedidos.php?Opc=7&Cupom=' + encodeURIComponent(param));
+
+    ajax.onreadystatechange = ()=>{
+        if(ajax.readyState === 4){
+            if(ajax.status < 400){
+                fecharEnd();//Fecha tela de endereço
+                switch(ajax.responseText.trim()){
+                    case 'INVALIDO':
+                        alerta('Cupom invalído! tente outro cupom valído.', 0);
+                        break;
+                    case 'VENCIDO':
+                        alerta('Cupom vencido! tente outro cumpom valído.', 0);
+                        break;
+                    default:
+                        document.getElementById('compra').getElementsByTagName('h1')[0].textContent = ajax.responseText.trim();
+                        alerta('Cupom ' + param + ' Aplicado com sucesso!', 1);
+                        break;
+                }
+            }else{
+                window.location.href = "error.php?Error=" + ajax.status.toString();
+            }
+        }
+    }
+
+    ajax.send();
 }
