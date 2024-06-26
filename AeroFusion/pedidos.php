@@ -215,5 +215,28 @@
 
 	function cadastrarEnd(){
 		$Endereco = new Endereco($_SESSION['Email']);
+
+		if (isset($_GET['rua'], $_GET['complemento'], $_GET['cep'], $_GET['referencia'], $_GET['bairro'], $_GET['estado'], $_GET['numero'], $_GET['cidade'])) {
+			$rua = $_GET['rua'];
+			$complemento = $_GET['complemento'];
+			$cep = str_replace('-', '', $_GET['cep']);
+			$referencia = $_GET['referencia'];
+			$bairro = $_GET['bairro'];
+			$estado = $_GET['estado'];
+			$numero = $_GET['numero'];
+			$cidade = $_GET['cidade'];
+		
+			// Certifique-se de que a função setEndereco está correta
+			$Ret = $Endereco->setEndereco($rua, $complemento, $cep, $referencia, $bairro, $estado, $numero, $cidade);
+			
+			if($Ret){
+				echo('OK');
+			}else{
+				echo('ERROR');
+			}
+
+		}else{
+			echo 'ERROR';
+		}
 	}
 ?>

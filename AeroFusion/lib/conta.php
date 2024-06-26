@@ -175,14 +175,19 @@
 			private $con = null;
 			private $query = null;
 			private $stmt = null;
+			private $IdCli = null;
 
 			//Construtor
 			public function __construct(
 				public $Email = '',
 			){
 				try{
+					//Inicia conexão com o banco de dados
 					$this->con = new \IniciaServer();
 					$this->con = $this->con->conexao();
+					//Recupera o Id do cliente cadastrado
+					$this->montaQuery(2);
+					$this->IdCli = $this->retornaValores()[0]['id'] ;
 				}catch(\PDOException $e){
 					echo $e->getMessage();
 				}
@@ -197,15 +202,8 @@
 			*/
 			public function getEndereco(){
 				$this->montaQuery(0);
-
-				try{
-					$this->stmt = $this->con->query($this->query);
-					$this->stmt = $this->stmt->fetchAll(\PDO::FETCH_ASSOC);
-				}catch(\PDOException $e){
-					echo $e->getMessage();
-				}finally{
-					return $this->stmt;
-				}
+				$this->stmt = $this->retornaValores();	
+				return $this->stmt;
 			}
 
 			/*
@@ -214,34 +212,45 @@
 			*Data: 15/06/2024
 			*Programador(a): Ighor Drummond
 			*/
-			public function setEndereco(
-				$Rua,
-				$Complemento,
-				$Cep,
-				$Referencia,
-				$Bairro,
-				$Uf,
-				$Cli,
-				$Numero,
-				$Cidade
-			){
-				$this->montaQuery(1);//Monta query para inserir novo endereço
+			public function setEndereco( $Rua, $Complemento, $Cep, $Referencia, $Bairro, $Uf, $Numero, $Cidade){
+				$Ret = false;
+				$EndExiste = false;
 
 				try{
-					//Prepara a inserção de dados
-					$this->query .= "
-						VALUES('$Cidade', '$Referencia', '$Uf', '$Bairro', '$Rua', '$Cep', '$Numero', '$Complemento', $Cli)
-					";
-
-					$this->con->beginTransaction();
-					if( ($this->con->exec($this->query)) > 0 ){
-						$this->con->commit();
-					}else{
-						new \PDOException("Não Inseriu dados na query");
+					//Valida se o endereço já existe
+					$this->montaQuery(0);
+					$this->stmt = $this->retornaValores();
+					
+					foreach ($this->stmt as $end) {
+						if($end['cep'] === $Cep){
+							if($end['numero'] === (int)$Numero and trim($end['rua']) === trim(strtoupper($Rua))){
+								$EndExiste = true;
+								break;
+							}
+						}
 					}
+					/*
+					//Se caso o endereço não existir, ele adiciona o mesmo
+					if(!$EndExiste){
+						$this->montaQuery(1);//Monta query para inserir novo endereço
+						//Prepara a inserção de dados
+						$this->query .= "
+							VALUES('$Cidade', '$Referencia', '$Uf', '$Bairro', '$Rua', '$Cep', '$Numero', '$Complemento', $this->IdCli)
+						";
+	
+						$this->con->beginTransaction();
+						if( ($this->con->exec($this->query)) > 0 ){
+							$this->con->commit();
+							$Ret = true;
+						}else{
+							throw new \PDOException("Não Inseriu dados na query");
+						}
+					}*/
 				}catch(\PDOException $e){
 					echo $e->getMessage();
 					$this->con->rollback();
+				}finally{
+					return $Ret; 
 				}
 			}
 
@@ -276,6 +285,31 @@
 					$this->query = "
 						INSERT INTO endereco(cidade, referencia, uf, bairro, rua, cep, numero, complemento, id_cliente)
 					" . PHP_EOL;				
+				}else if($Val === 2){
+					$this->query = "
+						SELECT
+							cli.id
+						FROM
+							cliente as cli
+						WHERE
+							cli.email = '$this->Email'
+					";
+				}
+			}
+			
+			/*
+			*Metodo: retornaValores()
+			*Descrição: Responsavel por retorna a consulta no banco
+			*Data: 26/06/2024
+			*Programador(a): Ighor Drummond
+			*/
+			private function retornaValores(){
+				try{
+					$this->stmt = $this->con->query($this->query);
+				}catch(\PDOException $e){
+					echo $e->getMessage();
+				}finally{
+					return $this->stmt->fetchAll(\PDO::FETCH_ASSOC);
 				}
 			}
 		}

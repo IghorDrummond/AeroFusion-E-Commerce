@@ -22,6 +22,8 @@ window.addEventListener('DOMContentLoaded', ()=>{
     telaCarregamento(true);
     novoPedido();
 })
+
+
 //-------------------------------Funções
 /*
 Função: telaCarregamento(controle de liga ou desliga)   
@@ -242,16 +244,27 @@ Descrição: apaga a tela end da página html
 Data: 24/06/2024
 Programador: Ighor Drummond
 */
-function cadastrarEnd(){
-    event.preventDefault();
-
+function cadastrarEnd(event){
+    var param = '';
+    var form = document.getElementsByClassName('end_dados')[0].getElementsByTagName('form')[0];
+    var formData = null;
+    //Desliga recarregamento da página após da submit
+    event.preventDefault();    
+    // Cria um objeto FormData a partir do formulário
+    formData = new FormData(form);
+    // Percorre os dados do formulário
+    for (let [name, value] of formData) {
+        param += "&" + encodeURIComponent(name) + "=" +  encodeURIComponent(value);
+    }
+    //Inicia uma requisição ajax
     ajax = new XMLHttpRequest();
 
-    ajax.open('POST', 'script/pedido.php?Opc=6');
+    ajax.open('POST', 'script/pedidos.php?Opc=6' + param);
 
     ajax.onreadystatechange = ()=>{
         if(ajax.readyState === 4){
             if(ajax.status < 400){
+                fecharEnd();//Fecha tela de endereço
                 switch(ajax.responseText.trim()){
                     case 'OK':
                         novoPedido();
@@ -261,10 +274,61 @@ function cadastrarEnd(){
                         break;
                 }
             }else{
-                window.location.href = "error.php?Error="  ajax.status.toString();
+                window.location.href = "error.php?Error=" + ajax.status.toString();
             }
         }
     }
 
     ajax.send();
+}
+/*
+Função: mascaraCep()
+Descrição: Mascara automatica de CEP
+Data: 20/05/2024
+Programador: Ighor Drummond   
+*/
+function mascaraCep(){
+    var cep = document.getElementsByName('cep')[0];
+    var aux = '';
+
+    for(nCont = 0; nCont <= cep.value.length-1; nCont++){
+        if(nCont === 5 && cep.value.substr(nCont, 1) != '-'){
+            aux += '-';
+        }
+
+        aux += cep.value.substr(nCont, 1);
+    }
+
+    cep.value = aux;
+}
+/*
+Função: buscaEndereco()
+Descrição: Responsavel por buscar cep da cidade
+Data: 26/05/2024
+Programador: Ighor Drummond   
+*/
+function buscaEndereco(){
+    var cep = document.getElementsByName('cep')[0].value;
+    var End = document.getElementsByClassName('end_dados')[0].getElementsByTagName('input');
+    var jsonHttp = null;
+
+    if(cep.length === 9){
+        jsonHttp = new XMLHttpRequest();
+        jsonHttp.open('GET', 'https://viacep.com.br/ws/'+ (cep.replace('-', '')) +'/json/');
+
+        jsonHttp.onreadystatechange = ()=>{
+            if(jsonHttp.readyState === 4 && jsonHttp.status < 400){
+                let jsonVal = JSON.parse(jsonHttp.responseText);
+                //Ejeta dados direto nos inputs
+                if(!jsonVal.hasOwnProperty('erro')){
+                    End[1].value = jsonVal.logradouro;
+                    End[2].value = jsonVal.bairro;
+                    End[3].value = jsonVal.localidade;
+                    End[4].value = jsonVal.uf;
+                }
+            }
+        }
+
+        jsonHttp.send();
+    }
 }

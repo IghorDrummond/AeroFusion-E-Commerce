@@ -1,36 +1,36 @@
 <div class="w-100 d-flex p-3 justify-content-center align-items-center end_body">
 	<div class="bg-white rounded p-2 end_dados">
-		<form class="form-group" onsubmit="cadastrarEnd()">
+		<form class="form-group" onsubmit="cadastrarEnd(event)">
 			<fieldset>
 				<legend>Insira seu Endereço:</legend>
 
 				<div class="form-group">
-					<label for="cep">Insira seu Cep:</label>
-					<input class="form-control" placeholder="xxxxx-xxx" name="cep" maxlength="9" required>
+					<label for="cep">Insira seu Cep:<span class="text-danger">*</span></label>
+					<input class="form-control" placeholder="xxxxx-xxx" name="cep" maxlength="9" required onkeyup="mascaraCep()" onchange="buscaEndereco()">
 				</div>
 
 				<div class="form-group">
-					<label for="rua">Rua:</label>
-					<input class="form-control" name="rua" required>
+					<label for="rua">Rua:<span class="text-danger">*</span></label>
+					<input readonly class="form-control" name="rua" required>
 				</div>
 
 				<div class="form-group">
-					<label for="bairro">Bairro:</label>
-					<input class="form-control" name="bairro" required>
+					<label for="bairro">Bairro:<span class="text-danger">*</span></label>
+					<input readonly class="form-control" name="bairro" required>
 				</div>
 
 				<div class="form-group">
-					<label for="cidade">Cidade:</label>
-					<input class="form-control" name="cidade" required>
+					<label for="cidade">Cidade:<span class="text-danger">*</span></label>
+					<input readonly class="form-control" name="cidade" required>
 				</div>
 
 				<div class="form-group">
-					<label for="estado">Estado:</label>
-					<input class="form-control" name="estado" maxlength="2" required>
+					<label for="estado">Estado:<span class="text-danger">*</span></label>
+					<input readonly class="form-control" name="estado" maxlength="2" required>
 				</div>
 
 				<div class="form-group">
-					<label for="numero">Número:</label>
+					<label for="numero">Número Residencial:<span class="text-danger">*</span></label>
 					<input type="number" class="form-control" name="numero" required>
 				</div>
 
