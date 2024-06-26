@@ -765,34 +765,34 @@
 						// Recebe o total do pedido
 						$this->Total = str_replace(',', '.', $this->stmt[0]['total_carrinho']);
 						$Ret['Total'] = $this->Total;
-						// Guarda data do novo pedido
-						$this->Data = date('Y-m-d H:i:s');
 						//Valida se tem cupom e se o mesmo está ativo para o produto
 						if(!empty($this->Cupom)){
 							$aux = $this->stmt;//Guarda produtos numa variavel auxiliar
 							$this->montaQuery(5);
 							//Faz a busca do cupom
 							$this->getDados();
-							//Valida se o cupom está ativo
+							//Valida se o cupom existe e se o mesmo está ativo
 							if(isset($this->stmt[0]['cupom_ativo']) and $this->stmt[0]['cupom_ativo'] === 1){
-								//Valida a data de validade do cupom se ela já passou
+								//Valida se o cupom está vencido
 								if($this->validaData($this->stmt[0]['data_validade'])){
-									//Percorre os cada produto valido no cupom e valida se existe no carrinho para aplicar desconto no total
+									//Percorre o cupom para validar se existe um produto valido no pedido para ser aplicado o desconto
 									for($nCont = 0; $nCont <= count($this->stmt) -1; $nCont++){
 										for($nCont2 = 0; $nCont2 <= count($aux) -1; $nCont2++){
 											if($this->stmt[$nCont]['id_prod'] === $aux[$nCont2]['id_prod']){
-												//Subtraí o total pelo o valor do produto
+												//Subtraí o total pelo o valor do produto e sua quantidade
 												$this->Total = strval((float)$this->Total - ((float)$this->stmt[$nCont]['valor_desconto'] * $aux[$nCont2]['quant']));
-												$Ret['Cupom'] = $this->Cupom;
+												$Ret['Cupom'] = $this->Cupom;//Guarda cupom valido
 											}
 										}
 									}
-									$Ret['Total'] = $this->Total;
+									$Ret['Total'] = $this->Total;//Guarda o novo total
 								}
 							}else{
 								$this->Cupom = "";//Apaga cupom pois o mesmo ou não existe ou não está ativo
 							}
 						}
+						// Guarda data do novo pedido
+						$this->Data = date('Y-m-d H:i:s');
 						// Cria um novo pedido com os dados informados
 						$this->montaQuery(3);
 						$this->con->beginTransaction();
@@ -981,5 +981,31 @@
 				$DataAtual > $DataFinal ? true : false;
 			}
 		}		
+		/*
+		*Classes: Cupons
+		*Descrição: Valida se o cupom está ativo ou não
+		*Data: 26/06/2024
+		*Programador(a): Ighor Drummond
+		*/
+		class validaCupom{
+			//Atributos
+			private $con = null;
+			private $stmt = null;
+			private $query = null;
+			
+			//Construtor
+			public function __construct(
+				public $Email = "",
+				public $Cupom = "",
+				public $Produtos = ""
+			){
+				try{
+					$this->con = new \IniciaServer();
+					$this->con = $this->con->conexao();
+				}catch(\PDOException $e){
+					echo $e->getMessage();
+				}
+			}
+		}
 	}
 ?>
