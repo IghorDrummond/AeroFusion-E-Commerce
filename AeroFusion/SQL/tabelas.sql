@@ -177,7 +177,7 @@ CREATE TABLE avaliacoes(
 CREATE TABLE cupons(
     id_cup int primary key auto_increment not null,
     nome_cupom  varchar(20) not null,
-    data_validade date not null,
+    data_validade datetime not null,
     valor_desconto float(2,2) default 0 not null,
     id_prod int not null,
     foreign key (id_prod) references produtos(id_prod)
