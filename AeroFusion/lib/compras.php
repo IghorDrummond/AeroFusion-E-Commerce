@@ -825,7 +825,7 @@ namespace Pedido {
 					if ($this->con->exec($this->query) > 0) {
 						$this->IdPed = $this->con->lastInsertId();
 						$this->con->commit();
-						$Ret['Pedido'] = $this->IdPed; // Insere o id do novo pedido feito
+						$Ret['Pedido'] = $this->IdPed; // Guarda o id do novo pedido
 					} else {
 						throw new \PDOException("Falha ao inserir o pedido.");
 					}
@@ -1166,6 +1166,53 @@ namespace Pedido {
 			$DataFinal = strtotime($Data);
 			$DataAtual = strtotime(date('Y-m-d H:i:s'));
 			$DataAtual > $DataFinal ? true : false;
+		}
+	}
+
+
+	/*
+	 *Classes: MetodoPagamento
+	 *Descrição: Guarda o método de pagamento para o pedido efetuado
+	 *Data: 29/06/2024
+	 *Programador(a): Ighor Drummond
+	 */
+	class MetodoPagamento
+	{
+		//Atributos
+		private $con = null;
+		private $query = null;
+		private $stmt = null;
+
+		//Construtor
+		public function __construct(
+			public $IdPed = null,
+			public $Email = null,
+			public $Metodo = null
+		)
+		{	
+			//Inicia a Conexão com o Banco de Dados
+			$this->con = new \IniciaServer();
+			$this->con = $this->con->conexao(); 
+		}
+
+		//Métodos
+		/*
+		 *Metodo: setPagamento()
+		 *Descrição: guarda o novo método de pagamento junto com o seu valor parcelado (caso for parcelamento)
+		 *Data: 29/06/2024
+		 *Programador(a): Ighor Drummond
+		 */
+		private function setPagamento(){
+
+		}
+		/*
+		 *Metodo: montaQuery(Opção)
+		 *Descrição: Responsavel por montar as querys
+		 *Data: 29/06/2024
+		 *Programador(a): Ighor Drummond
+		 */
+		private function montaQuery($Opc){
+
 		}
 	}
 }
