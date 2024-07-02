@@ -286,35 +286,36 @@
 			?>
 		</article>
 		<article class="bg-white p-2 text-warning">
-			<h3>Pedido #<?php echo($Pedido[0]['id_ped']) ?>  </h3>
-			<span>Status: <?php echo($Pedido[0]['status_']);?></span>
-			<span class="text-primary ml-5">
-				Cupom: 
-				<?php
-					if(is_null($Pedido[0]['nome_cupom'])){
-						echo('Não Há!');
-					}else{
-						echo($Pedido[0]['nome_cupom']);
-					}
-				?>
-			</span>
-			<h1>Total: R$ <?php echo($Pedido[0]['valor_total']);?> </h1>
-			<div class="bg-secondary rounded">
-				<h6 class="mx-3">Endereço escolhido:</h6>
-				<ul id="endereco_lista">
-					<li>Rua: <?php echo(mb_convert_case($Ped['rua'], MB_CASE_TITLE, 'UTF-8')) ?></li>
-					<li>Bairro: <?php echo(mb_convert_case($Ped['bairro'], MB_CASE_TITLE, 'UTF-8')) ?></li>
-					<li>Cidade: <?php echo(mb_convert_case($Ped['cidade'], MB_CASE_TITLE, 'UTF-8')) ?></li>
-					<li>Número: <?php echo(mb_convert_case($Ped['numero'], MB_CASE_TITLE, 'UTF-8')) ?></li>
-					<li>Complemento: <?php echo(mb_convert_case($Ped['complemento'], MB_CASE_TITLE, 'UTF-8')) ?></li>
-					<li>Referência: <?php echo(mb_convert_case($Ped['referencia'], MB_CASE_TITLE, 'UTF-8')) ?></li>
-					<li>Cep: <?php echo(mb_convert_case($Ped['cep'], MB_CASE_TITLE, 'UTF-8')) ?></li>
-					<li>UF: <?php echo($Pedido[0]['uf']) ?></li>
-				</ul>
-				<div class="clear"></div>
-			</div>
-			<!-- Forma de Pagamento -->
-			<form class="w-100 form-group mt-2">
+			<h5>Pedido #<?php echo($Pedido[0]['id_ped']) ?></h5>	
+			<span></span>Status: <?php echo($Pedido[0]['status_']);?></span>
+				<span class="text-primary ml-5">
+					Cupom: 
+					<?php
+						if(is_null($Pedido[0]['nome_cupom'])){
+							echo('Não Há!');
+						}else{
+							echo($Pedido[0]['nome_cupom']);
+						}
+					?>
+				</span>
+				<br><br>
+				<div class="border border-secondary rounded">
+					<h6 class="mx-3">Endereço escolhido:</h6>
+					<ul id="endereco_lista">
+						<li>Rua: <?php echo(mb_convert_case($Ped['rua'], MB_CASE_TITLE, 'UTF-8')) ?></li>
+						<li>Bairro: <?php echo(mb_convert_case($Ped['bairro'], MB_CASE_TITLE, 'UTF-8')) ?></li>
+						<li>Cidade: <?php echo(mb_convert_case($Ped['cidade'], MB_CASE_TITLE, 'UTF-8')) ?></li>
+						<li>Número: <?php echo(mb_convert_case($Ped['numero'], MB_CASE_TITLE, 'UTF-8')) ?></li>
+						<li>Complemento: <?php echo(mb_convert_case($Ped['complemento'], MB_CASE_TITLE, 'UTF-8')) ?></li>
+						<li>Referência: <?php echo(mb_convert_case($Ped['referencia'], MB_CASE_TITLE, 'UTF-8')) ?></li>
+						<li>Cep: <?php echo(mb_convert_case($Ped['cep'], MB_CASE_TITLE, 'UTF-8')) ?></li>
+						<li>UF: <?php echo($Pedido[0]['uf']) ?></li>
+					</ul>
+					<div class="clear"></div>
+				</div>
+				<h1>Total: R$ <?php echo($Pedido[0]['valor_total']);?> </h1>
+				<!-- Forma de Pagamento -->
+				<form class="w-100 form-group mt-2">
 			<?php
 				if($Pedido[0]['forma_pag'] === 'PIX'){
 			?>	
@@ -327,6 +328,8 @@
 			?>
 				<fieldset class="form-group">
 					<legend>Pagamento: Cartão</legend>
+					<span class="text-primary">Mudar Pagamento</span>
+					<br><br>
 					<div id="cartao" class="rounded m-auto text-white">
 						<!-- Cartão frontal -->
 						<div class="p-5 cartaoLado d-flex flex-column w-100">
@@ -359,12 +362,13 @@
 						</div>
 					</div>
 					<br>
+					<labe>Parcelas:</labe>
 					<select class="form-control">
-						<option selected>1x de R$ <?php echo($Pedido[0]['valor_total']); ?></option>
+						<option value="1" selected>1x de R$ <?php echo($Pedido[0]['valor_total']); ?></option>
 						<?php
 							for($nCont = 2; $nCont <= 12; $nCont++){
 						?>
-						<option><?php print($nCont .'x de R$ ' . str_replace('.', ',', number_format((float)$Pedido[0]['valor_total'] / $nCont, 2))); ?></option>
+						<option value="<?php echo($nCont) ?>"><?php print($nCont .'x de R$ ' . str_replace('.', ',', number_format((float)$Pedido[0]['valor_total'] / $nCont, 2))); ?></option>
 						<?php
 							}
 						?>
