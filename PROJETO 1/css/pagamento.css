@@ -53,6 +53,18 @@ article:nth-child(1) {
     overflow-y: auto;
 }
 
+#endereco_lista{
+    list-style-type: none;
+    background: gray;
+}
+#endereco_lista li{
+    float: left;
+    margin: auto 15px;
+}
+.clear{
+    clear: both;
+}
+
 .area_produtos {
     display: -webkit-box;
     display: -ms-flexbox;

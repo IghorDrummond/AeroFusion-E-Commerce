@@ -301,18 +301,21 @@
 			<br>
 			<h1>Total: R$ <?php echo($Pedido[0]['valor_total']);?> </h1>
 			
-			<div>
-				<ul>
-					<li>Rua: <?php echo(	ucfirst(strtolower($Pedido[0]['rua']))) ?></li>
-					<li>Bairro: <?php echo(	ucfirst(strtolower($Pedido[0]['bairro']))) ?></li>
-					<li>Cidade: <?php echo(	ucfirst(strtolower($Pedido[0]['cidade']))) ?></li>
-					<li>Número: <?php echo(	ucfirst(strtolower($Pedido[0]['numero']))) ?></li>
-					<li>Complemento: <?php echo(	ucfirst(strtolower($Pedido[0]['complemento']))) ?></li>
-					<li>Referência: <?php echo(	ucfirst(strtolower($Pedido[0]['referencia']))) ?></li>
-					<li>Cep: <?php echo(	ucfirst(strtolower($Pedido[0]['cep']))) ?></li>
-					<li>UF: <?php echo(	ucfirst(strtolower($Pedido[0]['uf']))) ?></li>
+			<div class="bg-secondary">
+				<h6 class="mx-3">Endereço escolhido:</h6>
+				<ul id="endereco_lista">
+					<li>Rua: <?php echo(mb_convert_case($Ped['rua'], MB_CASE_TITLE, 'UTF-8')) ?></li>
+					<li>Bairro: <?php echo(mb_convert_case($Ped['bairro'], MB_CASE_TITLE, 'UTF-8')) ?></li>
+					<li>Cidade: <?php echo(mb_convert_case($Ped['cidade'], MB_CASE_TITLE, 'UTF-8')) ?></li>
+					<li>Número: <?php echo(mb_convert_case($Ped['numero'], MB_CASE_TITLE, 'UTF-8')) ?></li>
+					<li>Complemento: <?php echo(mb_convert_case($Ped['complemento'], MB_CASE_TITLE, 'UTF-8')) ?></li>
+					<li>Referência: <?php echo(mb_convert_case($Ped['referencia'], MB_CASE_TITLE, 'UTF-8')) ?></li>
+					<li>Cep: <?php echo(mb_convert_case($Ped['cep'], MB_CASE_TITLE, 'UTF-8')) ?></li>
+					<li>UF: <?php echo($Pedido[0]['uf']) ?></li>
 				</ul>
+				<div class="clear"></div>
 			</div>
+
 			<!-- Forma de Pagamento -->
 		</article>
 	</section>
