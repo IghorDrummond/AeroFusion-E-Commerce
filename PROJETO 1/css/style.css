@@ -240,7 +240,8 @@ dialog:ntd-child(3) div{
 	height: 100vh;
 	z-index: 3;
 	background: white;
-	animation: surgir 1s;
+	-webkit-animation: surgir 1s;
+	        animation: surgir 1s;
 }
 
 /* Campo dos Produtos*/
@@ -336,6 +337,8 @@ footer i:not(:hover){
 }
 .link_rodape:not(:hover){
 	color: white;
+	-webkit-transition: all 1s;
+	-o-transition: all 1s;
 	transition: all 1s;
 }
 

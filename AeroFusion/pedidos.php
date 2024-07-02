@@ -328,12 +328,22 @@
 				<fieldset class="form-group">
 					<legend>Pagamento: Cartão</legend>
 
-					<div id="cartao" class="rounded m-auto text-white p-2">
+					<div id="cartao" class="rounded m-auto text-white p-5">
 						<img class="img-fluid" alt="Operadora Cartão" align="right">
 						<br>
-						<labe>Número do cartão</labe>
-						<input id="numero_cartao" name="numero_cartao" type="text" placeholder="0000 0000 0000 0000" maxlength="16" required>
+						<label>Número do cartão</label>
+						<input id="numero_cartao" name="numero_cartao" type="text" placeholder="0000 0000 0000 0000" maxlength="19" required>
 						<br>
+						<div class="d-flex flex-row">
+							<div>
+								<label>Data Expiração</label><br>
+								<input name="vencimento" type="text" placeholder="00/0000" maxlength="7" required>
+							</div>
+							<div>
+								<label>CVC</label><br>
+								<input name="cvc" class="w-50 d-inline-block" type="text" placeholder="000" maxlength="3" required>
+							</div>
+						</div>
 					</div>
 				</fieldset>	
 			<?php
@@ -346,6 +356,11 @@
 			<?php
 				}
 			?>			
+
+			<p class="text-center">
+				Atenção!<br>
+				Este pedido tem válidade em status pedente até 7 dias, caso o pedido não sofrer alguma alteração, será cancelado e encerrado.
+			</p>	
 			</form>
 			<!-- Apagar Pedido -->
 			<button type="button" class="btn btn-danger btn-lg btn-block align-self-end">
