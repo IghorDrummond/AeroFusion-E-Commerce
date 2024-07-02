@@ -364,7 +364,7 @@
 						<?php
 							for($nCont = 2; $nCont <= 12; $nCont++){
 						?>
-						<option><?php print($nCont .'x de R$ ' . str_replace('.', ',', $Pedido[0]['valor_total'] / $nCont) ); ?></option>
+						<option><?php print($nCont .'x de R$ ' . str_replace('.', ',', number_format((float)$Pedido[0]['valor_total'] / $nCont, 2))); ?></option>
 						<?php
 							}
 						?>
