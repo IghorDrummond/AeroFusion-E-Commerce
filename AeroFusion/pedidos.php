@@ -48,6 +48,9 @@
 		case '7':
 			ativaCupom();
 			break;
+		case '8':
+			pagamento();
+			break;
 	}
 
 	function montaTela(){
@@ -189,12 +192,13 @@
 
 	function novoPedido(){
 		//Cria objeto para inserir novo pedido
-		$Pedido = new novoPedido(Email: $_SESSION['Email'], Produtos: $_SESSION['Produtos'],Endereco:  $_GET['Endereco'], Pagamento: $_GET['Pagamento'], Cupom: $_GET['Cupom']);
+		$Pedido = new novoPedido();
 		//Cadastra novo pedido
-		$Ret = $Pedido->setPedido();
+		$Ret = $Pedido->setPedido($_SESSION['Email'], $_SESSION['Produtos'], $_GET['Endereco'], $_GET['Pagamento'], $_GET['Cupom']);
 		if($Ret['Inclusão']){
 			echo 'S';
 			unset($_SESSION['Produtos']);//Apaga o registro de produtos
+			$_SESSION['IdPed'] = $Ret['Pedido'];
 		}else{
 			echo 'N';
 		}
@@ -240,5 +244,25 @@
 	function ativaCupom(){
 		$Cupom  = new validaCupom(Email: $_SESSION['Email'], Produtos: $_SESSION['Produtos'], Cupom: $_GET['Cupom']);
 		echo $Cupom->validaCupom();
+	}
+
+	function pagamento(){
+		$Pedido = new novoPedido();
+		$Pedido = $Pedido->getPedido($_SESSION['Email'], $_SESSION['IdPed']);
+?>
+
+	<section>
+		<article>
+			<?php
+				foreach($Pedido as $Ped) {
+					
+				}
+			?>
+		</article>
+		<article>
+			
+		</article>
+	</section>
+<?php
 	}
 ?>

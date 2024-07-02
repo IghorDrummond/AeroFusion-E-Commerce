@@ -193,7 +193,7 @@ function finalizarCompra(){
                         switch(ajax.responseText.trim()){
                             case 'S':
                                 //Atualiza para página para pagar o pedido
-                                window.location.reload();
+                                $('main').load('script/pedidos.php?Opc=8');
                                 break;
                             case 'N':
                                 alerta('Houve um erro interno em nosso servidor. Tente novamente ou mais tarde.', 0);

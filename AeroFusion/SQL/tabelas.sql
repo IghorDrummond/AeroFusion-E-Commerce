@@ -241,7 +241,6 @@ CREATE TABLE pedidos(
     id_form int not null,
     nome_cupom varchar(20) default '',
     parcelamento int default 1,
-    valor_parcelado float(8,2) default 0,
     FOREIGN KEY (id_cliente) REFERENCES cliente(id),
     FOREIGN KEY (status) REFERENCES status(id_sta),
     FOREIGN KEY (id_end) REFERENCES endereco(id_end),
@@ -253,10 +252,12 @@ CREATE TABLE item_pedidos(
     id_iped int primary key auto_increment not null,
     id_prod int not null,
     id_ped int not null,
+    id_tam int not null,
     quant int not null,
     preco_item float(8,2) not null,
     FOREIGN KEY (id_prod) REFERENCES produtos(id_prod),
-    FOREIGN KEY (id_ped) REFERENCES pedidos(id_ped)
+    FOREIGN KEY (id_ped) REFERENCES pedidos(id_ped),
+    FOREIGN KEY (id_tam) REFERENCES tamanho(id_tam)
 );
 
 #CRIANDO TABELA DE PROTOCOLOS E GARANTIA

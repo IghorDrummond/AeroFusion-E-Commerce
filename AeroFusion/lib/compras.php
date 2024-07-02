@@ -728,6 +728,11 @@ namespace Pedido {
 		// Constantes
 		const STATUS = 1;
 		// Atributos
+		public $Email = null;
+		public $Produtos = null;
+		public $Endereco = null;
+		public $Pagamento = null;
+		public $Cupom = null;
 		protected $con = null;
 		protected $stmt = null;
 		protected $query = null;
@@ -742,11 +747,6 @@ namespace Pedido {
 
 		// Construtor
 		public function __construct(
-			public $Email = '',
-			public $Produtos = '',
-			public $Endereco = '',
-			public $Pagamento = '',
-			public $Cupom = ''
 		) {
 			try {
 				$this->con = new \IniciaServer();
@@ -770,8 +770,20 @@ namespace Pedido {
 		 *Data: 18/06/2024
 		 *Programador(a): Ighor Drummond
 		 */
-		public function setPedido()
+		public function setPedido(
+			$Email = '',
+			$Produtos = '',
+			$Endereco = '',
+			$Pagamento = '',
+			$Cupom = '',
+		)
 		{
+			$this->Email = $Email;
+			$this->Produtos = $Produtos;
+			$this->Endereco = $Endereco;
+			$this->Pagamento = $Pagamento;
+			$this->Cupom = $Cupom;
+
 			$Ret = [
 				"Inclusão" => false,
 				"sem_estoque" => "",
@@ -780,7 +792,7 @@ namespace Pedido {
 				"Cupom" => ''
 			];
 
-			try {
+			try{
 				date_default_timezone_set('America/Sao_Paulo'); // Configura data e hora do servidor
 				// Responsável por retorna os IDs dos produtos correspondente ao carrinho do usuário
 				$this->montaQuery(0); // Monta query para retorna os items do pedido
@@ -793,6 +805,7 @@ namespace Pedido {
 					$Ret['Total'] = $this->Total;
 					//Valida se tem cupom e se o mesmo está ativo para o produto
 					if (!empty($this->Cupom)) {
+						//Guarda dados anteriores
 						$aux = $this->stmt;//Guarda produtos numa variavel auxiliar
 						$this->montaQuery(5);
 						//Faz a busca do cupom
@@ -829,9 +842,8 @@ namespace Pedido {
 					} else {
 						throw new \PDOException("Falha ao inserir o pedido.");
 					}
-
 					// Vai dar a baixa na quantidade dos produtos e adicionar o item do pedido
-					foreach ($this->stmt as $Dados) {
+					foreach ($this->stmt as $nCont => $Dados) {
 						if ($Dados['disponibilidade'] === 'SIM') {
 							// Da baixa no produto
 							$this->Quant = strval(abs((int) $Dados['quant'] - (int) $Dados['estoque']));
@@ -841,7 +853,7 @@ namespace Pedido {
 
 							// Adiciona produto ao item do pedido
 							$this->montaQuery(4);
-							$this->query .= PHP_EOL . "VALUES($this->IdProd, $this->IdPed," . $Dados['quant'] . ", " . str_replace(',', '.', $Dados['total_item']) . ")";
+							$this->query .= PHP_EOL . "VALUES($this->IdProd, $this->IdPed," . $Dados['quant'] . ", " . str_replace(',', '.', $Dados['total_item']) . ", {$Dados['id_tam']}  )";
 							$this->pushDados();
 
 							// Apaga produto do carrinho do cliente
@@ -864,6 +876,21 @@ namespace Pedido {
 			} finally {
 				return $Ret;
 			}
+		}
+		/*
+		 *Metodo: getPedido()
+		 *Descrição: Responsavel por retornar pedido existente
+		 *Data: 02/07/2024
+		 *Programador(a): Ighor Drummond
+		 */
+		public function getPedido(
+			$IdPed,
+			$Email
+		){	
+			$this->IdPed = $IdPed;
+			$this->Email = $Email;
+			$this->montaQuery(6);
+			
 		}
 		/*
 		 *Metodo: getDados()
@@ -920,6 +947,7 @@ namespace Pedido {
 							car.id_prod,
 							car.quant,
 							prod.estoque,
+							car.id_tam,
 							FORMAT(
 								CASE
 									WHEN prod.promocao_ativo = 1 THEN prod.promocao * car.quant
@@ -973,13 +1001,14 @@ namespace Pedido {
 							AND id_cliente = $this->IdCli
 					";
 			} else if ($Opc === 3) {
+				$this->Cupom = strtoupper($this->Cupom);
 				$this->query = "
-						INSERT INTO pedidos(valor_total, data_pedido, id_cliente, id_end, status, id_form, )
+						INSERT INTO pedidos(valor_total, data_pedido, id_cliente, id_end, status, id_form, nome_cupom)
 						VALUES($this->Total, '$this->Data', $this->IdCli, $this->Endereco, " . strval(self::STATUS) . ", $this->Pagamento, '$this->Cupom')
 					";
 			} else if ($Opc === 4) {
 				$this->query = "
-						INSERT INTO item_pedidos(id_prod, id_ped, quant, preco_item)
+						INSERT INTO item_pedidos(id_prod, id_ped, quant, preco_item, id_tam)
 					";
 			} else if ($Opc === 5) {
 				$this->query = "
@@ -995,6 +1024,50 @@ namespace Pedido {
 					WHERE
 						nome_cupom = '$this->Cupom'
 					";
+			}else if($Opc === 6){
+				$this->query = "
+					SELECT
+						Cp.nome_cupom,
+						Pd.id_ped,
+						Pd.id_cliente,
+						Pd.id_form,
+						Pd.valor_total,
+						Pd.id_end,
+						Pd.data_pedido,
+						Ip.id_prod, 
+						Ip.quant,
+						Ip.preco_item,
+						Prod.nome,
+						Img.img1,
+						cat.nome_cat,
+						tam.nome_tam,
+						fm.forma_pag,
+						cli.email,
+						st.nome as status_
+					FROM
+						Pedidos as Pd
+					LEFT JOIN
+						cupons as Cp ON Cp.nome_cupom = Pd.nome_cupom
+					LEFT JOIN
+						cliente as cli ON cli.id = Pd.id_cliente
+					INNER JOIN 
+						item_pedidos as Ip ON Ip.id_ped = Pd.id_ped
+					INNER JOIN 
+						produtos as Prod ON Prod.id_prod = Ip.id_prod
+					INNER JOIN 
+						imagens_prod as Img ON Img.id_prod = Prod.id_prod
+					INNER JOIN 
+						categoria as cat ON cat.id_cat = Prod.id_cat
+					INNER JOIN
+						tamanho as tam ON tam.id_tam = Ip.id_tam
+					INNER JOIN 
+						forma_pagamento as fm ON fm.id_form = Pd.id_form
+					INNER JOIN
+						status as st ON st.id_sta = Pd.status
+					WHERE
+						Pd.id_ped = $this->IdPed
+						AND cli.email = '$this->Email'
+				";				
 			}
 		}
 		/*
@@ -1212,7 +1285,7 @@ namespace Pedido {
 		 *Programador(a): Ighor Drummond
 		 */
 		private function montaQuery($Opc){
-
+			
 		}
 	}
 }
