@@ -298,10 +298,8 @@
 					}
 				?>
 			</span>
-			<br>
 			<h1>Total: R$ <?php echo($Pedido[0]['valor_total']);?> </h1>
-			
-			<div class="bg-secondary">
+			<div class="bg-secondary rounded">
 				<h6 class="mx-3">Endereço escolhido:</h6>
 				<ul id="endereco_lista">
 					<li>Rua: <?php echo(mb_convert_case($Ped['rua'], MB_CASE_TITLE, 'UTF-8')) ?></li>
@@ -315,8 +313,44 @@
 				</ul>
 				<div class="clear"></div>
 			</div>
-
 			<!-- Forma de Pagamento -->
+			<form class="w-100 form-group mt-2">
+			<?php
+				if($Pedido[0]['forma_pag'] === 'PIX'){
+			?>	
+				<fieldset class="form-group">
+					<legend>Pagamento: Pix</legend>
+					<img src="img/qrcode_pix.svg" class="img-fluid rounded" alt="QR CODE PARA PAGAMENTO PIX">
+				</fieldset>	
+			<?php
+				}else if($Pedido[0]['forma_pag'] === 'CARTÃO'){ 
+			?>
+				<fieldset class="form-group">
+					<legend>Pagamento: Cartão</legend>
+
+					<div id="cartao" class="rounded m-auto text-white p-2">
+						<img class="img-fluid" alt="Operadora Cartão" align="right">
+						<br>
+						<labe>Número do cartão</labe>
+						<input id="numero_cartao" name="numero_cartao" type="text" placeholder="0000 0000 0000 0000" maxlength="16" required>
+						<br>
+					</div>
+				</fieldset>	
+			<?php
+				}else if($Pedido[0]['forma_pag'] === 'BOLETO'){ 
+			?>
+				<fieldset class="form-group">
+					<legend>Pagamento: Boleto</legend>
+					<img src="img/qrcode_pix.svg" class="img-fluid rounded" alt="QR CODE PARA PAGAMENTO PIX">
+				</fieldset>	
+			<?php
+				}
+			?>			
+			</form>
+			<!-- Apagar Pedido -->
+			<button type="button" class="btn btn-danger btn-lg btn-block align-self-end">
+				Deletar Pedido <i class="fa-solid fa-trash-can"></i>
+			</button>
 		</article>
 	</section>
 <?php

@@ -50,6 +50,8 @@ article:nth-child(1) {
     -webkit-box-direction: normal;
     -ms-flex-direction: column;
     flex-direction: column;
+}
+article{
     overflow-y: auto;
 }
 
@@ -95,6 +97,48 @@ article:nth-child(1) {
     width: 50%;
 }
 
+/* Página de pagamento */
+
+/* Cartão */
+#cartao,
+#cartao input::placeholder,
+#cartao input
+{
+    font-family: 'Dot Digital', sans-serif;
+    color: white;
+}
+
+#cartao{
+    width: 50%;
+    background: linear-gradient(to right, red, #ff7b5a );
+    box-shadow: 15px 5px 5px rgba(0, 0, 0, 0.5);
+    animation: entradaCartao 1s;
+    font-weight: bold;
+}
+#numero_cartao{
+    background: transparent;
+    border: none;
+    font-family: arial;
+    width: 100%;
+    font-size: 1.5em;
+    font-weight: none;
+}
+
+/* Hovers */
+#numero_cartao:hover{
+    border-bottom: 2px dashed white !important;
+}
+
+/* Animação */
+@keyframes entradaCartao {
+    0%{
+        transform: translateX(-5rem) rotateY(80deg);
+    }
+    100%{
+        transform: translateX(0px) rotateY(0deg);
+    }
+}
+
 /* Dispositivos extra small (telefones em modo retrato, com menos de 576px) */
 @media (max-width: 767.98px) { 
     article,
@@ -107,5 +151,8 @@ article:nth-child(1) {
     }
     .end_dados {
         width: 90%;
+    }
+    #cartao{
+        width: 85%;
     }
 }

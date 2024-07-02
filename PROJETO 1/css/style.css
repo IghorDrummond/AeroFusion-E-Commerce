@@ -11,6 +11,11 @@
 	font-family: 'Titan One';
 	src: url('../fonts/TitanOne-Regular.ttf');
 }
+@font-face{
+	font-family: 'Dot Digital';
+	src: url('../fonts/dot_digital-7.ttf');
+}
+
 /* Tela de Carregamento */
 #tela_carregamento{
 	width: 100%;
