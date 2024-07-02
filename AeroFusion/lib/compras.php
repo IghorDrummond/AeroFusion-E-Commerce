@@ -890,7 +890,8 @@ namespace Pedido {
 			$this->IdPed = $IdPed;
 			$this->Email = $Email;
 			$this->montaQuery(6);
-			
+			$this->getDados();
+			return $this->stmt;
 		}
 		/*
 		 *Metodo: getDados()
@@ -1031,25 +1032,38 @@ namespace Pedido {
 						Pd.id_ped,
 						Pd.id_cliente,
 						Pd.id_form,
-						Pd.valor_total,
+						FORMAT(Pd.valor_total, 2, 'pt_BR') as valor_total,
 						Pd.id_end,
 						Pd.data_pedido,
 						Ip.id_prod, 
 						Ip.quant,
 						Ip.preco_item,
 						Prod.nome,
+						Prod.promocao_ativo,
+						FORMAT(Prod.promocao, 2, 'pt_BR') as promocao,
+						FORMAT(Prod.preco, 2, 'pt_BR') as preco,
 						Img.img1,
 						cat.nome_cat,
 						tam.nome_tam,
 						fm.forma_pag,
 						cli.email,
-						st.nome as status_
+						st.nome as status_,
+                        en.rua,
+                        en.bairro,
+                        en.cidade,
+                        en.numero,
+                        en.complemento,
+                        en.referencia,
+                        en.cep,
+                        en.uf
 					FROM
 						Pedidos as Pd
 					LEFT JOIN
 						cupons as Cp ON Cp.nome_cupom = Pd.nome_cupom
 					LEFT JOIN
 						cliente as cli ON cli.id = Pd.id_cliente
+					LEFT JOIN
+						endereco as en ON en.id_end = Pd.id_end
 					INNER JOIN 
 						item_pedidos as Ip ON Ip.id_ped = Pd.id_ped
 					INNER JOIN 

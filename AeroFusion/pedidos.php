@@ -55,8 +55,11 @@
 
 	function montaTela(){
 		//Caso não houver produtos, ele retorna vazio
-		if((isset($_SESSION['Produtos']) and empty($_SESSION['Produtos'])) or !isset($_SESSION['Produtos'])){
+		if(((isset($_SESSION['Produtos']) and empty($_SESSION['Produtos'])) or !isset($_SESSION['Produtos'])) && (!isset($_SESSION['IdPed']) or empty($_SESSION['IdPed']))){
 			semProdutos();
+			return null;
+		}else if(!isset($_SESSION['Produtos']) and isset($_SESSION['IdPed'])){
+			pagamento();
 			return null;
 		}
 
@@ -248,19 +251,69 @@
 
 	function pagamento(){
 		$Pedido = new novoPedido();
-		$Pedido = $Pedido->getPedido($_SESSION['Email'], $_SESSION['IdPed']);
+		$Pedido = $Pedido->getPedido($_SESSION['IdPed'], $_SESSION['Email']);
 ?>
 
-	<section>
-		<article>
+	<section class="w-100 d-flex align-items-center justify-content-center">
+		<div class="w-100 bg-white border px-2">
+		</div>
+		<article class="px-1">
 			<?php
 				foreach($Pedido as $Ped) {
-					
+			?>
+			<div class="w-100 rounded area_produtos my-3 border border-secondary bg-white p-2">
+				<img src="img/<?php echo($Ped['img1'])?>" alt="Imagem do produto" width="200" class="rounded img-fluid">
+				<div>
+					<h6><?php echo( mb_convert_case($Ped['nome'], MB_CASE_TITLE, 'UTF-8') ); ?></h6>
+					<h6>Quantidade: <?php echo($Ped['quant']) ?></h6>
+					<span>Tamanho: <?php echo($Ped['nome_tam']); ?></span><br>
+					<?php
+						if($Ped['promocao_ativo'] === 1){
+							echo "Preço Solitário: 
+							De <del>R$ ". $Ped['preco'] . "</del> Por
+							<mark class='bg-transparent text-warning'>R$ ". $Ped['promocao'] ."</mark>
+							";
+						}else{
+							echo "Preço Solitário: R$ ". $Ped['preco'];							
+						}
+					?>
+				</div>
+			</div>
+
+
+			<?php
 				}
 			?>
 		</article>
-		<article>
+		<article class="bg-white p-2 text-warning">
+			<h3>Pedido #<?php echo($Pedido[0]['id_ped']) ?>  </h3>
+			<span>Status: <?php echo($Pedido[0]['status_']);?></span>
+			<span class="text-primary ml-5">
+				Cupom: 
+				<?php
+					if(is_null($Pedido[0]['nome_cupom'])){
+						echo('Não Há!');
+					}else{
+						echo($Pedido[0]['nome_cupom']);
+					}
+				?>
+			</span>
+			<br>
+			<h1>Total: R$ <?php echo($Pedido[0]['valor_total']);?> </h1>
 			
+			<div>
+				<ul>
+					<li>Rua: <?php echo(	ucfirst(strtolower($Pedido[0]['rua']))) ?></li>
+					<li>Bairro: <?php echo(	ucfirst(strtolower($Pedido[0]['bairro']))) ?></li>
+					<li>Cidade: <?php echo(	ucfirst(strtolower($Pedido[0]['cidade']))) ?></li>
+					<li>Número: <?php echo(	ucfirst(strtolower($Pedido[0]['numero']))) ?></li>
+					<li>Complemento: <?php echo(	ucfirst(strtolower($Pedido[0]['complemento']))) ?></li>
+					<li>Referência: <?php echo(	ucfirst(strtolower($Pedido[0]['referencia']))) ?></li>
+					<li>Cep: <?php echo(	ucfirst(strtolower($Pedido[0]['cep']))) ?></li>
+					<li>UF: <?php echo(	ucfirst(strtolower($Pedido[0]['uf']))) ?></li>
+				</ul>
+			</div>
+			<!-- Forma de Pagamento -->
 		</article>
 	</section>
 <?php

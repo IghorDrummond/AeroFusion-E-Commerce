@@ -50,7 +50,7 @@ article:nth-child(1) {
     -webkit-box-direction: normal;
     -ms-flex-direction: column;
     flex-direction: column;
-    overflow: auto;
+    overflow-y: auto;
 }
 
 .area_produtos {
