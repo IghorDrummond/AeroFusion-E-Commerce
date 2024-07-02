@@ -151,6 +151,7 @@ article{
     -webkit-animation: entradaCartao 1s;
             animation: entradaCartao 1s;
     font-weight: bold;
+    perspective: 1000px; /* Define a perspectiva 3D */
 }
 #numero_cartao{
     width: 100%;
@@ -168,7 +169,7 @@ article{
 
 
 /* Hovers */
-#numero_cartao:hover{
+#cartao input:hover{
     border-bottom: 2px dashed white !important;
 }
 
@@ -208,6 +209,6 @@ article{
         width: 90%;
     }
     #cartao{
-        width: 85%;
+        width: 95%;
     }
 }

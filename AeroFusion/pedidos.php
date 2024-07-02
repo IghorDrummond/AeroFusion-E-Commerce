@@ -342,14 +342,14 @@
 						<!-- Cartão traseiro -->
 						<div class="cartaoLado transforma d-none flex-column">
 							<div class="bg-dark p-4 w-100 mt-3"></div>
-							<div class="d-flex p-5">
+							<div class="d-flex p-5 w-100">
 								<div>
 									<label>Data Expiração</label><br>
 									<input name="vencimento" type="text" placeholder="00/0000" maxlength="7" required>
 								</div>
 								<div>
 									<label>CVC</label><br>
-									<input name="cvc" class="w-50 d-inline-block" type="text" placeholder="000" maxlength="3" required>
+									<input name="cvc" type="text" placeholder="000" maxlength="3" required>
 								</div>		
 							</div>	
 							<button type="button" class="ml-auto" title="virar cartão" onclick="virarCartao(0)">
@@ -358,6 +358,17 @@
 							<br>			
 						</div>
 					</div>
+					<br>
+					<select class="form-control">
+						<option selected>1x de R$ <?php echo($Pedido[0]['valor_total']); ?></option>
+						<?php
+							for($nCont = 2; $nCont <= 12; $nCont++){
+						?>
+						<option><?php print($nCont .'x de R$ ' . str_replace('.', ',', $Pedido[0]['valor_total'] / $nCont) ); ?></option>
+						<?php
+							}
+						?>
+					</select>
 				</fieldset>	
 			<?php
 				}else if($Pedido[0]['forma_pag'] === 'BOLETO'){ 
@@ -370,15 +381,18 @@
 				}
 			?>			
 
-			<p class="text-center">
-				Atenção!<br>
+			<blockquote class="text-center text-warning">
+				Antenção!<br>
 				Este pedido tem válidade em status pedente até 7 dias, caso o pedido não sofrer alguma alteração, será cancelado e encerrado.
-			</p>	
-			</form>
+			</blockquote>
+			<button type="submit" class="btn btn-primary btn-lg btn-block align-self-end">
+				Finalizar Pedido <i class="fa-solid fa-check fa-xl"></i>
+			</button>
 			<!-- Apagar Pedido -->
 			<button type="button" class="btn btn-danger btn-lg btn-block align-self-end">
 				Deletar Pedido <i class="fa-solid fa-trash-can"></i>
 			</button>
+			</form>
 		</article>
 	</section>
 <?php
