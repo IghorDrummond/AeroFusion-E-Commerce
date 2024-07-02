@@ -7,8 +7,11 @@ var aviso_texto = document.getElementsByClassName('alerta_texto');
 var botao_end = null;
 var pagamento = null;
 var Cupom = null;
+var Cartao = null;
 //String
 var End = '';
+//Númerico
+var antLado = 0;
 //Objeto
 var ajax = null;
 
@@ -377,4 +380,33 @@ function validaCupom(){
     }
 
     ajax.send();
+}
+/*
+Função: virarCartao(direção do cartão)
+Descrição: vira o cartão para posição correta
+Data: 02/07/2024
+Programador: Ighor Drummond   
+*/
+function virarCartao(estadoCard){
+    var graus = estadoCard === 1 ? 0 : 180;
+    var opc = estadoCard === 1 ? '+' : '-';
+    var limite = estadoCard === 1 ? 180 : 0;
+    Cartao = document.getElementById('cartao');
+
+   Z = setInterval(()=>{
+        graus = opc === '+' ? graus + 1 : graus - 1;
+        Cartao.style.transform = 'rotateY(' + graus.toString() +'deg)'
+        if(graus === limite){
+            clearInterval(Z);
+
+        }else{
+            if(graus === 90){
+                Cartao.getElementsByClassName('cartaoLado')[antLado].classList.remove('d-flex');
+                Cartao.getElementsByClassName('cartaoLado')[antLado].classList.add('d-none');
+                Cartao.getElementsByClassName('cartaoLado')[estadoCard].classList.remove('d-none');
+                Cartao.getElementsByClassName('cartaoLado')[estadoCard].classList.add('d-flex');
+                antLado = estadoCard;
+            }
+        }
+   }, 1);
 }

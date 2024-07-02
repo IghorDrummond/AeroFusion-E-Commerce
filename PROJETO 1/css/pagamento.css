@@ -156,6 +156,16 @@ article{
     width: 100%;
     font-weight: none;
 }
+#cartao button{
+    border: none;
+    background: transparent;
+    color: white;
+    font-weight: bold;
+}
+.transforma{
+    transform: rotateY(-180deg);
+}
+
 
 /* Hovers */
 #numero_cartao:hover{

@@ -327,22 +327,35 @@
 			?>
 				<fieldset class="form-group">
 					<legend>Pagamento: Cartão</legend>
-
-					<div id="cartao" class="rounded m-auto text-white p-5">
-						<img class="img-fluid" alt="Operadora Cartão" align="right">
-						<br>
-						<label>Número do cartão</label>
-						<input id="numero_cartao" name="numero_cartao" type="text" placeholder="0000 0000 0000 0000" maxlength="19" required>
-						<br>
-						<div class="d-flex flex-row">
-							<div>
-								<label>Data Expiração</label><br>
-								<input name="vencimento" type="text" placeholder="00/0000" maxlength="7" required>
-							</div>
-							<div>
-								<label>CVC</label><br>
-								<input name="cvc" class="w-50 d-inline-block" type="text" placeholder="000" maxlength="3" required>
-							</div>
+					<div id="cartao" class="rounded m-auto text-white">
+						<!-- Cartão frontal -->
+						<div class="p-5 cartaoLado d-flex flex-column w-100">
+							<img class="img-fluid ml-auto" alt="Operadora Cartão">
+							<label>Nome impresso</label>
+							<input id="numero_cartao" name="nome_cartao" type="text" placeholder="FULANO DE TAL"  required>
+							<label>Número do cartão</label>
+							<input id="numero_cartao" name="numero_cartao" type="text" placeholder="0000 0000 0000 0000" maxlength="19" required>
+							<button type="button" title="virar cartão" class="ml-auto" onclick="virarCartao(1)">
+								Virar <i class="fa-solid fa-hand-point-right fa-xl mt-3"></i>
+							</button>
+						</div>
+						<!-- Cartão traseiro -->
+						<div class="cartaoLado transforma d-none flex-column">
+							<div class="bg-dark p-4 w-100 mt-3"></div>
+							<div class="d-flex p-5">
+								<div>
+									<label>Data Expiração</label><br>
+									<input name="vencimento" type="text" placeholder="00/0000" maxlength="7" required>
+								</div>
+								<div>
+									<label>CVC</label><br>
+									<input name="cvc" class="w-50 d-inline-block" type="text" placeholder="000" maxlength="3" required>
+								</div>		
+							</div>	
+							<button type="button" class="ml-auto" title="virar cartão" onclick="virarCartao(0)">
+								Virar <i class="fa-solid fa-hand-point-right fa-xl mt-3"></i>
+							</button>	
+							<br>			
 						</div>
 					</div>
 				</fieldset>	
