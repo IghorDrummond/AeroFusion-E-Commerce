@@ -277,14 +277,19 @@ html::-webkit-scrollbar-thumb {
 
 /* Cartão */
 .caixa_cartao{
-	perspective: 1000px;
+	-webkit-perspective: 1000px;
+	        perspective: 1000px;
 }
 #cartao{
 	width: 65%;
     position: relative;
-    transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;
+            transform-style: preserve-3d;
+    -webkit-transition: background 2s;
+    -o-transition: background 2s;
     transition: background 2s;
-	box-shadow: 15px 5px 5px rgba(0, 0, 0, 0.5);
+	-webkit-box-shadow: 15px 5px 5px rgba(0, 0, 0, 0.5);
+	        box-shadow: 15px 5px 5px rgba(0, 0, 0, 0.5);
     background: -o-linear-gradient(left, red, #ff7b5a);
     background: -webkit-gradient(linear, left top, right top, from(red), to(#ff7b5a));
     background: linear-gradient(to right, red, #ff7b5a);
@@ -293,6 +298,26 @@ html::-webkit-scrollbar-thumb {
 }
 
 /* Inputs e label e button do cartão */
+#cartao input::-webkit-input-placeholder{
+	font-family: 'Dot Digital';
+	color: white;
+	font-size: 1.2em;
+}
+#cartao input::-moz-placeholder{
+	font-family: 'Dot Digital';
+	color: white;
+	font-size: 1.2em;
+}
+#cartao input:-ms-input-placeholder{
+	font-family: 'Dot Digital';
+	color: white;
+	font-size: 1.2em;
+}
+#cartao input::-ms-input-placeholder{
+	font-family: 'Dot Digital';
+	color: white;
+	font-size: 1.2em;
+}
 #cartao input,
 #cartao input::placeholder,
 #cartao{
@@ -318,7 +343,8 @@ html::-webkit-scrollbar-thumb {
 .data-info
 {
 	padding: 50px;
-	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	        box-sizing: border-box;
 }
 .transforma {
     -webkit-transform: rotateY(-180deg);
@@ -328,13 +354,13 @@ html::-webkit-scrollbar-thumb {
 
 /* Fundo do cartão */
 .elo{ 
-	background: -webkit-gradient(linear,right top, left top,from(#ffcc0d), color-stop(#08a7e0), to(#ef472a)) !important; 
 	background: -o-linear-gradient(right,#ffcc0d, #08a7e0, #ef472a) !important; 
+	background: -webkit-gradient(linear,right top, left top,from(#ffcc0d), color-stop(#08a7e0), to(#ef472a)) !important; 
 	background: linear-gradient(to left,#ffcc0d, #08a7e0, #ef472a) !important;
 }
 .visa{
-	background: -webkit-gradient(linear, right top, left top, from(#212675), to(#f7b808)) !important;
 	background: -o-linear-gradient(right, #212675, #f7b808) !important;
+	background: -webkit-gradient(linear, right top, left top, from(#212675), to(#f7b808)) !important;
 	background: linear-gradient(to left, #212675, #f7b808) !important;
 }
 .jcb,

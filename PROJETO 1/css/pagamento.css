@@ -101,7 +101,8 @@ article{
 
 /* Cartão */
 #cartao{
-    animation: entradaCartao 1s;
+    -webkit-animation: entradaCartao 1s;
+            animation: entradaCartao 1s;
 }
 
 /* Hovers */
