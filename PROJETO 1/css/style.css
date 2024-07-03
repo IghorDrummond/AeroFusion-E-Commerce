@@ -275,6 +275,57 @@ html::-webkit-scrollbar-thumb {
     border-radius: 10px;
 }
 
+/* Cartão */
+.elo{ 
+	background: -webkit-gradient(linear,right top, left top,from(#ffcc0d), color-stop(#08a7e0), to(#ef472a)) !important; 
+	background: -o-linear-gradient(right,#ffcc0d, #08a7e0, #ef472a) !important; 
+	background: linear-gradient(to left,#ffcc0d, #08a7e0, #ef472a) !important;
+	 transition: all 2s;
+}
+.visa{
+	background: -webkit-gradient(linear, right top, left top, from(#212675), to(#f7b808)) !important;
+	background: -o-linear-gradient(right, #212675, #f7b808) !important;
+	background: linear-gradient(to left, #212675, #f7b808) !important;
+	 transition: all 2s;
+}
+.jcb,
+.jcb15
+{
+	background: -o-linear-gradient(right, #212675, red, green) !important;
+	background: -webkit-gradient(linear, right top, left top, from(#212675), color-stop(red), to(green)) !important;
+	background: linear-gradient(to left, #212675, red, green) !important;
+}
+.maestro{
+	background: -o-linear-gradient(right, #08a7e0, red) !important;
+	background: -webkit-gradient(linear, right top, left top, from(#08a7e0), to(red)) !important;
+	background: linear-gradient(to left, #08a7e0, red) !important;
+}
+.unionpay{
+	background: -o-linear-gradient(right, #e31f3c,#084a80,#087f88) !important;
+	background: -webkit-gradient(linear, right top, left top, from(#e31f3c),color-stop(#084a80),to(#087f88)) !important;
+	background: linear-gradient(to left, #e31f3c,#084a80,#087f88) !important;
+}
+.amex{
+	background: -o-linear-gradient(right, #084a80,#087f88) !important;
+	background: -webkit-gradient(linear, right top, left top, from(#084a80),to(#087f88)) !important;
+	background: linear-gradient(to left, #084a80,#087f88) !important;
+}
+.discover{
+	background: -o-linear-gradient(right, #dcdcdc, #f7720a) !important;
+	background: -webkit-gradient(linear, right top, left top, from(#dcdcdc), to(#f7720a)) !important;
+	background: linear-gradient(to left, #dcdcdc, #f7720a) !important;
+}
+.diners{
+	background: -o-linear-gradient(right, #dcdcdc, #0079be) !important;
+	background: -webkit-gradient(linear, right top, left top, from(#dcdcdc), to(#0079be)) !important;
+	background: linear-gradient(to left, #dcdcdc, #0079be) !important;
+}
+.mastercard{
+	background: -o-linear-gradient(right, red, orange) !important;
+	background: -webkit-gradient(linear, right top, left top, from(red), to(orange)) !important;
+	background: linear-gradient(to left, red, orange) !important;
+}
+
 /*Rodapé*/
 footer i{
 	cursor: pointer;

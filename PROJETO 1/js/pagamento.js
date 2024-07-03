@@ -22,11 +22,6 @@ var dados = {
     numero: ''
 }
 var ajax = null;
-//Função anonima
-var chamaPag = ()=>{
-    let valor = $('#Metodo').val();
-    mudarPagamento(valor);
-}
 
 //-------------------------------Escopo
 telaCarregamento(true);
@@ -470,9 +465,21 @@ function bandeira(element){
         operadora.src = imagem[Object.keys(regraNumero).indexOf(tipo)];
         dados.bandeira = Object.keys(regraNumero).indexOf(tipo) + 1;
         dados.numero = numero;
+        trocarCor(tipo, regraNumero);
     }else{
+        trocarCor('', regraNumero);
         operadora.src = 'https://cdn-icons-png.flaticon.com/512/2695/2695969.png';
     }
+}
+function trocarCor(tipo, regraNumero){
+    var Cartao = document.getElementById('cartao');
+    //Troca fundo do cartão
+    //Remove fundos anteriores caso tiver adicionado
+    for(nCont = 0; nCont <= 9; nCont++){
+        Cartao.classList.remove(Object.keys(regraNumero)[nCont])
+    }
+    //Adiciona fundo ao cartão
+    Cartao.classList.add(tipo);
 }
 /*
 Função: maskNumero(elemento)
@@ -536,7 +543,6 @@ function mudarPagamento(){
             telaCarregamento(false);
             if(ajax.readyState === 4){
                 if(ajax.status < 400){
-                    telaCarregamento(true);
                     novoPedido();
                 }else{
                     alerta('Não foi possível trocar método de pagamento!', 0);

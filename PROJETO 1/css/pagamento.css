@@ -153,6 +153,7 @@ article{
     font-weight: bold;
     perspective: 1000px; 
     transform-style: preserve-3d; 
+    transition: all 2s;
 }
 #numero_cartao{
     width: 100%;
