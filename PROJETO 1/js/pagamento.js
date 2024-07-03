@@ -478,7 +478,9 @@ function trocarCor(tipo, regraNumero){
         Cartao.classList.remove(Object.keys(regraNumero)[nCont])
     }
     //Adiciona fundo ao cartão
-    Cartao.classList.add(tipo);
+    if(tipo != ''){
+        Cartao.classList.add(tipo);   
+    }
 }
 /*
 Função: maskNumero(elemento)
