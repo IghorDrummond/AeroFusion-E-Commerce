@@ -462,6 +462,7 @@ function bandeira(element){
     if(achado){
         operadora.src = imagem[Object.keys(regraNumero).indexOf(tipo)];
         dados.bandeira = Object.keys(regraNumero).indexOf(tipo) + 1;
+        dados.numero = numero;
     }else{
         operadora.src = 'https://cdn-icons-png.flaticon.com/512/2695/2695969.png';
     }
@@ -496,5 +497,42 @@ Data: 03/07/2024
 Programador: Ighor Drummond   
 */
 function maskValidade(element){
+    var validade = element;
+    var validadeMask = '';
 
+    for(nCont = 0; nCont <= (validade.value.length) -1; nCont++){
+        if(nCont === 2 && validade.value[2] != '/'){
+            validadeMask += '/';
+        }
+        validadeMask += validade.value[nCont];
+    }
+
+    validade.value = validadeMask;
+    dados.validade = validadeMask;
+}
+/*
+Função: mudarPagamento()
+Descrição: aplica máscara na validade do cartão
+Data: 03/07/2024
+Programador: Ighor Drummond   
+*/
+function mudarPagamento(){
+    telaCarregamento(true);
+    
+    ajax = new XMLHttpRequest();
+
+    ajax.open('POST', 'script/pedidos.php?Opc=9&Metodo=' + Metodo);
+
+    ajax.onreadystatechange = ()=>{
+        telaCarregamento(false);
+        if(ajax.readyState === 4){
+            if(ajax.status < 400){
+                novoPedido();
+            }else{
+                alerta('Não foi possível trocar método de pagamento!', 0);
+            }
+        }
+    }
+
+    ajax.send();
 }

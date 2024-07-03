@@ -1270,8 +1270,9 @@ namespace Pedido {
 	{
 		//Atributos
 		private $con = null;
-		private $query = null;
+		private $Query = null;
 		private $stmt = null;
+		private $IdCli = null;
 
 		//Construtor
 		public function __construct(
@@ -1293,7 +1294,12 @@ namespace Pedido {
 		 *Programador(a): Ighor Drummond
 		 */
 		private function setPagamento(){
-
+			//Recupera ID
+			$this->montaQuery(2);
+			$this->IdCli = $this->getDados()[0]['id'];
+			//Guarda Método de pagamento
+			$this->montaQuery(1);
+			$this->setDados();
 		}
 		/*
 		 *Metodo: montaQuery(Opção)
@@ -1302,7 +1308,61 @@ namespace Pedido {
 		 *Programador(a): Ighor Drummond
 		 */
 		private function montaQuery($Opc){
-			
+			if($Opc === 1) {
+				$this->Query = "
+				UPDATE 
+					pedidos
+				SET
+					id_form = $this->Metodo
+				WHERE
+					id_ped = $this->IdPed
+					AND id_cliente = $this->IdCli
+				";
+			}else if($Opc === 2){
+				$this->Query = "
+					SELECT
+						id
+					FROM
+						cliente
+					WHERE
+						email = '$this->Email'
+				";				
+			}
+		}
+		/*
+		 *Metodo: getDados()
+		 *Descrição: Responsavel por receber dados da consulta
+		 *Data: 03/07/2024
+		 *Programador(a): Ighor Drummond
+		 */
+		private function getDados()
+		{
+			$Ret = [];
+			try {
+				$this->stmt = $this->con->query($this->Query);
+				$Ret = $this->stmt->fetchAll(\PDO::FETCH_ASSOC);
+			} catch (\PDOException $e) {
+				echo $e->getMessage();
+			}finally{
+				return $Ret;
+			}
+		}
+		/*
+		 *Metodo: setDados()
+		 *Descrição: Responsavel por enviar dados ao banco
+		 *Data: 03/07/2024
+		 *Programador(a): Ighor Drummond
+		 */
+		private function setDados()
+		{
+			try {
+				$this->con->beginTransaction();
+				$this->con->exec($this->Query);
+				$this->con->commit();
+			} catch (\PDOException $e) {
+				echo $e->getMessage();
+				$this->con->rollBack();
+			}
 		}
 	}
 }
