@@ -8,24 +8,26 @@ var botao_end = null;
 var pagamento = null;
 var Cupom = null;
 var Cartao = null;
+var numero = null;
 //String
 var End = '';
 //Númerico
 var antLado = 0;
 //Objeto
+var dados = {
+    bandeira: 0,
+    nome: '',
+    validade: '',
+    cvc: '',
+    numero: ''
+}
 var ajax = null;
 
+//-------------------------------Escopo
+telaCarregamento(true);
+novoPedido();
 //-------------------------------Eventos
-/*
-* Evento: DOMContentLoaded
-* Descrição: Carrega solicitação de pedidos
-* Programador(a): Ighor Drummond
-* Data: 14/06/2024
-*/
-window.addEventListener('DOMContentLoaded', ()=>{
-    telaCarregamento(true);
-    novoPedido();
-});
+
 //-------------------------------Funções
 /*
 Função: telaCarregamento(controle de liga ou desliga)   
@@ -108,7 +110,7 @@ function novoPedido(){
             $(Tela).html(data); // Insere os dados no elemento main
             telaCarregamento(false); // Desliga a tela de carregamento
             botao_end = document?.getElementsByClassName('dropdown-toggle')[0];
-            pagamento = document?.getElementById('compra').getElementsByTagName('select')[0];
+            pagamento = document?.getElementById('compra')?.getElementsByTagName('select')[0];
             Cupom = document?.getElementsByName('cupom')[0];
         },
         error: function (jqXHR, textStatus, errorThrown) {
@@ -409,4 +411,90 @@ function virarCartao(estadoCard){
             }
         }
    }, 1);
+}
+/*
+Função: bandeira(elemento)
+Descrição: Bandeira do cartão de crédito
+Data: 03/07/2024
+Programador: Ighor Drummond   
+*/
+function bandeira(element){
+    var numero = element.value;
+    var operadora = document.getElementsByName('operadora')[0];
+    var regraNumero = {
+        mastercard: /^5[1-5][0-9]{14}$/,
+        elo: /^(4011|4312|4514|4573|5041|5066|509|6277|6362|6363|650|6550)/,
+        amex: /^3[47][0-9]{13}$/,
+        discover: /^6(?:011|5[0-9]{2})[0-9]{12}$/,
+        diners: /^3(?:0[0-5]|[68][0-9])[0-9]{11}$/,
+        jcb: /^(?:2131|1800|35\d{3})\d{11}$/,
+        jcb15: /^(?:2131|1800)\d{11}$/,
+        maestro: /^(5[06789]\d\d|6\d{3})\d{8,15}$/,
+        unionpay: /^(62|88)/,
+        visa: /^4[0-9]{12}(?:[0-9]{3})?$/,
+    };
+    var imagem = [
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/618px-Mastercard-logo.svg.png',
+        'https://seeklogo.com/images/E/elo-logo-0B17407ECC-seeklogo.com.png',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-U8tK4EfgFz0FAX0yYoXfE05yWfq2tqNLQw&s',
+        'https://www.discoversignage.com/uploads/09-12-21_04:20_DGN_AcceptanceMark_FC_Hrz_RGB.png',
+        'https://seeklogo.com/images/D/diners-club-logo-E375570397-seeklogo.com.png',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/JCB_logo.svg/1280px-JCB_logo.svg.png',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/JCB_logo.svg/1280px-JCB_logo.svg.png',
+        'https://seeklogo.com/images/M/Maestro-logo-333A576204-seeklogo.com.png',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/UnionPay_logo.svg/1280px-UnionPay_logo.svg.png',
+        'https://w7.pngwing.com/pngs/49/82/png-transparent-credit-card-visa-logo-mastercard-bank-mastercard-blue-text-rectangle.png'
+    ];
+    var tipo = null;
+    var pattern = null;
+    var achado = false;
+
+    //Remove máscara
+    numero = numero.replace(/\D/g, '');
+    //Validar qual bandeira é correspondente ao numero inserido
+    for([tipo, pattern] of Object.entries(regraNumero)){
+        if(pattern.test(numero)){
+            achado = true;
+            break;
+        }
+    }
+    //Aplica bandeira na imagem
+    if(achado){
+        operadora.src = imagem[Object.keys(regraNumero).indexOf(tipo)];
+        dados.bandeira = Object.keys(regraNumero).indexOf(tipo) + 1;
+    }else{
+        operadora.src = 'https://cdn-icons-png.flaticon.com/512/2695/2695969.png';
+    }
+}
+/*
+Função: maskNumero(elemento)
+Descrição: aplica máscara no número do cartão
+Data: 03/07/2024
+Programador: Ighor Drummond   
+*/
+function maskNumero(element){
+    var numero = element;
+    var numeroMask = '';
+
+    for(nCont = 0; nCont <= (numero.value.length) -1; nCont++){
+        if( (nCont === 4 && numero.value[4] != ' ' ) 
+        || 
+        (nCont === 9 && numero.value[9] != ' ' ) 
+        || 
+        (nCont === 14 && numero.value[14] != ' ' ) ){
+            numeroMask += ' ';
+        }
+        numeroMask += numero.value[nCont];
+    }
+
+    numero.value = numeroMask;
+}
+/*
+Função: maskValidade(elemento)
+Descrição: aplica máscara na validade do cartão
+Data: 03/07/2024
+Programador: Ighor Drummond   
+*/
+function maskValidade(element){
+
 }

@@ -129,20 +129,21 @@ CREATE TABLE favoritos(
 #CRIANDO TABELA DE BANDEIRAS PARA CARTÃO
 CREATE TABLE bandeiras(
     id_ban int primary key auto_increment not null,
-    nome_ban varchar(30) not null
+    nome_ban varchar(30) not null,
+    img_ban text not null
 );
 
 #INSIRINDO AS BANDEIRAS DOS CARTÕES
-INSERT INTO bandeiras(nome_ban) VALUES('VISA');
-INSERT INTO bandeiras(nome_ban) VALUES('MASTERCARD');
-INSERT INTO bandeiras(nome_ban) VALUES('ELO');
-INSERT INTO bandeiras(nome_ban) VALUES('AMERICAN EXPRESS');
-INSERT INTO bandeiras(nome_ban) VALUES('DISCOVER');
-INSERT INTO bandeiras(nome_ban) VALUES('DINERS');
-INSERT INTO bandeiras(nome_ban) VALUES('JCB');
-INSERT INTO bandeiras(nome_ban) VALUES('JCB15');
-INSERT INTO bandeiras(nome_ban) VALUES('MAESTRO');
-INSERT INTO bandeiras(nome_ban) VALUES('UNIONPLAY');
+INSERT INTO bandeiras(nome_ban, img_ban) VALUES('MASTERCARD', 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/618px-Mastercard-logo.svg.png');
+INSERT INTO bandeiras(nome_ban, img_ban) VALUES('ELO', 'https://seeklogo.com/images/E/elo-logo-0B17407ECC-seeklogo.com.png');
+INSERT INTO bandeiras(nome_ban, img_ban) VALUES('AMERICAN EXPRESS', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-U8tK4EfgFz0FAX0yYoXfE05yWfq2tqNLQw&s');
+INSERT INTO bandeiras(nome_ban, img_ban) VALUES('DISCOVER', 'https://www.discoversignage.com/uploads/09-12-21_04:20_DGN_AcceptanceMark_FC_Hrz_RGB.png');
+INSERT INTO bandeiras(nome_ban, img_ban) VALUES('DINERS', 'https://seeklogo.com/images/D/diners-club-logo-E375570397-seeklogo.com.png');
+INSERT INTO bandeiras(nome_ban, img_ban) VALUES('JCB' , 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/JCB_logo.svg/1280px-JCB_logo.svg.png');
+INSERT INTO bandeiras(nome_ban, img_ban) VALUES('JCB15', 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/JCB_logo.svg/1280px-JCB_logo.svg.png');
+INSERT INTO bandeiras(nome_ban, img_ban) VALUES('MAESTRO', 'https://seeklogo.com/images/M/Maestro-logo-333A576204-seeklogo.com.png');
+INSERT INTO bandeiras(nome_ban, img_ban) VALUES('UNIONPLAY', 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/UnionPay_logo.svg/1280px-UnionPay_logo.svg.png');
+INSERT INTO bandeiras(nome_ban, img_ban) VALUES('VISA', 'https://w7.pngwing.com/pngs/49/82/png-transparent-credit-card-visa-logo-mastercard-bank-mastercard-blue-text-rectangle.png');
 
 #CRIANDO TABELA DE CARTÕES
 CREATE TABLE cartoes(

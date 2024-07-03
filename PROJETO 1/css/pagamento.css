@@ -151,7 +151,8 @@ article{
     -webkit-animation: entradaCartao 1s;
             animation: entradaCartao 1s;
     font-weight: bold;
-    perspective: 1000px; /* Define a perspectiva 3D */
+    perspective: 1000px; 
+    transform-style: preserve-3d; 
 }
 #numero_cartao{
     width: 100%;

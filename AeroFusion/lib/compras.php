@@ -1056,6 +1056,7 @@ namespace Pedido {
                         en.referencia,
                         en.cep,
                         en.uf
+
 					FROM
 						Pedidos as Pd
 					LEFT JOIN
@@ -1064,6 +1065,8 @@ namespace Pedido {
 						cliente as cli ON cli.id = Pd.id_cliente
 					LEFT JOIN
 						endereco as en ON en.id_end = Pd.id_end
+					LEFT JOIN
+						cartoes as cad ON cad.id_cliente = cli.id
 					INNER JOIN 
 						item_pedidos as Ip ON Ip.id_ped = Pd.id_ped
 					INNER JOIN 

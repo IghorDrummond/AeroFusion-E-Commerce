@@ -1086,5 +1086,104 @@
 				}
 			}
 		}
+
+		/*
+		*Classe: Cadastrar cartão usuário
+		*Descrição: Responsavel atualizar a senha do usuário
+		*Data: 03/07/2024
+		*Programador(a): Ighor Drummond
+		*/
+		class Cartao{
+			//Atributos
+			private $con = null;
+			private $Query = null;
+			private $stmt = null;
+			private $Nome = null;
+			private $Numero = null;
+			private $Cvc = null;
+			private $Validade = null;
+			private $Operadora = null;
+			private $IdCli = null;
+			private $IdBan = null;
+
+			//construtor
+			public function __construct(
+				public $Email = null
+			){
+				try{
+					$this->con = new \IniciaServer();
+					$this->con = $this->con->conexao();
+				}catch(\PDOException $e){
+					echo $e->getMessage();
+				}
+			}
+
+			//Métodos
+			public function setCartao(
+				$Numero,
+				$Nome, 
+				$Ban,
+				$Validade,
+				$Cvc
+			){
+				//Recupera Id do cliente
+				$this->montaQuery(2);
+				$this->IdCli = $this->getDados()[0]['cliente'];
+				//Recupera id da bandeira
+				
+				//Monta query para inserir novo cartão
+				$this->montaQuery(1);
+				if($this->setDados()){
+					return true;
+				}else{
+					return false;
+				}
+			}
+
+			private function setDados(){
+				$Ret = false;
+
+				try{
+					$this->con->beginTransaction();
+					$this->con->exec($this->Query);
+					$this->con->commit();
+					$Ret = true;
+				}catch(\PDOException $e){
+					echo $e->getMessage();
+					$this->con->rollBack();
+				}finally{
+					return $Ret;
+				}
+			}
+
+			private function getDados(){
+				$Ret = [];
+				try{
+					$this->stmt = $this->con->query($this->Query);
+					$Ret = $this->stmt->fetchAll(\PDO::FETCH_ASSOC);
+				}catch(\PDOException $e){
+					echo $e->getMessage();
+				}finally{
+					return $Ret;
+				}
+			}
+			private function montaQuery($Opc){
+				if($Opc === 1){
+					$this->Query =  "
+						INSERT INTO cartoes(nome_cartao, numero_cartao, validade, cvv, id_cliente, id_ban)
+						VALUES($this->Nome, $this->Numero, $this->Validade, $this->Cvc, $this->IdCli, $this->IdBan)
+					";
+				}else if($Opc === 2){
+					$this->Query =  "
+						SELECT
+							id as cliente
+						FROM
+							cliente
+						WHERE
+							email = '$this->Email'
+					";					
+				}
+			}
+		}
 	}
 ?>

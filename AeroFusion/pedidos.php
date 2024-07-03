@@ -337,7 +337,7 @@ function pagamento()
 			<span class="text-primary">Mudar Endereço</span>
 			<h1>Total: R$ <?php echo ($Pedido[0]['valor_total']); ?> </h1>
 			<!-- Forma de Pagamento -->
-			<form class="w-100 form-group mt-2">
+			<form class="w-100 form-group mt-2" method="post" onsubmit="Pedido()">
 				<?php
 				if ($Pedido[0]['forma_pag'] === 'PIX') {
 					?>
@@ -355,12 +355,12 @@ function pagamento()
 							<div id="cartao" class="rounded m-auto text-white">
 								<!-- Cartão frontal -->
 								<div class="p-5 cartaoLado d-flex flex-column w-100">
-									<img class="img-fluid ml-auto" alt="Operadora Cartão">
+									<img class="img-fluid ml-auto" src="https://cdn-icons-png.flaticon.com/512/2695/2695969.png" name="operadora" alt="Operadora Cartão" width="50">
 									<label>Nome impresso</label>
-									<input id="numero_cartao" name="nome_cartao" type="text" placeholder="FULANO DE TAL" required>
+									<input id="numero_cartao" name="nome_cartao" type="text" placeholder="FULANO DE TAL" required value="<?php print !empty($Pedido[0]['nome_cartao']) ? $Pedido[0]['nome_cartao'] : ''   ?>">
 									<label>Número do cartão</label>
 									<input id="numero_cartao" name="numero_cartao" type="text" placeholder="0000 0000 0000 0000"
-										maxlength="19" required>
+										maxlength="19" required value="<?php print !empty($Pedido[0]['numero_cartao']) ? $Pedido[0]['numero_cartao'] : ''   ?>" onchange="bandeira(this)" onkeyup=" maskNumero(this)">
 									<button type="button" title="virar cartão" class="ml-auto" onclick="virarCartao(1)">
 										Virar <i class="fa-solid fa-hand-point-right fa-xl mt-3"></i>
 									</button>
@@ -371,11 +371,11 @@ function pagamento()
 									<div class="d-flex p-5 w-100">
 										<div>
 											<label>Data Expiração</label><br>
-											<input name="vencimento" type="text" placeholder="00/0000" maxlength="7" required>
+											<input name="vencimento" type="text" placeholder="00/0000" maxlength="7" required value="<?php print !empty($Pedido[0]['validade']) ? $Pedido[0]['validade'] : ''   ?>">
 										</div>
 										<div>
 											<label>CVC</label><br>
-											<input name="cvc" type="text" placeholder="000" maxlength="3" required>
+											<input name="cvc" type="text" placeholder="000" maxlength="3" required value="<?php print !empty($Pedido[0]['cvv']) ? $Pedido[0]['cvv'] : ''   ?>">
 										</div>
 									</div>
 									<button type="button" class="ml-auto" title="virar cartão" onclick="virarCartao(0)">
@@ -409,7 +409,6 @@ function pagamento()
 					<?php
 				}
 				?>
-
 				<blockquote class="text-center text-warning">
 					Antenção!<br>
 					Este pedido tem válidade em status pedente até 7 dias, caso o pedido não sofrer alguma alteração, será
