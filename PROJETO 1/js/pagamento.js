@@ -397,12 +397,11 @@ function virarCartao(estadoCard){
     var limite = estadoCard === 1 ? 180 : 0;
     Cartao = document.getElementById('cartao');
 
-   Z = setInterval(()=>{
+    Z = setInterval(()=>{
         graus = opc === '+' ? graus + 1 : graus - 1;
         Cartao.style.transform = 'rotateY(' + graus.toString() +'deg)'
         if(graus === limite){
             clearInterval(Z);
-
         }else{
             if(graus === 90){
                 Cartao.getElementsByClassName('cartaoLado')[antLado].classList.remove('d-flex');

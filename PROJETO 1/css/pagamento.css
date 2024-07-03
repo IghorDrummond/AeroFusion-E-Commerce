@@ -100,75 +100,9 @@ article{
 /* Página de pagamento */
 
 /* Cartão */
-#cartao input::-webkit-input-placeholder
-{
-    font-family: 'Dot Digital', sans-serif;
-    color: white;
-    background: transparent;
-    border: none;
-}
-#cartao input::-moz-placeholder
-{
-    font-family: 'Dot Digital', sans-serif;
-    color: white;
-    background: transparent;
-    border: none;
-}
-#cartao input:-ms-input-placeholder
-{
-    font-family: 'Dot Digital', sans-serif;
-    color: white;
-    background: transparent;
-    border: none;
-}
-#cartao input::-ms-input-placeholder
-{
-    font-family: 'Dot Digital', sans-serif;
-    color: white;
-    background: transparent;
-    border: none;
-}
-#cartao,
-#cartao input::placeholder,
-#cartao input
-{
-    font-family: 'Dot Digital', sans-serif;
-    color: white;
-    background: transparent;
-    border: none;
-}
-#cartao input{
-    font-size: 1.5em;
-}
-
 #cartao{
-    width: 50%;
-    background: -webkit-gradient(linear, left top, right top, from(red), to(#ff7b5a) );
-    background: -o-linear-gradient(left, red, #ff7b5a );
-    background: linear-gradient(to right, red, #ff7b5a );
-    -webkit-box-shadow: 15px 5px 5px rgba(0, 0, 0, 0.5);
-            box-shadow: 15px 5px 5px rgba(0, 0, 0, 0.5);
-    -webkit-animation: entradaCartao 1s;
-            animation: entradaCartao 1s;
-    font-weight: bold;
-    perspective: 1000px; 
-    transform-style: preserve-3d; 
-    transition: all 2s;
+    animation: entradaCartao 1s;
 }
-#numero_cartao{
-    width: 100%;
-    font-weight: none;
-}
-#cartao button{
-    border: none;
-    background: transparent;
-    color: white;
-    font-weight: bold;
-}
-.transforma{
-    transform: rotateY(-180deg);
-}
-
 
 /* Hovers */
 #cartao input:hover{

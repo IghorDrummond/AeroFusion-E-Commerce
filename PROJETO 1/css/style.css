@@ -276,17 +276,66 @@ html::-webkit-scrollbar-thumb {
 }
 
 /* Cartão */
+.caixa_cartao{
+	perspective: 1000px;
+}
+#cartao{
+	width: 65%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: background 2s;
+	box-shadow: 15px 5px 5px rgba(0, 0, 0, 0.5);
+    background: -o-linear-gradient(left, red, #ff7b5a);
+    background: -webkit-gradient(linear, left top, right top, from(red), to(#ff7b5a));
+    background: linear-gradient(to right, red, #ff7b5a);
+	border-radius: 10px;
+	margin: auto;
+}
+
+/* Inputs e label e button do cartão */
+#cartao input,
+#cartao input::placeholder,
+#cartao{
+	font-family: 'Dot Digital';
+	color: white;
+	font-size: 1.2em;
+}
+#cartao input{
+	background: transparent;
+	border: none;
+}
+#cartao label{
+	font-weight: bold;
+}
+#cartao button{
+	background: transparent;
+	border: none;
+	color: white;
+}
+
+/* Lados do cartão */
+.cartaoLado:nth-child(1),
+.data-info
+{
+	padding: 50px;
+	box-sizing: border-box;
+}
+.transforma {
+    -webkit-transform: rotateY(-180deg);
+    transform: rotateY(-180deg);
+}
+
+
+/* Fundo do cartão */
 .elo{ 
 	background: -webkit-gradient(linear,right top, left top,from(#ffcc0d), color-stop(#08a7e0), to(#ef472a)) !important; 
 	background: -o-linear-gradient(right,#ffcc0d, #08a7e0, #ef472a) !important; 
 	background: linear-gradient(to left,#ffcc0d, #08a7e0, #ef472a) !important;
-	 transition: all 2s;
 }
 .visa{
 	background: -webkit-gradient(linear, right top, left top, from(#212675), to(#f7b808)) !important;
 	background: -o-linear-gradient(right, #212675, #f7b808) !important;
 	background: linear-gradient(to left, #212675, #f7b808) !important;
-	 transition: all 2s;
 }
 .jcb,
 .jcb15
@@ -391,6 +440,9 @@ footer i:not(:hover){
 	-webkit-transition: all 1s;
 	-o-transition: all 1s;
 	transition: all 1s;
+}
+#cartao input:hover{
+    border-bottom: 2px dashed white !important;
 }
 
 /* Animações */
