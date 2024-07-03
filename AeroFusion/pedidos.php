@@ -347,11 +347,18 @@
 						?>
 						<fieldset class="form-group">
 							<legend>Pagamento: Pix</legend>
-							<select name="metodo" class="form-control">
-								<option selected value="0">Mudar Pagamento</option>
-								<option value="2">Cartão</option>
-								<option value="3">Boleto</option>
-							</select>
+							<div class="input-group mb-3">
+									<select class="custom-select" id="Metodo">
+										<option selected value="0">Mudar Pagamento</option>
+										<option value="2">Cartão</option>
+										<option value="3">Boleto</option>
+										</option>
+									</select>
+									<div class="input-group-prepend">
+										<label class="input-group-text bg-primary text-white" style="cursor: pointer;" for="Metodo" onclick="mudarPagamento()">Selecionar</label>
+									</div>
+								</div>
+								<br><br>
 							<br><br>
 							<img src="img/qrcode_pix.svg" class="img-fluid rounded" alt="QR CODE PARA PAGAMENTO PIX">
 						</fieldset>
@@ -360,11 +367,17 @@
 						?>
 							<fieldset>
 								<legend>Pagamento: Cartão</legend>
-								<select name="metodo" class="form-control">
-									<option selected value="0">Mudar Pagamento</option>
-									<option value="1">Pix</option>
-									<option value="3">Boleto</option>
-								</select>
+								<div class="input-group mb-3">
+									<select class="custom-select" id="Metodo">
+										<option selected value="0">Mudar Pagamento</option>
+										<option value="1">Pix</option>
+										<option value="3">Boleto</option>
+										</option>
+									</select>
+									<div class="input-group-prepend">
+										<label class="input-group-text bg-primary text-white" style="cursor: pointer;" for="Metodo" onclick="mudarPagamento()">Selecionar</label>
+									</div>
+								</div>
 								<br><br>
 								<div id="cartao" class="rounded m-auto text-white">
 									<!-- Cartão frontal -->
@@ -418,11 +431,17 @@
 						?>
 							<fieldset class="form-group">
 								<legend>Pagamento: Boleto</legend>
-								<select name="metodo" class="form-control">
-									<option selected value="0">Mudar Pagamento</option>
-									<option value="1">Pix</option>
-									<option value="2">Cartão</option>
-								</select>
+								<div class="input-group mb-3">
+									<select class="custom-select" id="Metodo">
+										<option selected value="0">Mudar Pagamento</option>
+										<option value="1">Pix</option>
+										<option value="2">Cartão</option>
+										</option>
+									</select>
+									<div class="input-group-prepend">
+										<label class="input-group-text bg-primary text-white" style="cursor: pointer;" for="Metodo" onclick="mudarPagamento()">Selecionar</label>
+									</div>
+								</div>
 								<br><br>
 								<img src="img/qrcode_pix.svg" class="img-fluid rounded" alt="QR CODE PARA PAGAMENTO PIX">
 							</fieldset>

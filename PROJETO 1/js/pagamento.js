@@ -22,6 +22,11 @@ var dados = {
     numero: ''
 }
 var ajax = null;
+//Função anonima
+var chamaPag = ()=>{
+    let valor = $('#Metodo').val();
+    mudarPagamento(valor);
+}
 
 //-------------------------------Escopo
 telaCarregamento(true);
@@ -108,10 +113,12 @@ function novoPedido(){
         dataType: 'html',
         success: function (data) {
             $(Tela).html(data); // Insere os dados no elemento main
+            // Após inserir o HTML, agora é seguro acessar os elementos
+            botao_end = $('.dropdown-toggle').first(); // Acessa o primeiro elemento com a classe dropdown-toggle
+            pagamento = $('#compra select').first(); // Acessa o primeiro select dentro do elemento com o ID compra
+            Cupom = $('[name=cupom]').first(); // Acessa o primeiro elemento com o atributo name=cupom
+            Metodo = $('#Metodo'); // Acessa o elemento com o ID Metodo
             telaCarregamento(false); // Desliga a tela de carregamento
-            botao_end = document?.getElementsByClassName('dropdown-toggle')[0];
-            pagamento = document?.getElementById('compra')?.getElementsByTagName('select')[0];
-            Cupom = document?.getElementsByName('cupom')[0];
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alerta('Houve um erro ao carregar o seu pedido. Tente novamente ou mais tarde.', 0);
@@ -517,22 +524,25 @@ Data: 03/07/2024
 Programador: Ighor Drummond   
 */
 function mudarPagamento(){
-    telaCarregamento(true);
+    var Metodo = $('#Metodo').val();
+
+    if(Metodo > 0){
+        telaCarregamento(true);
+        ajax = new XMLHttpRequest();
+
+        ajax.open('POST', 'script/pedidos.php?Opc=9&Metodo=' + encodeURIComponent(Metodo));
     
-    ajax = new XMLHttpRequest();
-
-    ajax.open('POST', 'script/pedidos.php?Opc=9&Metodo=' + Metodo);
-
-    ajax.onreadystatechange = ()=>{
-        telaCarregamento(false);
-        if(ajax.readyState === 4){
-            if(ajax.status < 400){
-                novoPedido();
-            }else{
-                alerta('Não foi possível trocar método de pagamento!', 0);
+        ajax.onreadystatechange = ()=>{
+            telaCarregamento(false);
+            if(ajax.readyState === 4){
+                if(ajax.status < 400){
+                    telaCarregamento(true);
+                    novoPedido();
+                }else{
+                    alerta('Não foi possível trocar método de pagamento!', 0);
+                }
             }
-        }
+        }     
+        ajax.send();
     }
-
-    ajax.send();
 }

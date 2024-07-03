@@ -1293,7 +1293,7 @@ namespace Pedido {
 		 *Data: 29/06/2024
 		 *Programador(a): Ighor Drummond
 		 */
-		private function setPagamento(){
+		public function setPagamento(){
 			//Recupera ID
 			$this->montaQuery(2);
 			$this->IdCli = $this->getDados()[0]['id'];
