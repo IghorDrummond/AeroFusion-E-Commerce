@@ -13,6 +13,31 @@ var numero = null;
 var End = '';
 //Númerico
 var antLado = 0;
+//Array
+var regraNumero = {
+    mastercard: /^5[1-5][0-9]{14}$/,
+    elo: /^(4011|4312|4514|4573|5041|5066|509|6277|6362|6363|650|6550)/,
+    amex: /^3[47][0-9]{13}$/,
+    discover: /^6(?:011|5[0-9]{2})[0-9]{12}$/,
+    diners: /^3(?:0[0-5]|[68][0-9])[0-9]{11}$/,
+    jcb: /^(?:2131|1800|35\d{3})\d{11}$/,
+    jcb15: /^(?:2131|1800)\d{11}$/,
+    maestro: /^(5[06789]\d\d|6\d{3})\d{8,15}$/,
+    unionplay: /^(62|88)/,
+    visa: /^4[0-9]{12}(?:[0-9]{3})?$/,
+};
+var imagem = [
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/618px-Mastercard-logo.svg.png',
+    'https://seeklogo.com/images/E/elo-logo-0B17407ECC-seeklogo.com.png',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-U8tK4EfgFz0FAX0yYoXfE05yWfq2tqNLQw&s',
+    'https://www.discoversignage.com/uploads/09-12-21_04:20_DGN_AcceptanceMark_FC_Hrz_RGB.png',
+    'https://seeklogo.com/images/D/diners-club-logo-E375570397-seeklogo.com.png',
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/JCB_logo.svg/1280px-JCB_logo.svg.png',
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/JCB_logo.svg/1280px-JCB_logo.svg.png',
+    'https://seeklogo.com/images/M/Maestro-logo-333A576204-seeklogo.com.png',
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/UnionPay_logo.svg/1280px-UnionPay_logo.svg.png',
+    'https://w7.pngwing.com/pngs/49/82/png-transparent-credit-card-visa-logo-mastercard-bank-mastercard-blue-text-rectangle.png'
+];
 //Booleano
 var lGira = false;
 //Objeto
@@ -24,6 +49,8 @@ var dados = {
     numero: ''
 }
 var ajax = null;
+//Constantes
+const BandeiraClasses  = ("mastercard;elo;amex;discover;diners;jcb;jcb15;maestro;unionpay;visa").split(';');
 
 //-------------------------------Escopo
 telaCarregamento(true);
@@ -79,18 +106,18 @@ Descrição: Responsavel por deletar items do carrinho e do pedido
 Data: 15/06/2024
 Programador: Ighor Drummond
 */
-function deletaItem(Item){
+function deletaItem(Item) {
     telaCarregamento(true);
     //Apaga da session o produto
     //Apaga do carrinho o produto
     //Recarrega a página usando a função dom
     ajax = new XMLHttpRequest();
     ajax.open('POST', 'script/pedidos.php?Opc=3&Prod=' + encodeURIComponent(Item));
-    ajax.onreadystatechange = ()=>{
-        if(ajax.readyState === 4){
-            if(ajax.status < 400){
+    ajax.onreadystatechange = () => {
+        if (ajax.readyState === 4) {
+            if (ajax.status < 400) {
                 novoPedido();//Chama para carregar os dados novamente sem o item
-            }else{
+            } else {
                 window.location.href = "error.php?Error=" + encodeURIComponent(ajax.status.toString());
             }
         }
@@ -103,7 +130,7 @@ Descrição: Responsavel por carregar dados do pagamentos
 Data: 15/06/2024
 Programador: Ighor Drummond
 */
-function novoPedido(){
+function novoPedido() {
     $.ajax({
         url: 'script/pedidos.php?Opc=2',
         method: 'GET',
@@ -129,7 +156,7 @@ Descrição: Responsavel por selecionar o endereço
 Data: 15/06/2024
 Programador: Ighor Drummond
 */
-function selecionaEndereco(element){
+function selecionaEndereco(element) {
     //Guarda o endereço selecionado
     End = element.id;
     //Ajusta o botão para o titulo correto
@@ -141,19 +168,19 @@ Descrição: Responsavel por aumentar ou diminuir a quantidade do item desejado
 Data: 18/06/2024
 Programador: Ighor Drummond
 */
-function atualizaQuantidade(Opc, IdCar, element){
+function atualizaQuantidade(Opc, IdCar, element) {
     telaCarregamento(true);
     var btnGroup = element.parentElement;
     var Quantidade = btnGroup.querySelector('.quantidade_acao').textContent;
 
     //Faz a adição do valor novo valor
-    if(Opc === '+'){
+    if (Opc === '+') {
         Quantidade = (parseInt(Quantidade) + 1).toString();
-    }else{
-        if(parseInt(Quantidade) === 1){
+    } else {
+        if (parseInt(Quantidade) === 1) {
             deletaItem(IdCar);//Apaga do carrinho o produto
             return false;
-        }else{
+        } else {
             Quantidade = (parseInt(Quantidade) - 1).toString();
         }
     }
@@ -162,15 +189,15 @@ function atualizaQuantidade(Opc, IdCar, element){
 
     ajax.open('POST', 'script/pedidos.php?Opc=4&IdCar=' + encodeURIComponent(IdCar) + '&Quant=' + encodeURIComponent(Quantidade));
 
-    ajax.onreadystatechange = ()=>{
+    ajax.onreadystatechange = () => {
         telaCarregamento(false);
-        if(ajax.readyState === 4){
-            if(ajax.status < 400){
+        if (ajax.readyState === 4) {
+            if (ajax.status < 400) {
                 novoPedido();//Atualiza o pedido novamente após atualização da quantidade
-                if(ajax.responseText  === 'ESTOQUE'){
+                if (ajax.responseText === 'ESTOQUE') {
                     alerta('Limite máximo do estoque atingido!', 0);
                 }
-            }else{
+            } else {
                 alerta('Ocorreu um erro ao adicionar uma nova quantidade. Error: ' + ajax.status.toString(), 0);
             }
         }
@@ -184,22 +211,22 @@ Descrição: Responsavel por finalizar a compra e abrir um novo pedido no banco 
 Data: 18/06/2024
 Programador: Ighor Drummond
 */
-function finalizarCompra(){
+function finalizarCompra() {
     //Impede de recarregar a página
     event.preventDefault();
 
     //Valida se um endereço foi escolhido
-    if(botao_end.textContent.substr(0, 8).toUpperCase() === 'ENDEREÇO' ){
+    if (botao_end.textContent.substr(0, 8).toUpperCase() === 'ENDEREÇO') {
         //Valida se foi escolhido um método de pagamento
-        if(pagamento.selectedIndex > 0){
+        if (pagamento.selectedIndex > 0) {
             telaCarregamento(true);
             ajax = new XMLHttpRequest();
             ajax.open('POST', 'script/pedidos.php?Opc=5&Pagamento=' + encodeURIComponent(pagamento.selectedIndex) + '&Endereco=' + encodeURIComponent(End) + '&Cupom=' + encodeURIComponent(Cupom.value));
-            ajax.onreadystatechange = ()=>{
+            ajax.onreadystatechange = () => {
                 telaCarregamento(false);
-                if(ajax.readyState === 4){
-                    if(ajax.status < 400){
-                        switch(ajax.responseText.trim()){
+                if (ajax.readyState === 4) {
+                    if (ajax.status < 400) {
+                        switch (ajax.responseText.trim()) {
                             case 'S':
                                 //Atualiza para página para pagar o pedido
                                 $('main').load('script/pedidos.php?Opc=8');
@@ -208,16 +235,16 @@ function finalizarCompra(){
                                 alerta('Houve um erro interno em nosso servidor. Tente novamente ou mais tarde.', 0);
                                 break;
                         }
-                    }else{
-                        window.location.href =  "error.php?Error=" + ajax.status.toString();
+                    } else {
+                        window.location.href = "error.php?Error=" + ajax.status.toString();
                     }
                 }
             }
             ajax.send();
-        }else{
+        } else {
             alerta('Escolha um método de pagamento.', 0);
         }
-    }else{
+    } else {
         alerta('Escolha um endereço.', 0);
     }
 }
@@ -227,13 +254,13 @@ Descrição: chama tela de adicionar um novo endereço
 Data: 24/06/2024
 Programador: Ighor Drummond
 */
-function adicionarEnd(){
+function adicionarEnd() {
     telaCarregamento(true);
     //Carrega arquivo para adição para html
-    $.get('script/HTML/htmlAdicionarEnd.php', function(data) {
-            telaCarregamento(false);
-            $('body').append(data);
-        }).fail(function(xhr) {
+    $.get('script/HTML/htmlAdicionarEnd.php', function (data) {
+        telaCarregamento(false);
+        $('body').append(data);
+    }).fail(function (xhr) {
         alerta("Ocorreu um erro: " + xhr.status + " " + xhr.statusText, 0);
         telaCarregamento(false);
     });
@@ -244,7 +271,7 @@ Descrição: apaga a tela end da página html
 Data: 24/06/2024
 Programador: Ighor Drummond
 */
-function fecharEnd(){
+function fecharEnd() {
     $('.end_body').remove();
 }
 /*
@@ -253,28 +280,28 @@ Descrição: apaga a tela end da página html
 Data: 24/06/2024
 Programador: Ighor Drummond
 */
-function cadastrarEnd(event){
+function cadastrarEnd(event) {
     var param = '';
     var form = document.getElementsByClassName('end_dados')[0].getElementsByTagName('form')[0];
     var formData = null;
     //Desliga recarregamento da página após da submit
-    event.preventDefault();    
+    event.preventDefault();
     // Cria um objeto FormData a partir do formulário
     formData = new FormData(form);
     // Percorre os dados do formulário
     for (let [name, value] of formData) {
-        param += "&" + encodeURIComponent(name) + "=" +  encodeURIComponent(value);
+        param += "&" + encodeURIComponent(name) + "=" + encodeURIComponent(value);
     }
     //Inicia uma requisição ajax
     ajax = new XMLHttpRequest();
 
     ajax.open('POST', 'script/pedidos.php?Opc=6' + param);
 
-    ajax.onreadystatechange = ()=>{
-        if(ajax.readyState === 4){
-            if(ajax.status < 400){
+    ajax.onreadystatechange = () => {
+        if (ajax.readyState === 4) {
+            if (ajax.status < 400) {
                 fecharEnd();//Fecha tela de endereço
-                switch(ajax.responseText.trim()){
+                switch (ajax.responseText.trim()) {
                     case 'OK':
                         novoPedido();
                         break;
@@ -288,7 +315,7 @@ function cadastrarEnd(event){
                         alerta('Ocorreu um erro interno em nosso servidor. tente novamente ou mais tarde.', 0);
                         break;
                 }
-            }else{
+            } else {
                 window.location.href = "error.php?Error=" + ajax.status.toString();
             }
         }
@@ -302,12 +329,12 @@ Descrição: Mascara automatica de CEP
 Data: 20/05/2024
 Programador: Ighor Drummond   
 */
-function mascaraCep(){
+function mascaraCep() {
     var cep = document.getElementsByName('cep')[0];
     var aux = '';
 
-    for(nCont = 0; nCont <= cep.value.length-1; nCont++){
-        if(nCont === 5 && cep.value.substr(nCont, 1) != '-'){
+    for (nCont = 0; nCont <= cep.value.length - 1; nCont++) {
+        if (nCont === 5 && cep.value.substr(nCont, 1) != '-') {
             aux += '-';
         }
 
@@ -322,20 +349,20 @@ Descrição: Responsavel por buscar cep da cidade
 Data: 26/05/2024
 Programador: Ighor Drummond   
 */
-function buscaEndereco(){
+function buscaEndereco() {
     var cep = document.getElementsByName('cep')[0].value;
     var End = document.getElementsByClassName('end_dados')[0].getElementsByTagName('input');
     var jsonHttp = null;
 
-    if(cep.length === 9){
+    if (cep.length === 9) {
         jsonHttp = new XMLHttpRequest();
-        jsonHttp.open('GET', 'https://viacep.com.br/ws/'+ (cep.replace('-', '')) +'/json/');
+        jsonHttp.open('GET', 'https://viacep.com.br/ws/' + (cep.replace('-', '')) + '/json/');
 
-        jsonHttp.onreadystatechange = ()=>{
-            if(jsonHttp.readyState === 4 && jsonHttp.status < 400){
+        jsonHttp.onreadystatechange = () => {
+            if (jsonHttp.readyState === 4 && jsonHttp.status < 400) {
                 let jsonVal = JSON.parse(jsonHttp.responseText);
                 //Ejeta dados direto nos inputs
-                if(!jsonVal.hasOwnProperty('erro')){
+                if (!jsonVal.hasOwnProperty('erro')) {
                     End[1].value = jsonVal.logradouro;
                     End[2].value = jsonVal.bairro;
                     End[3].value = jsonVal.localidade;
@@ -352,10 +379,10 @@ Descrição: Valida o cupom e atualiza total
 Data: 26/06/2024
 Programador: Ighor Drummond   
 */
-function validaCupom(){
+function validaCupom() {
     var param = document.getElementsByName('cupom')[0].value
 
-    if(param === ''){
+    if (param === '') {
         return null;
     }
     //Inicia uma requisição ajax
@@ -363,11 +390,11 @@ function validaCupom(){
 
     ajax.open('POST', 'script/pedidos.php?Opc=7&Cupom=' + encodeURIComponent(param));
 
-    ajax.onreadystatechange = ()=>{
-        if(ajax.readyState === 4){
-            if(ajax.status < 400){
+    ajax.onreadystatechange = () => {
+        if (ajax.readyState === 4) {
+            if (ajax.status < 400) {
                 fecharEnd();//Fecha tela de endereço
-                switch(ajax.responseText.trim()){
+                switch (ajax.responseText.trim()) {
                     case 'INVALIDO':
                         alerta('Cupom invalído! tente outro cupom valído.', 0);
                         break;
@@ -379,7 +406,7 @@ function validaCupom(){
                         alerta('Cupom ' + param + ' Aplicado com sucesso!', 1);
                         break;
                 }
-            }else{
+            } else {
                 window.location.href = "error.php?Error=" + ajax.status.toString();
             }
         }
@@ -393,26 +420,26 @@ Descrição: vira o cartão para posição correta
 Data: 02/07/2024
 Programador: Ighor Drummond   
 */
-function virarCartao(estadoCard){
+function virarCartao(estadoCard) {
     var graus = estadoCard === 1 ? 0 : 180;
     var opc = estadoCard === 1 ? '+' : '-';
     var limite = estadoCard === 1 ? 180 : 0;
     Cartao = document.getElementById('cartao');
 
     //Evita o cartão fica em um loop caso o botão for pressionado varias vezes
-    if(lGira){
+    if (lGira) {
         return null;
     }
 
-    Z = setInterval(()=>{
+    Z = setInterval(() => {
         lGira = true;
         graus = opc === '+' ? graus + 1 : graus - 1;
-        Cartao.style.transform = 'rotateY(' + graus.toString() +'deg)'
-        if(graus === limite){
+        Cartao.style.transform = 'rotateY(' + graus.toString() + 'deg)'
+        if (graus === limite) {
             clearInterval(Z);
             lGira = false;
-        }else{
-            if(graus === 90){
+        } else {
+            if (graus === 90) {
                 Cartao.getElementsByClassName('cartaoLado')[antLado].classList.remove('d-flex');
                 Cartao.getElementsByClassName('cartaoLado')[antLado].classList.add('d-none');
                 Cartao.getElementsByClassName('cartaoLado')[estadoCard].classList.remove('d-none');
@@ -420,41 +447,17 @@ function virarCartao(estadoCard){
                 antLado = estadoCard;
             }
         }
-   }, 1);
+    }, 1);
 }
 /*
 Função: bandeira(elemento)
-Descrição: Bandeira do cartão de crédito
+Descrição: Aplica Bandeira ao cartão de crédito
 Data: 03/07/2024
 Programador: Ighor Drummond   
 */
-function bandeira(element){
+function bandeira(element) {
     var numero = element.value;
     var operadora = document.getElementsByName('operadora')[0];
-    var regraNumero = {
-        mastercard: /^5[1-5][0-9]{14}$/,
-        elo: /^(4011|4312|4514|4573|5041|5066|509|6277|6362|6363|650|6550)/,
-        amex: /^3[47][0-9]{13}$/,
-        discover: /^6(?:011|5[0-9]{2})[0-9]{12}$/,
-        diners: /^3(?:0[0-5]|[68][0-9])[0-9]{11}$/,
-        jcb: /^(?:2131|1800|35\d{3})\d{11}$/,
-        jcb15: /^(?:2131|1800)\d{11}$/,
-        maestro: /^(5[06789]\d\d|6\d{3})\d{8,15}$/,
-        unionpay: /^(62|88)/,
-        visa: /^4[0-9]{12}(?:[0-9]{3})?$/,
-    };
-    var imagem = [
-        'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/618px-Mastercard-logo.svg.png',
-        'https://seeklogo.com/images/E/elo-logo-0B17407ECC-seeklogo.com.png',
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-U8tK4EfgFz0FAX0yYoXfE05yWfq2tqNLQw&s',
-        'https://www.discoversignage.com/uploads/09-12-21_04:20_DGN_AcceptanceMark_FC_Hrz_RGB.png',
-        'https://seeklogo.com/images/D/diners-club-logo-E375570397-seeklogo.com.png',
-        'https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/JCB_logo.svg/1280px-JCB_logo.svg.png',
-        'https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/JCB_logo.svg/1280px-JCB_logo.svg.png',
-        'https://seeklogo.com/images/M/Maestro-logo-333A576204-seeklogo.com.png',
-        'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/UnionPay_logo.svg/1280px-UnionPay_logo.svg.png',
-        'https://w7.pngwing.com/pngs/49/82/png-transparent-credit-card-visa-logo-mastercard-bank-mastercard-blue-text-rectangle.png'
-    ];
     var tipo = null;
     var pattern = null;
     var achado = false;
@@ -462,39 +465,39 @@ function bandeira(element){
     //Remove máscara
     numero = numero.replace(/\D/g, '');
     //Validar qual bandeira é correspondente ao numero inserido
-    for([tipo, pattern] of Object.entries(regraNumero)){
-        if(pattern.test(numero)){
+    for ([tipo, pattern] of Object.entries(regraNumero)) {
+        if (pattern.test(numero)) {
             achado = true;
             break;
         }
     }
     //Aplica bandeira na imagem
-    if(achado){
+    if (achado) {
         operadora.src = imagem[Object.keys(regraNumero).indexOf(tipo)];
         dados.bandeira = Object.keys(regraNumero).indexOf(tipo) + 1;
         dados.numero = numero;
-        trocarCor(tipo, regraNumero);
-    }else{
-        trocarCor('', regraNumero);
+        trocarCor(tipo);
+    } else {
+        trocarCor('');
         operadora.src = 'https://cdn-icons-png.flaticon.com/512/2695/2695969.png';
     }
 }
 /*
-Função: trocarCor(tipo, regraNumero)
+Função: trocarCor(Bandeira aplicada)
 Descrição: troca cor do cartão
 Data: 03/07/2024
 Programador: Ighor Drummond   
 */
-function trocarCor(tipo, regraNumero){
+function trocarCor(tipo) {
     var Cartao = document.getElementById('cartao');
     //Troca fundo do cartão
     //Remove fundos anteriores caso tiver adicionado
-    for(nCont = 0; nCont <= 9; nCont++){
+    for (nCont = 0; nCont <= 9; nCont++) {
         Cartao.classList.remove(Object.keys(regraNumero)[nCont])
     }
     //Adiciona fundo ao cartão
-    if(tipo != ''){
-        Cartao.classList.add(tipo);   
+    if (tipo != '') {
+        Cartao.classList.add(tipo);
     }
 }
 /*
@@ -503,16 +506,16 @@ Descrição: aplica máscara no número do cartão
 Data: 03/07/2024
 Programador: Ighor Drummond   
 */
-function maskNumero(element){
+function maskNumero(element) {
     var numero = element;
     var numeroMask = '';
 
-    for(nCont = 0; nCont <= (numero.value.length) -1; nCont++){
-        if( (nCont === 4 && numero.value[4] != ' ' ) 
-        || 
-        (nCont === 9 && numero.value[9] != ' ' ) 
-        || 
-        (nCont === 14 && numero.value[14] != ' ' ) ){
+    for (nCont = 0; nCont <= (numero.value.length) - 1; nCont++) {
+        if ((nCont === 4 && numero.value[4] != ' ')
+            ||
+            (nCont === 9 && numero.value[9] != ' ')
+            ||
+            (nCont === 14 && numero.value[14] != ' ')) {
             numeroMask += ' ';
         }
         numeroMask += numero.value[nCont];
@@ -526,12 +529,12 @@ Descrição: aplica máscara na validade do cartão
 Data: 03/07/2024
 Programador: Ighor Drummond   
 */
-function maskValidade(element){
+function maskValidade(element) {
     var validade = element;
     var validadeMask = '';
 
-    for(nCont = 0; nCont <= (validade.value.length) -1; nCont++){
-        if(nCont === 2 && validade.value[2] != '/'){
+    for (nCont = 0; nCont <= (validade.value.length) - 1; nCont++) {
+        if (nCont === 2 && validade.value[2] != '/') {
             validadeMask += '/';
         }
         validadeMask += validade.value[nCont];
@@ -546,25 +549,25 @@ Descrição: aplica máscara na validade do cartão
 Data: 03/07/2024
 Programador: Ighor Drummond   
 */
-function mudarPagamento(){
+function mudarPagamento() {
     var Metodo = $('#Metodo').val();
 
-    if(Metodo > 0){
+    if (Metodo > 0) {
         telaCarregamento(true);
         ajax = new XMLHttpRequest();
 
         ajax.open('POST', 'script/pedidos.php?Opc=9&Metodo=' + encodeURIComponent(Metodo));
-    
-        ajax.onreadystatechange = ()=>{
+
+        ajax.onreadystatechange = () => {
             telaCarregamento(false);
-            if(ajax.readyState === 4){
-                if(ajax.status < 400){
+            if (ajax.readyState === 4) {
+                if (ajax.status < 400) {
                     novoPedido();
-                }else{
+                } else {
                     alerta('Não foi possível trocar método de pagamento!', 0);
                 }
             }
-        }     
+        }
         ajax.send();
     }
 }
@@ -574,10 +577,37 @@ Descrição: finalizar Pedido
 Data: 07/07/2024
 Programador: Ighor Drummond   
 */
-function finalizarPedido(){
-    if(Object.values(dados).every(value => value)){
+function finalizarPedido() {
+    if (Object.values(dados).every(value => value)) {
         ajax = new XMLHttpRequest();
 
         ajax.open('POST', 'script/pedidos.php?Opc=10');
+    }
+}
+/*
+Função: finalizarPedido()
+Descrição: finalizar Pedido
+Data: 07/07/2024
+Programador: Ighor Drummond   
+*/
+function cartaoSelecionado(element) {
+    var elementoPai = element.parentElement;
+    var ElementosFilhos = {
+        Cartao: elementoPai.getElementsByTagName('h3')[0].textContent,
+        Validade: elementoPai.getElementsByTagName('time')[0].textContent,
+        Nome: elementoPai.getElementsByTagName('small')[0].textContent,
+        Bandeira: elementoPai.getElementsByTagName('img')[0].alt,
+        SrcBand: elementoPai.getElementsByTagName('img')[0].src
+    }
+
+    //Valida se não há dados vazio
+    if (Object.values(ElementosFilhos).every(value => value)) {
+        Cartao = document.getElementById('cartao');//Recebe o elemento Cartão
+        trocarCor(ElementosFilhos.Bandeira);//Troca Cor do Cartão
+        Cartao.getElementsByTagName('img')[0].src = ElementosFilhos.SrcBand;//Troca bandeira do cartão
+        document.getElementById('nome_cartao').value = ElementosFilhos.Nome.substr(5, ElementosFilhos.Nome.length-1);
+        document.getElementById('numero_cartao').value = ElementosFilhos.Cartao.substr(7, ElementosFilhos.Cartao.length-1);  
+        //document.getElementById('cvv').value = 
+        document.getElementById('vencimento').value = ElementosFilhos.Validade; 
     }
 }

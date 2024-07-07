@@ -374,7 +374,7 @@ html::-webkit-scrollbar-thumb {
 	background: -webkit-gradient(linear, right top, left top, from(#08a7e0), to(red)) !important;
 	background: linear-gradient(to left, #08a7e0, red) !important;
 }
-.unionpay{
+.unionplay{
 	background: -o-linear-gradient(right, #e31f3c,#084a80,#087f88) !important;
 	background: -webkit-gradient(linear, right top, left top, from(#e31f3c),color-stop(#084a80),to(#087f88)) !important;
 	background: linear-gradient(to left, #e31f3c,#084a80,#087f88) !important;

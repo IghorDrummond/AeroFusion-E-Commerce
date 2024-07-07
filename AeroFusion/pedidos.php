@@ -408,11 +408,11 @@
 											<div class="d-flex flex-wrap data-info">
 												<div>
 													<label>Data Expiração</label><br>
-													<input name="vencimento" type="text" placeholder="00/0000" maxlength="7" onkeyup="maskValidade(this)" required value="<?php print !empty($Pedido[0]['validade']) ? $Pedido[0]['validade'] : ''?>">
+													<input id="vencimento" name="vencimento" type="text" placeholder="00/0000" maxlength="7" onkeyup="maskValidade(this)" required value="<?php print !empty($Pedido[0]['validade']) ? $Pedido[0]['validade'] : ''?>">
 												</div>
 												<div>
 													<label>CVV</label><br>
-													<input name="cvv" type="text" placeholder="000" maxlength="3" required value="<?php print !empty($Pedido[0]['cvv']) ? $Pedido[0]['cvv'] : ''?>">
+													<input id="cvv" name="cvv" type="text" placeholder="000" maxlength="3" required value="<?php print !empty($Pedido[0]['cvv']) ? $Pedido[0]['cvv'] : ''?>">
 												</div>
 											</div>
 											<button type="button" title="Virar cartão" class="ml-auto" onclick="virarCartao(0)">
@@ -435,7 +435,7 @@
 											<h3>Cartão: <?php echo (substr($Cartoes['numero_cartao'], 0, 4)) . ' **** **** **' . substr($Cartoes['numero_cartao'], 14, 16)  ?> </h3>
 											<small>Nome: <?php echo strtoupper($Cartoes['nome_cartao']); ?></small><br>
 											<small>Vencimento: <time> <?php echo $Cartoes['validade_formatada']  ?> </time></small><br>
-											<small>Bandeira: <img src="<?php echo($Cartoes['img_ban']) ?>" class="img-fluid" width="50" height="50"></small>
+											<small>Bandeira: <img src="<?php echo($Cartoes['img_ban']) ?>" class="img-fluid" width="50" height="50" alt="<?php print retornaClasseCartao($Cartoes['nome_ban']); ?>"></small>
 											<button type="button" class="btn btn-primary btn-sm btn-block mt-2" onclick="cartaoSelecionado(this)">Selecionar</button>
 										</div>
 										<hr>
@@ -508,14 +508,12 @@
 	}
 
 	function finalizarPedido(){
-		//if(isset($_SESSION['IdPed']) and ){
 
-		//}
 	}
 
 	function retornaClasseCartao($Ban){
-		$Bandeiras = "MASTERCARD;ELO;AMERICANEXPRESS;DISCOVER;DINERS;JCB;JCB15;MAESTRO;UNIONPLAY;VISA";
-		$BanClasses =  "mastercard;elo;amex;discover;diners;jcb;jcb15;maestro;unionpay;visa";
+		$Bandeiras = "MASTERCARD;ELO;AMERICAN EXPRESS;DISCOVER;DINERS;JCB;JCB15;MAESTRO;UNIONPLAY;VISA";
+		$BanClasses =  "mastercard;elo;amex;discover;diners;jcb;jcb15;maestro;unionplay;visa";
 		$BanVetor = [[], []];
 
 		$BanVetor[0] = explode(';', $Bandeiras);
