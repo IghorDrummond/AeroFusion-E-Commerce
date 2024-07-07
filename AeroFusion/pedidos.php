@@ -14,6 +14,7 @@
 	use Pedido\MetodoPagamento;
 	use Acesso\Endereco;
 	use Pagamentos\Pagamento;
+	use Cadastro\Cartao;
 
 	//Declaração de variaveis
 	//String
@@ -55,6 +56,9 @@
 			break;
 		case '9':
 			alterarPagamento();
+			break;
+		case '10':
+			finalizarPedido();
 			break;
 	}
 
@@ -362,9 +366,12 @@
 							<br><br>
 							<img src="img/qrcode_pix.svg" class="img-fluid rounded" alt="QR CODE PARA PAGAMENTO PIX">
 						</fieldset>
-						<?php
+				<?php
 					} else if ($Pedido[0]['forma_pag'] === 'CARTÃO') {
-						?>
+						//Recupera cartões cadastrados deste usuário
+						$Cartao = new Cartao(Email: $_SESSION['Email']);
+						$Cartao = $Cartao->getCartao();
+				?>
 							<fieldset>
 								<legend>Pagamento: Cartão</legend>
 								<div class="input-group mb-3">
@@ -381,11 +388,11 @@
 								<br><br>
 
 								<div class="caixa_cartao">
-									<div id="cartao">
+									<div id="cartao" class="<?php print retornaClasseCartao($Pedido[0]['nome_ban']); ?>">
 
 										<!-- Parte frontal do Cartão -->
 										<div class="cartaoLado d-flex flex-column">
-											<img class="img-fluid ml-auto" src="https://cdn-icons-png.flaticon.com/512/2695/2695969.png" name="operadora" alt="Operadora Cartão" width="50">
+											<img class="img-fluid ml-auto" src="<?php echo(is_null($Pedido[0]['nome_cartao']) || empty($Pedido[0]['nome_cartao']) ? 'https://cdn-icons-png.flaticon.com/512/2695/2695969.png' : $Pedido[0]['img_ban']);   ?>" name="operadora" alt="Operadora Cartão" width="50">
 											<label for="">Nome impresso</label>
 											<input type="text" id="nome_cartao" placeholder="FULANO DE TAL" name="nome_cartao" value="<?php print !empty($Pedido[0]['nome_cartao']) ? $Pedido[0]['nome_cartao'] : ''?>" required>
 											<label>Número do cartão</label>
@@ -404,8 +411,8 @@
 													<input name="vencimento" type="text" placeholder="00/0000" maxlength="7" onkeyup="maskValidade(this)" required value="<?php print !empty($Pedido[0]['validade']) ? $Pedido[0]['validade'] : ''?>">
 												</div>
 												<div>
-													<label>CVC</label><br>
-													<input name="cvc" type="text" placeholder="000" maxlength="3" required value="<?php print !empty($Pedido[0]['cvv']) ? $Pedido[0]['cvv'] : ''?>">
+													<label>CVV</label><br>
+													<input name="cvv" type="text" placeholder="000" maxlength="3" required value="<?php print !empty($Pedido[0]['cvv']) ? $Pedido[0]['cvv'] : ''?>">
 												</div>
 											</div>
 											<button type="button" title="Virar cartão" class="ml-auto" onclick="virarCartao(0)">
@@ -416,7 +423,28 @@
 
 									</div>
 								</div>
-
+								<label class="mt-4">Escolha um outro cartão:</label>
+								<div class="dropdown">
+									<button class="btn btn-secondary dropdown-toggle btn-sm btn-block" data-toggle="dropdown" arial-expanded="false">Cartões</button>
+									<div class="dropdown-menu">
+								<?php
+									if(isset($Cartao[0]['numero_cartao'])){
+										foreach($Cartao as $nCont => $Cartoes) {
+								?>
+										<div class="dropdown-tem p-2">
+											<h3>Cartão: <?php echo (substr($Cartoes['numero_cartao'], 0, 4)) . ' **** **** **' . substr($Cartoes['numero_cartao'], 14, 16)  ?> </h3>
+											<small>Nome: <?php echo strtoupper($Cartoes['nome_cartao']); ?></small><br>
+											<small>Vencimento: <time> <?php echo $Cartoes['validade_formatada']  ?> </time></small><br>
+											<small>Bandeira: <img src="<?php echo($Cartoes['img_ban']) ?>" class="img-fluid" width="50" height="50"></small>
+											<button type="button" class="btn btn-primary btn-sm btn-block mt-2" onclick="cartaoSelecionado(this)">Selecionar</button>
+										</div>
+										<hr>
+								<?php
+										}
+									}
+								?>
+									</div>
+								</div>							
 								<br>
 								<labe>Parcelas:</labe>
 								<select class="form-control">
@@ -478,3 +506,25 @@
 			$Pagamento->setPagamento();
 		}
 	}
+
+	function finalizarPedido(){
+		//if(isset($_SESSION['IdPed']) and ){
+
+		//}
+	}
+
+	function retornaClasseCartao($Ban){
+		$Bandeiras = "MASTERCARD;ELO;AMERICANEXPRESS;DISCOVER;DINERS;JCB;JCB15;MAESTRO;UNIONPLAY;VISA";
+		$BanClasses =  "mastercard;elo;amex;discover;diners;jcb;jcb15;maestro;unionpay;visa";
+		$BanVetor = [[], []];
+
+		$BanVetor[0] = explode(';', $Bandeiras);
+		$BanVetor[1] = explode(';', $BanClasses);
+
+		for($nCont = 0; $nCont <= count($BanVetor[0]) -1; $nCont++){
+			if($BanVetor[0][$nCont] === $Ban){
+				return $BanVetor[1][$nCont];
+			}
+		}
+	}
+?>

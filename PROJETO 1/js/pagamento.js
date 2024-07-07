@@ -13,12 +13,14 @@ var numero = null;
 var End = '';
 //Númerico
 var antLado = 0;
+//Booleano
+var lGira = false;
 //Objeto
 var dados = {
     bandeira: 0,
     nome: '',
     validade: '',
-    cvc: '',
+    cvv: '',
     numero: ''
 }
 var ajax = null;
@@ -397,11 +399,18 @@ function virarCartao(estadoCard){
     var limite = estadoCard === 1 ? 180 : 0;
     Cartao = document.getElementById('cartao');
 
+    //Evita o cartão fica em um loop caso o botão for pressionado varias vezes
+    if(lGira){
+        return null;
+    }
+
     Z = setInterval(()=>{
+        lGira = true;
         graus = opc === '+' ? graus + 1 : graus - 1;
         Cartao.style.transform = 'rotateY(' + graus.toString() +'deg)'
         if(graus === limite){
             clearInterval(Z);
+            lGira = false;
         }else{
             if(graus === 90){
                 Cartao.getElementsByClassName('cartaoLado')[antLado].classList.remove('d-flex');
@@ -470,6 +479,12 @@ function bandeira(element){
         operadora.src = 'https://cdn-icons-png.flaticon.com/512/2695/2695969.png';
     }
 }
+/*
+Função: trocarCor(tipo, regraNumero)
+Descrição: troca cor do cartão
+Data: 03/07/2024
+Programador: Ighor Drummond   
+*/
 function trocarCor(tipo, regraNumero){
     var Cartao = document.getElementById('cartao');
     //Troca fundo do cartão
@@ -551,5 +566,18 @@ function mudarPagamento(){
             }
         }     
         ajax.send();
+    }
+}
+/*
+Função: finalizarPedido()
+Descrição: finalizar Pedido
+Data: 07/07/2024
+Programador: Ighor Drummond   
+*/
+function finalizarPedido(){
+    if(Object.values(dados).every(value => value)){
+        ajax = new XMLHttpRequest();
+
+        ajax.open('POST', 'script/pedidos.php?Opc=10');
     }
 }

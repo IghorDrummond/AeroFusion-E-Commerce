@@ -149,7 +149,7 @@ INSERT INTO bandeiras(nome_ban, img_ban) VALUES('VISA', 'https://w7.pngwing.com/
 CREATE TABLE cartoes(
     id_card int primary key auto_increment not null,
     nome_cartao varchar(250) not null,
-    numero_cartao int(16) not null,
+    numero_cartao varchar(16) not null,
     cvv int(3) not null,
     validade date not null,
     id_ban int not null,

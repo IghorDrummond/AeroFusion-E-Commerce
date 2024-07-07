@@ -1113,6 +1113,9 @@
 				try{
 					$this->con = new \IniciaServer();
 					$this->con = $this->con->conexao();
+					//Recupera Id do cliente
+					$this->montaQuery(2);
+					$this->IdCli = $this->getDados()[0]['cliente'];
 				}catch(\PDOException $e){
 					echo $e->getMessage();
 				}
@@ -1126,9 +1129,6 @@
 				$Validade,
 				$Cvc
 			){
-				//Recupera Id do cliente
-				$this->montaQuery(2);
-				$this->IdCli = $this->getDados()[0]['cliente'];
 				//Recupera id da bandeira
 				
 				//Monta query para inserir novo cartão
@@ -1138,6 +1138,12 @@
 				}else{
 					return false;
 				}
+			}
+
+			public function getCartao(){
+				$this->montaQuery(3);
+				$Ret = $this->getDados();
+				return $Ret;
 			}
 
 			private function setDados(){
@@ -1182,6 +1188,19 @@
 						WHERE
 							email = '$this->Email'
 					";					
+				}else if($Opc === 3){
+					$this->Query =  " 
+						SELECT
+							cd.*, 
+							bd.*,
+							DATE_FORMAT(cd.validade, '%m/%Y') AS validade_formatada
+						FROM
+							cartoes cd
+						INNER JOIN 
+							bandeiras bd ON bd.id_ban = cd.id_ban
+						WHERE
+							cd.id_cliente = $this->IdCli;
+					";
 				}
 			}
 		}

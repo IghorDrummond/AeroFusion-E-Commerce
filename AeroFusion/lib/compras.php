@@ -1055,8 +1055,14 @@ namespace Pedido {
                         en.complemento,
                         en.referencia,
                         en.cep,
-                        en.uf
-
+                        en.uf,
+						cad.numero_cartao,
+						cad.nome_cartao,
+						DATE_FORMAT(cad.validade, '%m/%Y') AS validade,
+						cad.cvv,
+						cad.id_ban,
+						bd.img_ban,
+						bd.nome_ban
 					FROM
 						Pedidos as Pd
 					LEFT JOIN
@@ -1067,6 +1073,8 @@ namespace Pedido {
 						endereco as en ON en.id_end = Pd.id_end
 					LEFT JOIN
 						cartoes as cad ON cad.id_cliente = cli.id
+					LEFT JOIN 
+						bandeiras as bd ON bd.id_ban = cad.id_ban
 					INNER JOIN 
 						item_pedidos as Ip ON Ip.id_ped = Pd.id_ped
 					INNER JOIN 
