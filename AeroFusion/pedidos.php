@@ -60,6 +60,9 @@
 		case '10':
 			finalizarPedido();
 			break;
+		case '11':
+			retornaCartao();
+			break;
 	}
 
 	function montaTela()
@@ -370,7 +373,7 @@
 					} else if ($Pedido[0]['forma_pag'] === 'CARTÃO') {
 						//Recupera cartões cadastrados deste usuário
 						$Cartao = new Cartao(Email: $_SESSION['Email']);
-						$Cartao = $Cartao->getCartao();
+						$Cartao = $Cartao->getCartao('');
 				?>
 							<fieldset>
 								<legend>Pagamento: Cartão</legend>
@@ -431,10 +434,10 @@
 									if(isset($Cartao[0]['numero_cartao'])){
 										foreach($Cartao as $nCont => $Cartoes) {
 								?>
-										<div class="dropdown-tem p-2">
-											<h3>Cartão: <?php echo (substr($Cartoes['numero_cartao'], 0, 4)) . ' **** **** **' . substr($Cartoes['numero_cartao'], 14, 16)  ?> </h3>
+										<div class="dropdown-tem p-2" id="#X<?php print($Cartoes['id_card']) ?>">
+											<h3>Cartão: <?php echo (substr($Cartoes['numero_cartao'], 0, 4)) . ' **** **** **' . substr($Cartoes['numero_cartao'], 17, 19)  ?> </h3>
 											<small>Nome: <?php echo strtoupper($Cartoes['nome_cartao']); ?></small><br>
-											<small>Vencimento: <time> <?php echo $Cartoes['validade_formatada']  ?> </time></small><br>
+											<small>Vencimento: <time> <?php echo $Cartoes['validade_formatada']  ?></time></small><br>
 											<small>Bandeira: <img src="<?php echo($Cartoes['img_ban']) ?>" class="img-fluid" width="50" height="50" alt="<?php print retornaClasseCartao($Cartoes['nome_ban']); ?>"></small>
 											<button type="button" class="btn btn-primary btn-sm btn-block mt-2" onclick="cartaoSelecionado(this)">Selecionar</button>
 										</div>
@@ -477,7 +480,8 @@
 									</div>
 								</div>
 								<br><br>
-								<img src="img/qrcode_pix.svg" class="img-fluid rounded" alt="QR CODE PARA PAGAMENTO PIX">
+								<!-- Implementa Boleto -->
+								 
 							</fieldset>
 						<?php
 					}
@@ -524,5 +528,13 @@
 				return $BanVetor[1][$nCont];
 			}
 		}
+	}
+
+	function retornaCartao(){
+		$_GET['Card'] = substr($_GET['Card'], 2, strlen($_GET['Card']));;
+		$Cartao = new Cartao(Email: $_SESSION['Email']);
+		$Ret = $Cartao->getCartao($_GET['Card']);
+		$Ret[0]['bandeira'] = retornaClasseCartao($Ret[0]['nome_ban']);
+		print(json_encode($Ret));//Retorna um JSON dos dados
 	}
 ?>

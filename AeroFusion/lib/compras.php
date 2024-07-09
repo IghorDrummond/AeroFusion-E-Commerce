@@ -1056,7 +1056,12 @@ namespace Pedido {
                         en.referencia,
                         en.cep,
                         en.uf,
-						cad.numero_cartao,
+						CONCAT(
+							SUBSTRING(cad.numero_cartao, 1, 4), ' ',
+							SUBSTRING(cad.numero_cartao, 5, 4), ' ',
+							SUBSTRING(cad.numero_cartao, 9, 4), ' ',
+							SUBSTRING(cad.numero_cartao, 13, 4)
+						) AS numero_cartao,
 						cad.nome_cartao,
 						DATE_FORMAT(cad.validade, '%m/%Y') AS validade,
 						cad.cvv,

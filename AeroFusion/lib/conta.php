@@ -1105,6 +1105,7 @@
 			private $Operadora = null;
 			private $IdCli = null;
 			private $IdBan = null;
+			private $IdCard = null;
 
 			//construtor
 			public function __construct(
@@ -1140,7 +1141,8 @@
 				}
 			}
 
-			public function getCartao(){
+			public function getCartao($Cartao){
+				$this->IdCard = (empty($Cartao) or is_null($Cartao)) ? '' : $Cartao;
 				$this->montaQuery(3);
 				$Ret = $this->getDados();
 				return $Ret;
@@ -1191,16 +1193,26 @@
 				}else if($Opc === 3){
 					$this->Query =  " 
 						SELECT
-							cd.*, 
-							bd.*,
+							cd.id_card,
+							cd.cvv,
+							CONCAT(
+								SUBSTRING(cd.numero_cartao, 1, 4), ' ',
+								SUBSTRING(cd.numero_cartao, 5, 4), ' ',
+								SUBSTRING(cd.numero_cartao, 9, 4), ' ',
+								SUBSTRING(cd.numero_cartao, 13, 4)
+							) AS numero_cartao,
+							cd.nome_cartao,
+							bd.nome_ban,
+							bd.img_ban,
 							DATE_FORMAT(cd.validade, '%m/%Y') AS validade_formatada
 						FROM
 							cartoes cd
 						INNER JOIN 
 							bandeiras bd ON bd.id_ban = cd.id_ban
 						WHERE
-							cd.id_cliente = $this->IdCli;
+							cd.id_cliente = $this->IdCli
 					";
+					$this->Query .= empty($this->IdCard) ? '' : " AND cd.id_card =  $this->IdCard ";
 				}
 			}
 		}

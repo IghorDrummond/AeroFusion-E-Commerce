@@ -585,29 +585,32 @@ function finalizarPedido() {
     }
 }
 /*
-Função: finalizarPedido()
-Descrição: finalizar Pedido
+Função: cartaoSelecionado(Elemento selecionado)
+Descrição: Seleciona um novo cartão
 Data: 07/07/2024
 Programador: Ighor Drummond   
 */
 function cartaoSelecionado(element) {
     var elementoPai = element.parentElement;
-    var ElementosFilhos = {
-        Cartao: elementoPai.getElementsByTagName('h3')[0].textContent,
-        Validade: elementoPai.getElementsByTagName('time')[0].textContent,
-        Nome: elementoPai.getElementsByTagName('small')[0].textContent,
-        Bandeira: elementoPai.getElementsByTagName('img')[0].alt,
-        SrcBand: elementoPai.getElementsByTagName('img')[0].src
-    }
+    var Card = elementoPai.id;
+    $.ajax({
+        url: 'script/pedidos.php?Opc=11&Card=' + encodeURIComponent(Card),
+        type: 'POST',
+        dataType: 'json',
+        success: function(CardDate){
+            if(Object.values(CardDate).every(value => value)){
+                Cartao = document.getElementById('cartao');//Recebe o elemento Cartão
+                trocarCor(CardDate[0].bandeira);//Troca Cor do Cartão
+                Cartao.getElementsByTagName('img')[0].src = CardDate[0].img_ban;//Troca bandeira do cartão
+                $('#nome_cartao').val(CardDate[0].nome_cartao);
+                $('#vencimento').val(CardDate[0].validade_formatada); 
+                $('#numero_cartao').val(CardDate[0].numero_cartao);  
+                $('#cvv').val(CardDate[0].cvv); 
+            }
+        },
+        error: function(xhr, status, error){
+            alerta('Não foi possivel buscar o seu cartão no banco de dados. Tente novamente ou mais tarde', 0);
+        }
+    });
 
-    //Valida se não há dados vazio
-    if (Object.values(ElementosFilhos).every(value => value)) {
-        Cartao = document.getElementById('cartao');//Recebe o elemento Cartão
-        trocarCor(ElementosFilhos.Bandeira);//Troca Cor do Cartão
-        Cartao.getElementsByTagName('img')[0].src = ElementosFilhos.SrcBand;//Troca bandeira do cartão
-        document.getElementById('nome_cartao').value = ElementosFilhos.Nome.substr(5, ElementosFilhos.Nome.length-1);
-        document.getElementById('numero_cartao').value = ElementosFilhos.Cartao.substr(7, ElementosFilhos.Cartao.length-1);  
-        //document.getElementById('cvv').value = 
-        document.getElementById('vencimento').value = ElementosFilhos.Validade; 
-    }
 }
