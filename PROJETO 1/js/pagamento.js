@@ -11,6 +11,7 @@ var Cartao = null;
 var numero = null;
 //String
 var End = '';
+var nAntCard = '';
 //Númerico
 var antLado = 0;
 //Array
@@ -593,6 +594,12 @@ Programador: Ighor Drummond
 function cartaoSelecionado(element) {
     var elementoPai = element.parentElement;
     var Card = elementoPai.id;
+
+    if(nAntCard === Card){
+        return null;
+    }
+
+    nAntCard = Card;
     $.ajax({
         url: 'script/pedidos.php?Opc=11&Card=' + encodeURIComponent(Card),
         type: 'POST',
@@ -612,5 +619,4 @@ function cartaoSelecionado(element) {
             alerta('Não foi possivel buscar o seu cartão no banco de dados. Tente novamente ou mais tarde', 0);
         }
     });
-
 }

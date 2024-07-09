@@ -345,7 +345,6 @@
 					</ul>
 					<div class="clear"></div>
 				</div>
-				<span class="text-primary">Mudar Endereço</span>
 				<h1>Total: R$ <?php echo ($Pedido[0]['valor_total']); ?> </h1>
 				<!-- Forma de Pagamento -->
 				<form class="w-100 form-group mt-2" method="post" onsubmit="Pedido()">
@@ -391,15 +390,15 @@
 								<br><br>
 
 								<div class="caixa_cartao">
-									<div id="cartao" class="<?php print retornaClasseCartao($Pedido[0]['nome_ban']); ?>">
+									<div id="cartao" class="<?php print retornaClasseCartao($Cartao[0]['nome_ban']); ?>">
 
 										<!-- Parte frontal do Cartão -->
 										<div class="cartaoLado d-flex flex-column">
-											<img class="img-fluid ml-auto" src="<?php echo(is_null($Pedido[0]['nome_cartao']) || empty($Pedido[0]['nome_cartao']) ? 'https://cdn-icons-png.flaticon.com/512/2695/2695969.png' : $Pedido[0]['img_ban']);   ?>" name="operadora" alt="Operadora Cartão" width="50">
+											<img class="img-fluid ml-auto" src="<?php echo(is_null($Cartao[0]['nome_cartao']) || empty($Cartao[0]['nome_cartao']) ? 'https://cdn-icons-png.flaticon.com/512/2695/2695969.png' : $Cartao[0]['img_ban']);   ?>" name="operadora" alt="Operadora Cartão" width="50">
 											<label for="">Nome impresso</label>
-											<input type="text" id="nome_cartao" placeholder="FULANO DE TAL" name="nome_cartao" value="<?php print !empty($Pedido[0]['nome_cartao']) ? $Pedido[0]['nome_cartao'] : ''?>" required>
+											<input type="text" id="nome_cartao" placeholder="FULANO DE TAL" name="nome_cartao" value="<?php print !empty($Cartao[0]['nome_cartao']) ? $Cartao[0]['nome_cartao'] : ''?>" required>
 											<label>Número do cartão</label>
-											<input id="numero_cartao" name="numero_cartao" type="text" placeholder="0000 0000 0000 0000" maxlength="19" maxlength="19" required value="<?php print !empty($Pedido[0]['numero_cartao']) ? $Pedido[0]['numero_cartao'] : ''?>" onchange="bandeira(this)" onkeyup=" maskNumero(this)">
+											<input id="numero_cartao" name="numero_cartao" type="text" placeholder="0000 0000 0000 0000" maxlength="19" maxlength="19" required value="<?php print !empty($Cartao[0]['numero_cartao']) ? $Cartao[0]['numero_cartao'] : ''?>" onchange="bandeira(this)" onkeyup=" maskNumero(this)">
 											<button type="button" title="Virar cartão" class="ml-auto" onclick="virarCartao(1)">
 												Virar<i class="fa-solid fa-hand-point-right fa-xl m-3"></i>
 											</button>
@@ -411,11 +410,11 @@
 											<div class="d-flex flex-wrap data-info">
 												<div>
 													<label>Data Expiração</label><br>
-													<input id="vencimento" name="vencimento" type="text" placeholder="00/0000" maxlength="7" onkeyup="maskValidade(this)" required value="<?php print !empty($Pedido[0]['validade']) ? $Pedido[0]['validade'] : ''?>">
+													<input id="vencimento" name="vencimento" type="text" placeholder="00/0000" maxlength="7" onkeyup="maskValidade(this)" required value="<?php print !empty($Cartao[0]['validade_formatada']) ? $Cartao[0]['validade_formatada'] : ''?>">
 												</div>
 												<div>
 													<label>CVV</label><br>
-													<input id="cvv" name="cvv" type="text" placeholder="000" maxlength="3" required value="<?php print !empty($Pedido[0]['cvv']) ? $Pedido[0]['cvv'] : ''?>">
+													<input id="cvv" name="cvv" type="text" placeholder="000" maxlength="3" required value="<?php print !empty($Cartao[0]['cvv']) ? $Cartao[0]['cvv'] : ''?>">
 												</div>
 											</div>
 											<button type="button" title="Virar cartão" class="ml-auto" onclick="virarCartao(0)">
@@ -481,7 +480,38 @@
 								</div>
 								<br><br>
 								<!-- Implementa Boleto -->
-								 
+								<ul class="list-group text-dark">
+									<li class="list-group-item">
+										<b>Total - </b>R$ <?php echo($Pedido[0]['valor_total']) ?>
+									</li>
+									<li class="list-group-item">
+										<b>Número do Cliente -</b> #<?php echo($Pedido[0]['id_cliente']) ?>
+									</li>
+									<li class="list-group-item">
+										<b>Vencimento - </b><time></time>
+									</li>
+									<li class="list-group-item">
+										<b>Items:</b><br> 
+										<?php 
+											foreach ($Pedido as $Ped) {
+												echo(mb_convert_case($Ped['nome'], MB_CASE_TITLE, 'UTF-8'));
+												if($Ped['promocao_ativo'] === 1){
+													echo "
+														- De:<del> R$ {$Ped['preco']} </del> Por: R$ {$Ped['promocao']}
+													";
+												}else{
+													echo "
+														- R$ {$Ped['preco']}
+													";												
+												}
+												echo('<br>');
+											}
+										?>
+									</li>
+									<li class="list-group-item">
+
+									</li>
+								</ul>
 							</fieldset>
 						<?php
 					}

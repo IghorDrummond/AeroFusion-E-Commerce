@@ -1055,19 +1055,7 @@ namespace Pedido {
                         en.complemento,
                         en.referencia,
                         en.cep,
-                        en.uf,
-						CONCAT(
-							SUBSTRING(cad.numero_cartao, 1, 4), ' ',
-							SUBSTRING(cad.numero_cartao, 5, 4), ' ',
-							SUBSTRING(cad.numero_cartao, 9, 4), ' ',
-							SUBSTRING(cad.numero_cartao, 13, 4)
-						) AS numero_cartao,
-						cad.nome_cartao,
-						DATE_FORMAT(cad.validade, '%m/%Y') AS validade,
-						cad.cvv,
-						cad.id_ban,
-						bd.img_ban,
-						bd.nome_ban
+                        en.uf
 					FROM
 						Pedidos as Pd
 					LEFT JOIN
@@ -1076,10 +1064,6 @@ namespace Pedido {
 						cliente as cli ON cli.id = Pd.id_cliente
 					LEFT JOIN
 						endereco as en ON en.id_end = Pd.id_end
-					LEFT JOIN
-						cartoes as cad ON cad.id_cliente = cli.id
-					LEFT JOIN 
-						bandeiras as bd ON bd.id_ban = cad.id_ban
 					INNER JOIN 
 						item_pedidos as Ip ON Ip.id_ped = Pd.id_ped
 					INNER JOIN 
