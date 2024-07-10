@@ -620,3 +620,7 @@ function cartaoSelecionado(element) {
         }
     });
 }
+
+function baixarBoleto(){
+    
+}

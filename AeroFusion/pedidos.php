@@ -480,10 +480,8 @@
 								</div>
 								<br><br>
 								<!-- Implementa Boleto -->
+								 <h2>Boleto Gerado:</h2>
 								<ul class="list-group text-dark">
-									<li class="list-group-item">
-										<b>Total - </b>R$ <?php echo($Pedido[0]['valor_total']) ?>
-									</li>
 									<li class="list-group-item">
 										<b>Número do Cliente -</b> #<?php echo($Pedido[0]['id_cliente']) ?>
 									</li>
@@ -509,7 +507,12 @@
 										?>
 									</li>
 									<li class="list-group-item">
-
+										<b>AeroFusion Company S.A</b>
+										<b>CNPJ: 61.416.543/0001-89</b><br>
+										<b>Cliente - </b><?php echo($_SESSION['Nome']) ?> <b>Email - </b><?php echo($_SESSION['Email']) ?>
+									</li>
+									<li class="list-group-item text-center">
+										<button type="button" class="btn btn-primary p-2" onclick="baixaBoleto()">Baixar Boleto</button>
 									</li>
 								</ul>
 							</fieldset>
