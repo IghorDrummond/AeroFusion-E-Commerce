@@ -621,6 +621,6 @@ function cartaoSelecionado(element) {
     });
 }
 
-function baixarBoleto(){
-    
+function baixaBoleto(){
+    $('body').load('script/pedidos.php?Opc=12');
 }

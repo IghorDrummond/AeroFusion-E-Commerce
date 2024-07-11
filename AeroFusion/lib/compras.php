@@ -1433,7 +1433,7 @@ namespace Pedido {
 
 			//Informações para cliente
 			$this->dadosboleto['demonstrativo1'] = "Pagamento de Compra na Loja " . self::nome_emp;
-			$this->dadosboleto['demonstrativo2'] = "Mensalidade referente a " . self::nome_emp . " Taxa Bancária - R$ " number_format(self::taxa_boleto, 2, ',', '');
+			$this->dadosboleto['demonstrativo2'] = "Mensalidade referente a " . self::nome_emp . " Taxa Bancária - R$ ". number_format(self::taxa_boleto, 2, ',', '');
 			$this->dadosboleto['demonstrativo3'] = self::identificador;
 			$this->dadosboleto["instrucoes1"] = "- Sr. Caixa, cobrar multa de 2% após o vencimento";
 			$this->dadosboleto["instrucoes2"] = "- Receber até 10 dias após o vencimento";
@@ -1486,30 +1486,40 @@ namespace Pedido {
 		 */
 		public function getBoleto(){
 			//Formata números para um padrão
-			$this->codigo_banco_com_dv = $this->geraCodigo();
+			$this->dadosboleto['codigo_banco_com_dv'] = $this->geraCodigo();
 			$this->fator_vencimento = $this->fator_vencimento();
 			//valor tem 10 digitos sem vírgula
 			$this->dadosboleto['valor_boleto'] = $this->formata_numero($this->dadosboleto['valor_boleto'], 10, '0', 1);
 			//agencia tem 4 digitos
-			$this->dadosboleto['agencia'] = formata_numero($this->dadosboleto['agencia'], 4, '0', 0);
+			$this->dadosboleto['agencia'] = $this->formata_numero($this->dadosboleto['agencia'], 4, '0', 0);
 			//conta tem 6 digitos
-			$this->dadosboleto['conta'] = formata_numero($this->dadosboleto['conta'], 6, '0', 0);
+			$this->dadosboleto['conta'] = $this->formata_numero($this->dadosboleto['conta'], 6, '0', 0);
 			//digitod a conta tem 1 digito
-			$this->dadosboleto['conta_dv'] = formata_numero($this->dadosboleto['conta_dv'], 1, '0', 0);
+			$this->dadosboleto['conta_dv'] = $this->formata_numero($this->dadosboleto['conta_dv'], 1, '0', 0);
 			//nosso número tem 11 digitos com o digito
-			$this->dadosboleto['nosso_numero'] = formata_numero(self::carteira, 2, '0', 0) . formata_numero(self::nosso_numero, 11, '0', 0);
-
-			$this->dadosboleto['nosso_numero_dv'] = digito_verificador("");
-
+			$this->dadosboleto['nosso_numero'] = $this->formata_numero(self::carteira, 2, '0', 0) . $this->formata_numero(self::nosso_numero, 11, '0', 0);
+			//dv do nosso numero
+			$this->dadosboleto['nosso_numero_dv'] = $this->digito_verificador($this->dadosboleto['nosso_numero'], 0);
 			//conta cedente com 7 digitos
-			$this->dadosboleto['conta_cedente'] = formata_numero($this->dadosboleto['conta_cedente'], 7, '0', 0);
+			$this->dadosboleto['conta_cedente'] = $this->formata_numero($this->dadosboleto['conta_cedente'], 7, '0', 0);
 			//conta cedente com digito
-			$this->dadosboleto['conta_cedente_dv'] = formata_numero($this->dadosboleto['conta_cedente'], 1, '0', 0);
-
+			$this->dadosboleto['conta_cedente_dv'] = $this->formata_numero($this->dadosboleto['conta_cedente'], 1, '0', 0);
 			//formatar digito verificador
 			$digito_barra = self::codigoBanco . self::nummoeda . $this->fator_vencimento . $this->dadosboleto['valor_boleto'] . $this->dadosboleto['agencia'] . $this->dadosboleto['nosso_numero_dv'] . $this->dadosboleto['conta_cedente'] . "0";
 			//43 numeros para o calculo do digito de verificador do código de barras
-			$codigo_barra = digito_verificador("");
+			$digito_barra = $this->digito_verificador($digito_barra, 2);
+			//agora nova linha com o codigo de barra completo com 44 digitos
+			$this->dadosboleto['codigo_barras'] =  self::codigoBanco . self::nummoeda . $digito_barra . $this->fator_vencimento . $this->dadosboleto['valor_boleto'] . $this->dadosboleto['agencia'] . $this->dadosboleto['nosso_numero_dv'] . $this->dadosboleto['conta_cedente'] . "0";
+			//Envia dados importantes
+			$this->dadosboleto['linha_digitavel'] = monta_linha_digitavel($this->dadosboleto['codigo_barras']);
+			$this->dadosboleto['agencia_codigo'] = "{$this->dadosboleto['agencia']}-{$this->dadosboleto['agencia_dv']} / {$this->dadosboleto['conta_cedente']}-{$this->dadosboleto['conta_cedente_dv']}"; 
+			$this->dadosboleto['nosso_numero'] = substr($this->dadosboleto['nosso_numero'], 0, 2) . '/' . substr($this->dadosboleto['nosso_numero'], 2). '-' . $this->dadosboleto['nosso_numero_dv']; 
+			/*
+				lista para eu (ighor) aplicar dentro da minha classe conforme o manual de boletos do bradesco.
+				adicionar _daytop
+				adicionar monta_linha_digitavel
+				adicionar modulo_10
+			*/
 		}
 
 		/*
@@ -1563,28 +1573,8 @@ namespace Pedido {
 		 */
 		private function geraCodigo(){
 			$Ret = "";
-			$total = 0;
-			$fator = 2;
-			$nCont = 0;
-			$numero = "";
-
 			$Ret = substr(self::codigoBanco, 0, 3);//Recebe o código do banco
-
-			//Separa os numeros
-			for($nCont = strlen($Ret) - 1; $nCont >= 0; $nCont--){
-				$numero = (int)(substr($Ret, $nCont-1, $nCont));
-				$total += ($numero * fator);
-				if($fator === 9){
-					$fator = 1;
-				}
-				$fator++;
-			}
-			//Calcula o modulo 11 de acordo com o banco bradesco
-			$total *= 10;
-			$total = ($total % 11); //Receberá o digito pelo resto da divisão
-			$total = $total === 10 ? 0 : $total;
-
-			return $Ret .= " - " . strval($total);
+			return $Ret .= " - " . $this->modulo_11($Ret,9,0);
 		}
 
 		/*
@@ -1597,8 +1587,8 @@ namespace Pedido {
 			$data = explode("/", self::data_venc);
 			$dia = $data[0];
 			$mes = $data[1];
-			$ano = $ano[2];
-			return(abs((_dateToDays("1997","10","07")) - (_dateToDays($ano, $mes, $dia))));
+			$ano = $data[2];
+			return(abs(($this->_dateToDays("1997","10","07")) - ($this->_dateToDays($ano, $mes, $dia))));
 		}
 
 		/*
@@ -1619,6 +1609,85 @@ namespace Pedido {
 			}
 			//Retorna numero formatado
 			return $numero;
+		}
+
+		/*
+		 *Metodo: digito_verificador(valor a ser verificado, opção)
+		 *Descrição: 
+		 *Data: 10/07/2024
+		 *Programador(a): Ighor Drummond
+		 */
+		private function digito_verificador($valor, $opc){
+			$resto = 0;
+			$digito = 0;
+			$Ret = null;
+			//Verificador para nosso numero
+			if($opc === 1){	
+				$digito = 11 - ($this->modulo_11($valor, 7, 1));
+
+				if($digito === 10){
+					$Ret = "P";
+				}else if($digito === 11){
+					$Ret = 0;
+				}else{
+					$Ret = $digito;
+				}
+			}else if($opc === 2){//Verificador para barra
+				$resto = $this->modulo_11($valor, 9, 1); 
+				if($resto === 0 or $resto === 1 or $resto === 10){
+					$Ret = 1;
+				}else{
+					$Ret = 11 - $resto;
+				}
+			}
+
+			return $Ret;
+		}
+
+		/*
+		 *Metodo: modulo_11(valor a ser calculado, base, opção)
+		 *Descrição: Responsavel por calcular do modulo 11 para geração do digito verificador
+		 *Data: 10/07/2024
+		 *Programador(a): Ighor Drummond
+		*/
+		private function modulo_11($val, $base, $opc){
+			$Ret = null;
+			$total = 0;
+			$fator = 2;
+			$nCont = 0;
+			$numero = "";
+
+			//Separa os numeros
+			for($nCont = strlen($val) - 1; $nCont >= 0; $nCont--){
+				$numero = (int)(substr($val, $nCont-1, $nCont));
+				$total += ($numero * $fator);
+				if($fator === $base){
+					$fator = 1;
+				}
+				$fator++;
+			}
+
+			//Calcula o modulo 11 de acordo com o banco bradesco
+			if($opc === 0){
+				$total *= 10;
+				$total = ($total % 11); //Receberá o digito pelo resto da divisão
+				$total = $total === 10 ? 0 : $total;
+				$Ret = $total;
+			}elseif($opc === 1){
+				$Ret = $total % 11;
+			}
+
+			return $Ret;
+		}
+
+		/*
+		 *Metodo: modulo_11(valor a ser calculado, base, opção)
+		 *Descrição: 
+		 *Data: 10/07/2024
+		 *Programador(a): Ighor Drummond
+		*/
+		private function _dateToDays($ano,$mes,$dia){
+
 		}
 	}
 }
