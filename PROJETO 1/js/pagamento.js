@@ -622,6 +622,7 @@ function cartaoSelecionado(element) {
 }
 
 function baixaBoleto(){
+    telaCarregamento(true);
     $.ajax({
         url: 'script/pedidos.php?Opc=12',
         type: 'GET',
@@ -645,13 +646,16 @@ function baixaBoleto(){
                     html2canvas:  { scale: 2, logging: true, dpi: 192, letterRendering: true },
                     jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
                 }).then(function() {
+                    telaCarregamento(false);
                     alerta("Boleto gerado com sucesso!", 1);
                 }).catch(function(error) {
+                    telaCarregamento(false);
                     alerta('Erro ao gerar PDF!', 0);
                 });
             };            
         },
         error: function(xhr, status, error) {     
+            telaCarregamento(false);
             alerta("Erro ao carregar boleto! ", 0);
         }
     });   
