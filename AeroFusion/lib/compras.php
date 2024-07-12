@@ -1371,102 +1371,114 @@ namespace Pedido {
 	 */
 	class Boleto
 	{
-		//Constantes
-		const segundos = 86400;
-		const dias_de_prazo_para_pagamento = 5;
-		const taxa_boleto = 2.95;
-		const data_venc = date("d/m/Y", time() + (self::dias_de_prazo_para_pagamento * self::segundos));
-		const nosso_numero = "75896452";
-		const numero_documento = self::nosso_numero;
-		const agencia = "1100";
-		const agendica_dg = "1";
-		const conta = "0102003";
-		const conta_dg = "4";
-		const carteira = "4";
-		const identificador = "AeroFusion - Desenvolvido por Ighor Drummond - 2024";
-		const cnpj = "61.416.543/0001-89";
-		const nome_emp = "AeroFusion Company LTDA.";
-		const contato = "suporte@aerofusion.com";
-		const codigoBanco = "237";
-		const nummoeda = "9";
+	    // Constantes
+	    const SEGUNDOS = 86400;
+	    const DIAS_DE_PRAZO_PARA_PAGAMENTO = 5;
+	    const TAXA_BOLETO = 2.95;
+	    const NOSSO_NUMERO = "75896452";
+	    const NUMERO_DOCUMENTO = self::NOSSO_NUMERO;
+	    const AGENCIA = "1100";
+	    const AGENCIA_DG = "1";
+	    const CONTA = "0102003";
+	    const CONTA_DG = "4";
+	    const CARTEIRA = "4";
+	    const IDENTIFICADOR = "AeroFusion - Desenvolvido por Ighor Drummond - 2024";
+	    const CNPJ = "61.416.543/0001-89";
+	    const NOME_EMP = "AeroFusion Company LTDA.";
+	    const CONTATO = "suporte@aerofusion.com";
+	    const CODIGO_BANCO = "237";
+	    const NUMMOEDA = "9";
 
+	    // Atributos
+	    private $valor_boleto = null;
+	    private $dadosboleto = [];
+	    private $con = null;
+	    private $Query = null;
+	    private $stmt = null;
+	    private $fator_vencimento = null;
+	    private $codigo_banco_com_dv = null;
+	    private $data_vencimento = null;
 
-		//Atributos
-		private $valor_boleto = null;
-		private $dadosboleto = [];
-		private $con = null;
-		private $Query = null;
-		private $stmt = null;
-		private $fator_vencimento = null;
-		private $codigo_banco_com_dv = null;
+	    // Construtor
+	    function __construct(
+	        public $Email = null,
+	        public $Pedido  = null
+	    )
+	    {
+	    	//Configura data do servidor
+	        date_default_timezone_set('America/Sao_Paulo');
+	        // Calcula a data de vencimento
+	        $this->data_vencimento = date("d/m/Y", time() + (self::DIAS_DE_PRAZO_PARA_PAGAMENTO * self::SEGUNDOS));
 
-		//Construtor
-		function __construct(
-			public $IdPed = null,
-			public $Email = null,
-			public $valor_cobrado = null,
-		)
-		{
-			//Inicia conexão com o banco de dados
-			$this->con = new \IniciaServer();
-			$this->con = $this->con->conexao();
+	        // Inicia conexão com o banco de dados
+	        $this->con = new \IniciaServer();
+	        $this->con = $this->con->conexao();
 
-			//Formata virgula para ponto
-			$this->valor_cobrado = number_format(',', '.', $this->valor_cobrado);
-			//Cacula valor cobrado pela taxa do boleto
-			$this->valor_boleto = number_format($this->valor_cobrado + self::taxa_boleto, 2, ',', '');
+	        // Formata vírgula para ponto
+	        $this->Pedido[0]['valor_total']  = str_replace(',', '.', $this->Pedido[0]['valor_total'] );
+	        //Converte para float o valor cobrado
+	        $this->Pedido[0]['valor_total']  = (float)$this->Pedido[0]['valor_total'] ;
+	        // Calcula valor cobrado pela taxa do boleto
+	        $this->valor_boleto = number_format($this->Pedido[0]['valor_total']  + self::TAXA_BOLETO, 2, ',', '');
 
-			//Inserir cabeçalho do boleto
-			$this->dadosboleto['nosso_numero'] = self::nosso_numero;
-			$this->dadosboleto['numero_documento'] = self::numero_documento;
-			$this->dadosboleto['data_vencimento'] = self::data_venc;
-			$this->dadosboleto['tada_documento'] = date("d/m/Y");
-			$this->dadosboleto['data_processamento'] = date("d/m/Y");
-			$this->dadosboleto['valor_boleto'] = $this->valor_cobrado;
+	        // Inserir cabeçalho do boleto
+	        $this->dadosboleto['nosso_numero'] = self::NOSSO_NUMERO;
+	        $this->dadosboleto['numero_documento'] = self::NUMERO_DOCUMENTO;
+	        $this->dadosboleto['data_vencimento'] = $this->data_vencimento;
+	        $this->dadosboleto['data_documento'] = date("d/m/Y");
+	        $this->dadosboleto['data_processamento'] = date("d/m/Y");
+			$this->dadosboleto['valor_cobrado '] = $this->Pedido[0] ;
+	        $this->dadosboleto['valor_boleto'] = $this->valor_boleto;
 
-			//Dados do cliente
-			$this->montaQuery(0);
-			$this->getDados();//Retorna dados do cliente logado
-			$this->dadosboleto['sacado'] = $this->stmt[0]['nome'];
-			$this->dadosboleto['endereco1'] = ($this->stmt[0]['rua'] . " - " . $this->stmt[0]['bairro']);
-			$this->dadosboleto['endereco2'] = ($this->stmt[0]['cidade'] . " - " .  $this->stmt[0]['uf'] . " - CEP: " . $this->stmt[0]['cep'] );
+	        // Dados do cliente
+	        $this->montaQuery();
+	        $this->getDados(); // Retorna dados do cliente logado
+	        $this->dadosboleto['sacado'] = $this->stmt['nome'];
+	        $this->dadosboleto['endereco1'] = ($this->stmt['rua'] . " - " . $this->stmt['bairro']);
+	        $this->dadosboleto['endereco2'] = ($this->stmt['cidade'] . " - " .  $this->stmt['uf'] . " - CEP: " . $this->stmt['cep']);
 
-			//Informações para cliente
-			$this->dadosboleto['demonstrativo1'] = "Pagamento de Compra na Loja " . self::nome_emp;
-			$this->dadosboleto['demonstrativo2'] = "Mensalidade referente a " . self::nome_emp . " Taxa Bancária - R$ ". number_format(self::taxa_boleto, 2, ',', '');
-			$this->dadosboleto['demonstrativo3'] = self::identificador;
-			$this->dadosboleto["instrucoes1"] = "- Sr. Caixa, cobrar multa de 2% após o vencimento";
-			$this->dadosboleto["instrucoes2"] = "- Receber até 10 dias após o vencimento";
-			$this->dadosboleto["instrucoes3"] = "- Em caso de dúvidas entre em contato conosco: " . self::contato;
-			$this->dadosboleto["instrucoes4"] = "&nbsp; " . self::identificador;
-			
-			//Dados do boleto bancário especifico
-			$this->dadosboleto["quantidade"] = "001";
-			$this->dadosboleto["valor_unitario"] = $this->valor_boleto;
-			$this->dadosboleto["especie"] = "R$";
-			$this->dadosboleto["especie_doc"] = "DS";			
+	        // Informações para cliente
+	        $this->dadosboleto['demonstrativo1'] = "Pagamento de Compra na Loja " . self::NOME_EMP;
+	        $this->dadosboleto['demonstrativo2'] = "Mensalidade referente a " . self::NOME_EMP . " Taxa Bancária - R$ " . number_format(self::TAXA_BOLETO, 2, ',', '');
+	        $this->dadosboleto['demonstrativo3'] = self::IDENTIFICADOR;
+	        $this->dadosboleto["instrucoes1"] = "- Sr. Caixa, cobrar multa de 2% após o vencimento";
+	        $this->dadosboleto["instrucoes2"] = "- Receber até 10 dias após o vencimento";
+	        $this->dadosboleto["instrucoes3"] = "- Em caso de dúvidas entre em contato conosco: " . self::CONTATO;
 
-			//imprime items e seus valores
+			//Imprime os items desejado
+			$this->dadosboleto['instrucoes4'] = "Items:";
+			foreach($this->Pedido as $Prod){
+				$this->dadosboleto["instrucoes4"] .= "<br> Nome: {$Prod['nome']} - Quant: {$Prod['quant']} - Preço: R$ ";
+				$this->dadosboleto["instrucoes4"] .= $Prod['promocao_ativo'] === 1 ? $Prod['promocao'] : $Prod['preco'];
+			}
 
-			// Dados da conta Bradesco
-			$this->dadosboleto["agencia"] = self::agencia;//Num da agencia, sem digito
-			$this->dadosboleto["agencia_dv"] = self::agendica_dg;// Digito do Num da agencia
-			$this->dadosboleto["conta"] = self::conta;// Num da conta, sem digito
-			$this->dadosboleto["conta_dv"] = self::conta_dg;// Digito do Num da conta
+	        // Dados do boleto bancário específico
+	        $this->dadosboleto["quantidade"] = "001";
+	        $this->dadosboleto["valor_unitario"] = strval($this->Pedido[0]['valor_total'] ) . " + Taxa de " . self::TAXA_BOLETO . " do boleto";
+	        $this->dadosboleto["especie"] = "R$";
+	        $this->dadosboleto["especie_doc"] = "DS";        
+			$this->dadosboleto['aceite'] = "Aceitado";    
 
-			// Dados da conta do cliente
-			$this->dadosboleto["conta_cedente"] = self::conta; // ContaCedente do Cliente, sem digito (Somente Números)
-			$this->dadosboleto["conta_cedente_dv"] = self::conta_dg; // Digito da ContaCedente do Cliente
-			$this->dadosboleto["carteira"] = self::carteira;  // Código da Carteira: pode ser 06 ou 03
+	        // Imprime itens e seus valores
 
-			//Dados extras do boleto
-			$this->dadosboleto["identificacao"] = self::identificador;
-			$this->dadosboleto["cpf_cnpj"] = self::cnpj;
-			$this->dadosboleto["endereco"] = "Avenida São paulo";
-			$this->dadosboleto["cidade_uf"] = "São Paulo / SP";
-			$this->dadosboleto["cedente"] = self::nome_emp;						
-		}
+	        // Dados da conta Bradesco
+	        $this->dadosboleto["agencia"] = self::AGENCIA; // Num da agência, sem dígito
+	        $this->dadosboleto["agencia_dv"] = self::AGENCIA_DG; // Dígito do Num da agência
+	        $this->dadosboleto["conta"] = self::CONTA; // Num da conta, sem dígito
+	        $this->dadosboleto["conta_dv"] = self::CONTA_DG; // Dígito do Num da conta
 
+	        // Dados da conta do cliente
+	        $this->dadosboleto["conta_cedente"] = self::CONTA; // ContaCedente do Cliente, sem dígito (Somente Números)
+	        $this->dadosboleto["conta_cedente_dv"] = self::CONTA_DG; // Dígito da ContaCedente do Cliente
+	        $this->dadosboleto["carteira"] = self::CARTEIRA; // Código da Carteira: pode ser 06 ou 03
+
+	        // Dados extras do boleto
+	        $this->dadosboleto["identificacao"] = self::IDENTIFICADOR;
+	        $this->dadosboleto["cpf_cnpj"] = self::CNPJ;
+	        $this->dadosboleto["endereco"] = "Avenida São Paulo";
+	        $this->dadosboleto["cidade_uf"] = "São Paulo / SP";
+	        $this->dadosboleto["cedente"] = self::NOME_EMP;
+	    }
 		//Métodos
 		/*
 		 *Metodo:  getDadosBoleto()
@@ -1476,50 +1488,6 @@ namespace Pedido {
 		 */
 		public function getDadosBoleto(){
 			return $this->dadosboleto;
-		}
-
-		/*
-		 *Metodo: getBoleto()
-		 *Descrição: Responsavel por preparar e retornar o boleto
-		 *Data: 09/07/2024
-		 *Programador(a): Ighor Drummond
-		 */
-		public function getBoleto(){
-			//Formata números para um padrão
-			$this->dadosboleto['codigo_banco_com_dv'] = $this->geraCodigo();
-			$this->fator_vencimento = $this->fator_vencimento();
-			//valor tem 10 digitos sem vírgula
-			$this->dadosboleto['valor_boleto'] = $this->formata_numero($this->dadosboleto['valor_boleto'], 10, '0', 1);
-			//agencia tem 4 digitos
-			$this->dadosboleto['agencia'] = $this->formata_numero($this->dadosboleto['agencia'], 4, '0', 0);
-			//conta tem 6 digitos
-			$this->dadosboleto['conta'] = $this->formata_numero($this->dadosboleto['conta'], 6, '0', 0);
-			//digitod a conta tem 1 digito
-			$this->dadosboleto['conta_dv'] = $this->formata_numero($this->dadosboleto['conta_dv'], 1, '0', 0);
-			//nosso número tem 11 digitos com o digito
-			$this->dadosboleto['nosso_numero'] = $this->formata_numero(self::carteira, 2, '0', 0) . $this->formata_numero(self::nosso_numero, 11, '0', 0);
-			//dv do nosso numero
-			$this->dadosboleto['nosso_numero_dv'] = $this->digito_verificador($this->dadosboleto['nosso_numero'], 0);
-			//conta cedente com 7 digitos
-			$this->dadosboleto['conta_cedente'] = $this->formata_numero($this->dadosboleto['conta_cedente'], 7, '0', 0);
-			//conta cedente com digito
-			$this->dadosboleto['conta_cedente_dv'] = $this->formata_numero($this->dadosboleto['conta_cedente'], 1, '0', 0);
-			//formatar digito verificador
-			$digito_barra = self::codigoBanco . self::nummoeda . $this->fator_vencimento . $this->dadosboleto['valor_boleto'] . $this->dadosboleto['agencia'] . $this->dadosboleto['nosso_numero_dv'] . $this->dadosboleto['conta_cedente'] . "0";
-			//43 numeros para o calculo do digito de verificador do código de barras
-			$digito_barra = $this->digito_verificador($digito_barra, 2);
-			//agora nova linha com o codigo de barra completo com 44 digitos
-			$this->dadosboleto['codigo_barras'] =  self::codigoBanco . self::nummoeda . $digito_barra . $this->fator_vencimento . $this->dadosboleto['valor_boleto'] . $this->dadosboleto['agencia'] . $this->dadosboleto['nosso_numero_dv'] . $this->dadosboleto['conta_cedente'] . "0";
-			//Envia dados importantes
-			$this->dadosboleto['linha_digitavel'] = monta_linha_digitavel($this->dadosboleto['codigo_barras']);
-			$this->dadosboleto['agencia_codigo'] = "{$this->dadosboleto['agencia']}-{$this->dadosboleto['agencia_dv']} / {$this->dadosboleto['conta_cedente']}-{$this->dadosboleto['conta_cedente_dv']}"; 
-			$this->dadosboleto['nosso_numero'] = substr($this->dadosboleto['nosso_numero'], 0, 2) . '/' . substr($this->dadosboleto['nosso_numero'], 2). '-' . $this->dadosboleto['nosso_numero_dv']; 
-			/*
-				lista para eu (ighor) aplicar dentro da minha classe conforme o manual de boletos do bradesco.
-				adicionar _daytop
-				adicionar monta_linha_digitavel
-				adicionar modulo_10
-			*/
 		}
 
 		/*
@@ -1544,9 +1512,8 @@ namespace Pedido {
 		 *Data: 09/07/2024
 		 *Programador(a): Ighor Drummond
 		 */
-		private function montaQuery($Opc){
-			if($Opc === 0){
-				$this->Query = "
+		private function montaQuery(){
+			$this->Query = "
 					SELECT
 						cli.nome,
 						cli.id,
@@ -1556,138 +1523,12 @@ namespace Pedido {
 						en.cep,
 						en.uf
 					FROM
-						cliente
+						cliente cli
 					INNER JOIN 
 						endereco as en ON cli.id = en.id_cliente
 					WHERE
-						email = '$this->Email'
-				";				
-			}
-		}
-
-		/*
-		 *Metodo: geraCodigo()
-		 *Descrição: Responsavel por gerar o código
-		 *Data: 09/07/2024
-		 *Programador(a): Ighor Drummond
-		 */
-		private function geraCodigo(){
-			$Ret = "";
-			$Ret = substr(self::codigoBanco, 0, 3);//Recebe o código do banco
-			return $Ret .= " - " . $this->modulo_11($Ret,9,0);
-		}
-
-		/*
-		 *Metodo: fator_vencimento()
-		 *Descrição: Responsavel por calcular o fator do vencimento
-		 *Data: 09/07/2024
-		 *Programador(a): Ighor Drummond
-		 */
-		private function fator_vencimento(){
-			$data = explode("/", self::data_venc);
-			$dia = $data[0];
-			$mes = $data[1];
-			$ano = $data[2];
-			return(abs(($this->_dateToDays("1997","10","07")) - ($this->_dateToDays($ano, $mes, $dia))));
-		}
-
-		/*
-		 *Metodo: formata_numero(numero a ser formatado, loop, dado inserido, opção a ser escolhida)
-		 *Descrição: Responsavel por formata numeros para um valor padrão
-		 *Data: 09/07/2024
-		 *Programador(a): Ighor Drummond
-		 */
-		private function formata_numero($numero, $limite, $insert, $Opc){
-			switch ($Opc) {
-				case 1:
-					$numero = str_replace(",", ".", $numero);
-					break;
-			}
-			//Formata numero
-			for($nCont = 0; $nCont <= $limite; $nCont++ ){
-				$numero = $insert . $numero;
-			}
-			//Retorna numero formatado
-			return $numero;
-		}
-
-		/*
-		 *Metodo: digito_verificador(valor a ser verificado, opção)
-		 *Descrição: 
-		 *Data: 10/07/2024
-		 *Programador(a): Ighor Drummond
-		 */
-		private function digito_verificador($valor, $opc){
-			$resto = 0;
-			$digito = 0;
-			$Ret = null;
-			//Verificador para nosso numero
-			if($opc === 1){	
-				$digito = 11 - ($this->modulo_11($valor, 7, 1));
-
-				if($digito === 10){
-					$Ret = "P";
-				}else if($digito === 11){
-					$Ret = 0;
-				}else{
-					$Ret = $digito;
-				}
-			}else if($opc === 2){//Verificador para barra
-				$resto = $this->modulo_11($valor, 9, 1); 
-				if($resto === 0 or $resto === 1 or $resto === 10){
-					$Ret = 1;
-				}else{
-					$Ret = 11 - $resto;
-				}
-			}
-
-			return $Ret;
-		}
-
-		/*
-		 *Metodo: modulo_11(valor a ser calculado, base, opção)
-		 *Descrição: Responsavel por calcular do modulo 11 para geração do digito verificador
-		 *Data: 10/07/2024
-		 *Programador(a): Ighor Drummond
-		*/
-		private function modulo_11($val, $base, $opc){
-			$Ret = null;
-			$total = 0;
-			$fator = 2;
-			$nCont = 0;
-			$numero = "";
-
-			//Separa os numeros
-			for($nCont = strlen($val) - 1; $nCont >= 0; $nCont--){
-				$numero = (int)(substr($val, $nCont-1, $nCont));
-				$total += ($numero * $fator);
-				if($fator === $base){
-					$fator = 1;
-				}
-				$fator++;
-			}
-
-			//Calcula o modulo 11 de acordo com o banco bradesco
-			if($opc === 0){
-				$total *= 10;
-				$total = ($total % 11); //Receberá o digito pelo resto da divisão
-				$total = $total === 10 ? 0 : $total;
-				$Ret = $total;
-			}elseif($opc === 1){
-				$Ret = $total % 11;
-			}
-
-			return $Ret;
-		}
-
-		/*
-		 *Metodo: modulo_11(valor a ser calculado, base, opção)
-		 *Descrição: 
-		 *Data: 10/07/2024
-		 *Programador(a): Ighor Drummond
-		*/
-		private function _dateToDays($ano,$mes,$dia){
-
+						cli.email = '$this->Email'
+			";				
 		}
 	}
 }

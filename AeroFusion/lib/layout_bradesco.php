@@ -69,6 +69,9 @@
       width: 50%;
       margin: auto;
     }
+    table{
+      margin: auto;
+    }
     -->
   </style>
 </head>
@@ -122,7 +125,7 @@
   </table>
   <table width=666 cellspacing=5 cellpadding=0 border=0 align=Default>
     <tr>
-      <td width=41><IMG SRC="img/BOLETO/logo_empresa.png"></td>
+      <td width=41><IMG SRC="img/BOLETO/logo_empresa.png" width="100" height="100" style="border: 1px solid black; margin-right: 15px;"></td>
       <td class=ti width=455><?php echo $dadosboleto["identificacao"]; ?> <?php echo isset($dadosboleto["cpf_cnpj"]) ? "<br>" . $dadosboleto["cpf_cnpj"] : '' ?><br>
         <?php echo $dadosboleto["endereco"]; ?><br>
         <?php echo $dadosboleto["cidade_uf"]; ?><br>
