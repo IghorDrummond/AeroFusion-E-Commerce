@@ -628,6 +628,7 @@ function baixaBoleto(){
         success: function(response) {
             //Abre uma página para mostrar boleto gerado no servidor
             var popupWindow = window.open('', '_blank', 'width=800,height=600');
+            let data_hoje  = new Date();
             popupWindow.document.open();
             popupWindow.document.write(response);
             popupWindow.document.close();
@@ -639,13 +640,11 @@ function baixaBoleto(){
                 // Usar a biblioteca html2pdf para gerar o PDF
                 html2pdf(popupWindow.document.body.innerHTML, {
                     margin:       0.5,
-                    filename:     'boleto_aerofusion.pdf',
+                    filename:     'boleto_aerofusion'+ data_hoje.getDate() + "-"+ data_hoje.getMonth() + "-" + data_hoje.getFullYear() + "-" + data_hoje.getHours() + ":" + data_hoje.getMinutes() +'.pdf',
                     image:        { type: 'jpeg', quality: 0.98 },
                     html2canvas:  { scale: 2, logging: true, dpi: 192, letterRendering: true },
                     jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
                 }).then(function() {
-                    // Fecha o popup após o download do PDF
-                    //popupWindow.close();
                     alerta("Boleto gerado com sucesso!", 1);
                 }).catch(function(error) {
                     alerta('Erro ao gerar PDF!', 0);
