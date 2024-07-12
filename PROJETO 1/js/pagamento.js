@@ -622,5 +622,38 @@ function cartaoSelecionado(element) {
 }
 
 function baixaBoleto(){
-    $('body').load('script/pedidos.php?Opc=12');
+    $.ajax({
+        url: 'script/pedidos.php?Opc=12',
+        type: 'GET',
+        success: function(response) {
+            //Abre uma página para mostrar boleto gerado no servidor
+            var popupWindow = window.open('', '_blank', 'width=800,height=600');
+            popupWindow.document.open();
+            popupWindow.document.write(response);
+            popupWindow.document.close();
+            popupWindow.document.title = "Boleto AeroFusion";
+
+            //Gerar um PDF da página
+            popupWindow.onload = function() {
+                popupWindow.document.write(response);
+                // Usar a biblioteca html2pdf para gerar o PDF
+                html2pdf(popupWindow.document.body.innerHTML, {
+                    margin:       0.5,
+                    filename:     'boleto_aerofusion.pdf',
+                    image:        { type: 'jpeg', quality: 0.98 },
+                    html2canvas:  { scale: 2, logging: true, dpi: 192, letterRendering: true },
+                    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+                }).then(function() {
+                    // Fecha o popup após o download do PDF
+                    //popupWindow.close();
+                    alerta("Boleto gerado com sucesso!", 1);
+                }).catch(function(error) {
+                    alerta('Erro ao gerar PDF!', 0);
+                });
+            };            
+        },
+        error: function(xhr, status, error) {     
+            alerta("Erro ao carregar boleto! ", 0);
+        }
+    });   
 }

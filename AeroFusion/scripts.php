@@ -7,6 +7,7 @@
         <!-- Scripts Obrigatórios -->
         <script src="https://kit.fontawesome.com/c488e9ed48.js" crossorigin="anonymous"></script>
         <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
         <script type="text/javascript" src="js/script.js"></script>
 
       
