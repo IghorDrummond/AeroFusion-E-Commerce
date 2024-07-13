@@ -395,17 +395,17 @@
 									</div>
 								</div>
 								<br><br>
-
+								<h6 class="text-center">Selecione um cartão abaixo ou adicione um novo.</h6>
+								<br>
 								<div class="caixa_cartao">
-									<div id="cartao" class="<?php print retornaClasseCartao($Cartao[0]['nome_ban']); ?>">
-
+									<div id="cartao">
 										<!-- Parte frontal do Cartão -->
 										<div class="cartaoLado d-flex flex-column">
-											<img class="img-fluid ml-auto" src="<?php echo(is_null($Cartao[0]['nome_cartao']) || empty($Cartao[0]['nome_cartao']) ? 'https://cdn-icons-png.flaticon.com/512/2695/2695969.png' : $Cartao[0]['img_ban']);   ?>" name="operadora" alt="Operadora Cartão" width="50">
+											<img class="img-fluid ml-auto" src="https://cdn-icons-png.flaticon.com/512/2695/2695969.png" name="operadora" alt="Operadora Cartão" width="50">
 											<label for="">Nome impresso</label>
-											<input type="text" id="nome_cartao" placeholder="FULANO DE TAL" name="nome_cartao" value="<?php print !empty($Cartao[0]['nome_cartao']) ? $Cartao[0]['nome_cartao'] : ''?>" required>
+											<input type="text" id="nome_cartao" placeholder="FULANO DE TAL" name="nome_cartao" onchange="guardaNome(this)" required>
 											<label>Número do cartão</label>
-											<input id="numero_cartao" name="numero_cartao" type="text" placeholder="0000 0000 0000 0000" maxlength="19" maxlength="19" required value="<?php print !empty($Cartao[0]['numero_cartao']) ? $Cartao[0]['numero_cartao'] : ''?>" onchange="bandeira(this)" onkeyup=" maskNumero(this)">
+											<input id="numero_cartao" name="numero_cartao" type="text" placeholder="0000 0000 0000 0000" maxlength="19" maxlength="19" required onchange="bandeira(this)" onkeyup=" maskNumero(this)">
 											<button type="button" title="Virar cartão" class="ml-auto" onclick="virarCartao(1)">
 												Virar<i class="fa-solid fa-hand-point-right fa-xl m-3"></i>
 											</button>
@@ -417,11 +417,11 @@
 											<div class="d-flex flex-wrap data-info">
 												<div>
 													<label>Data Expiração</label><br>
-													<input id="vencimento" name="vencimento" type="text" placeholder="00/0000" maxlength="7" onkeyup="maskValidade(this)" required value="<?php print !empty($Cartao[0]['validade_formatada']) ? $Cartao[0]['validade_formatada'] : ''?>">
+													<input id="vencimento" name="vencimento" type="text" placeholder="00/0000" maxlength="7" onkeyup="maskValidade(this)" required>
 												</div>
 												<div>
 													<label>CVV</label><br>
-													<input id="cvv" name="cvv" type="text" placeholder="000" maxlength="3" required value="<?php print !empty($Cartao[0]['cvv']) ? $Cartao[0]['cvv'] : ''?>">
+													<input id="cvv" name="cvv" type="text" placeholder="000" maxlength="3" required onchange="guardaCvv(this)">
 												</div>
 											</div>
 											<button type="button" title="Virar cartão" class="ml-auto" onclick="virarCartao(0)">
@@ -459,7 +459,7 @@
 								</div>							
 								<br>
 								<labe>Parcelas:</labe>
-								<select class="form-control">
+								<select class="form-control" onchange="parcelaEscolhida(this)">
 									<option value="1" selected>1x de R$ <?php echo ($Pedido[0]['valor_total']); ?></option>
 									<?php
 									for ($nCont = 2; $nCont <= 12; $nCont++) {
@@ -610,7 +610,8 @@
 	function cadastrarCartao(){
 		if(!empty($_GET['bandeira']) and !empty($_GET['nome']) and !empty($_GET['validade']) and !empty($_GET['cvv']) and !empty($_GET['numero'])){
 			$Cartao = new Cartao($_SESSION['Email']);
-			$Cartao->setCartao($_GET['numero'], $_GET['nome'], $_GET['bandeira'], $_GET['validade'], $_GET['Cvc']);
+			$Cartao->setCartao(str_replace(' ', '', $_GET['numero']), strtoupper($_GET['nome']), $_GET['bandeira'], $_GET['validade'], $_GET['cvv']);
+			montaTela();//Prepara a tela novamente para adição do cartão
 		}
 	}
 ?>

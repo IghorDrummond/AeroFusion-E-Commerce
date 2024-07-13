@@ -1134,12 +1134,38 @@
 				$this->Nome = $Nome;
 				$this->Numero = $Numero;
 				$this->IdBan = $Ban;
-				$this->Validade = $Validade;
 				$this->Cvc = $Cvc;
 
+				//Formata data
+				$Validade = explode('/', $Validade);
+				if((int)$Validade[0] >= 1 and (int)$Validade[0] <= 12){
+					$this->Validade = $Validade[1] . '-' . $Validade[0] . '-' . '01';					
+				}else{
+					return false;
+				}
+
+				//Valida se este cartão a ser inserido já existe0
+				$this->montaQuery(4);
+				if(isset($this->getDados()[0]['id_card'])){
+					return false;
+				}
+
+				//Valida se cartão já não foi vencido
+				//Define o horario 
+				date_default_timezone_set('America/Sao_Paulo');
+				//Pega a Data Inicial
+				$dataInicial = new \DateTime($this->Validade);
+				//Pega a Data final
+				$dataFinal = new \DateTime(Date('Y-m-d H:i:s'));
+				//Faz a Diferença
+				$diferenca = $dataInicial->diff($dataFinal);
+				//Valida se a data inicial é menor que a data final
+				if($diferenca->y > 0 and $diferenca->invert === 0){
+					return false;
+				}				
 
 				//Monta query para inserir novo cartão
-				$this->montaQuery(1);
+				$this->montaQuery(4);
 				if($this->setDados()){
 					return true;
 				}else{
@@ -1185,7 +1211,7 @@
 				if($Opc === 1){
 					$this->Query =  "
 						INSERT INTO cartoes(nome_cartao, numero_cartao, validade, cvv, id_cliente, id_ban)
-						VALUES($this->Nome, $this->Numero, $this->Validade, $this->Cvc, $this->IdCli, $this->IdBan)
+						VALUES('$this->Nome', '$this->Numero', '$this->Validade', $this->Cvc, $this->IdCli, $this->IdBan)
 					";
 				}else if($Opc === 2){
 					$this->Query =  "
@@ -1221,8 +1247,14 @@
 					$this->Query .= empty($this->IdCard) ? '' : " AND cd.id_card =  $this->IdCard ";
 				}else if($Opc === 4){
 					$this->Query =  "
-						INSERT INTO cartoes(nome_cartao, numero_cartao, cvv, validade, id_ban, id_cliente)
-						VALUES('$this->Nome', '$this->Numero', $this->Cvc, '$this->Validade', $this->IdBan, $this->IdCli);
+						SELECT
+							*
+						FROM 
+							cartoes
+						WHERE
+							id_cliente = $this->IdCli
+							AND numero_cartao = '$this->Numero'
+							AND cvv = $this->Cvc
 					";
 				}
 			}

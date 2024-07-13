@@ -495,7 +495,7 @@ function trocarCor(tipo) {
     //Troca fundo do cartão
     //Remove fundos anteriores caso tiver adicionado
     for (nCont = 0; nCont <= 9; nCont++) {
-        Cartao.classList.remove(Object.keys(regraNumero)[nCont])
+        Cartao.classList.remove(Object.keys(regraNumero)[nCont]);
     }
     //Adiciona fundo ao cartão
     if (tipo != '') {
@@ -582,21 +582,13 @@ Programador: Ighor Drummond
 function finalizarPedido() {
     telaCarregamento(true);
     event.preventDefault();//Evita recarregar a página
-    let metodo = document.getElementById("metodo").textContent;
-
-    //Formata campo para analisar que tipo de pagamento é
-    metodo = metodo.substr(11, metodo.length - 1).toUpperCase();
-
-    if (metodo === "CARTÃO") {
-
-    }
-
-
+    
     $.ajax({
         url: 'script/pedidos.php',
         method: 'GET',
         data: {
-            Opc: 10
+            Opc: 10,
+            parcelamento: dados.parcelamento
         },
         success: function (response) {
             telaCarregamento(false);
@@ -608,6 +600,7 @@ function finalizarPedido() {
             alerta('Erro na requisição AJAX:' + textStatus + errorThrown, 0);
         }
     });
+
 }
 /*
 Função: cartaoSelecionado(Elemento selecionado)
@@ -623,12 +616,14 @@ function cartaoSelecionado(element) {
         return null;
     }
 
+    telaCarregamento(true);
     nAntCard = Card;
     $.ajax({
         url: 'script/pedidos.php?Opc=11&Card=' + encodeURIComponent(Card),
         type: 'POST',
         dataType: 'json',
         success: function (CardDate) {
+            telaCarregamento(false);
             if (Object.values(CardDate).every(value => value)) {
                 Cartao = document.getElementById('cartao');//Recebe o elemento Cartão
                 trocarCor(CardDate[0].bandeira);//Troca Cor do Cartão
@@ -637,9 +632,17 @@ function cartaoSelecionado(element) {
                 $('#vencimento').val(CardDate[0].validade_formatada);
                 $('#numero_cartao').val(CardDate[0].numero_cartao);
                 $('#cvv').val(CardDate[0].cvv);
+
+                //Guarda Informações do cartão selecionado
+                dados.nome = CardDate[0].nome_cartao;
+                dados.validade = CardDate[0].validade_formatada;
+                dados.numero = CardDate[0].numero_cartao;
+                dados.cvv = CardDate[0].cvv;
+                dados.bandeira = CardDate[0].bandeira;
             }
         },
         error: function (xhr, status, error) {
+            telaCarregamento(false);
             alerta('Não foi possivel buscar o seu cartão no banco de dados. Tente novamente ou mais tarde', 0);
         }
     });
@@ -717,6 +720,8 @@ Data: 13/07/2024
 Programador: Ighor Drummond   
 */
 function addCartao() {
+    //Recupera valores importante para validar dados
+
     if (Object.values(dados).every(value => value)) {
         $.ajax({
             url: 'script/pedidos.php',
@@ -727,8 +732,7 @@ function addCartao() {
                 nome: dados.nome,
                 validade: dados.validade,
                 cvv: dados.cvv,
-                numero: dados.numero,
-                parcelamento: dados.parcelamento
+                numero: dados.numero
             },
             success: function (response) {
                 telaCarregamento(false);
@@ -740,5 +744,34 @@ function addCartao() {
                 alerta('Erro ao adicionar Cartão: ' + textStatus + errorThrown, 0);
             }
         });
+    } else {
+        alerta('Falta preencher dados no cartão!', 0);
     }
+}
+/*
+Função: parcelaEscolhida(elemento)
+Descrição: Seleciona a Parcela em até 12x
+Data: 13/07/2024
+Programador: Ighor Drummond   
+*/
+function parcelaEscolhida(element) {
+    dados.parcelamento = element.selectedIndex;
+}
+/*
+Função: guardaNome(element)
+Descrição: Guarda nome do cartão
+Data: 13/07/2024
+Programador: Ighor Drummond   
+*/
+function guardaNome(element) {
+    dados.nome = element.value;
+}
+/*
+Função: guardaCvv(element)
+Descrição: Guarda o Cvv do cartão
+Data: 13/07/2024
+Programador: Ighor Drummond   
+*/
+function guardaCvv(element) {
+    dados.cvv = element.value;
 }
