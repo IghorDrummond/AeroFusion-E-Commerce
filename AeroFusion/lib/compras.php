@@ -744,6 +744,8 @@ namespace Pedido {
 		protected $Data = null;
 		private $Total = null;
 		private $Quant = null;
+		private $Parcelamento = null;
+		private $status = null;
 
 		// Construtor
 		public function __construct(
@@ -828,6 +830,7 @@ namespace Pedido {
 							}
 						} else {
 							$this->Cupom = "";//Apaga cupom pois o mesmo ou não existe ou não está ativo
+							$this->stmt = $aux;//Devolve os produtos para a stmt tratar mais a frente
 						}
 					}
 					// Guarda data do novo pedido
@@ -893,6 +896,88 @@ namespace Pedido {
 			$this->getDados();
 			return $this->stmt;
 		}
+
+		/*
+		 *Metodo: setPagamento()
+		 *Descrição: Responsavel por retornar finalizar pedido após pagamento
+		 *Data: 11/07/2024
+		 *Programador(a): Ighor Drummond
+		 */
+		public function setPagamento($IdPed, $Email, $Parcelamento=1){
+			$this->IdPed = $IdPed; 
+			$this->Email = $Email;
+			//Monta query para recuperar forma de pagamento realizada
+			$this->montaQuery(6);
+			$this->getDados();
+			//Recupera Id do Cliente
+			$this->IdCli = $this->stmt[0]['id_cliente'];
+			//Define o horario 
+			date_default_timezone_set('America/Sao_Paulo');
+			//Pega a Data Inicial
+			$dataInicial = new \DateTime($this->stmt[0]['data_pedido']);
+			//Pega a Data final
+			$dataFinal = new \DateTime(Date('Y-m-d H:i:s'));
+			//Faz a Diferença
+			$diferenca = $dataInicial->diff($dataFinal);
+			//Valida se a data inicial e final é maior que 7 dias
+			if($diferenca->d > 7){
+				//Atualiza status do pedido para 6 (cancelado) e devolve os items para o estoque
+				$this->status = '6';
+				$this->delPedido($this->IdPed, $this->Email);
+				return "VENCIDO";
+			}
+			//Valida forma de pagamento para finalizar o pedido e atualizar o status
+			switch($this->stmt[0]['forma_pag']) {
+				case 'PIX':
+					$this->Parcelamento = 1;
+					break;
+				case 'CARTÃO':
+					$this->Parcelamento = $Parcelamento >= 1 and $Parcelamento <= 12 ? $Parcelamento : die();
+					break;
+				case 'BOLETO': 
+					$this->Parcelamento = 1;
+					break;
+			}
+			//Monta query para atualizar pedido para pagamento efetuado
+			$this->status = '2';
+			$this->montaQuery(7);
+			$this->pushDados();
+			return "PAGO";
+		}
+
+		/*
+		 *Metodo: delPedido(Id do Pedido, Email)
+		 *Descrição: Responsavel por receber cancelar o Pedido e devolver items ao estoque
+		 *Data: 13/07/2024
+		 *Programador(a): Ighor Drummond
+		 */
+		public function delPedido($IdPed, $Email){
+			$this->IdPed = $IdPed;
+			$this->Email = $Email;
+
+			//Recupera o pedido desejado
+			$this->montaQuery(6);
+			$this->getDados();
+			$this->Parcelamento = 1;
+			$Pedido = $this->stmt;
+			//Devolve os produtos ao estoque
+			foreach ($Pedido as $ProdQuant) {
+				//Pesquisa produto
+				$this->IdProd = $ProdQuant['id_prod'];
+				$this->montaQuery(8);
+				$this->getDados();
+				//Soma quantidade ao estoque disponivel do produto
+				$this->Quant = $ProdQuant['quant'] + $this->stmt[0]['estoque'];
+				//Atualiza estoque do produto
+				$this->montaQuery(1);
+				$this->pushDados();
+			}
+
+			//Atualiza status do pedido
+			$this->montaQuery(7);
+			$this->pushDados();
+		}
+
 		/*
 		 *Metodo: getDados()
 		 *Descrição: Responsavel por receber dados da consulta
@@ -1040,6 +1125,7 @@ namespace Pedido {
 						Ip.preco_item,
 						Prod.nome,
 						Prod.promocao_ativo,
+						Prod.estoque,
 						FORMAT(Prod.promocao, 2, 'pt_BR') as promocao,
 						FORMAT(Prod.preco, 2, 'pt_BR') as preco,
 						Img.img1,
@@ -1082,6 +1168,26 @@ namespace Pedido {
 						Pd.id_ped = $this->IdPed
 						AND cli.email = '$this->Email'
 				";				
+			}else if($Opc === 7){
+				$this->query = "
+					UPDATE
+						pedidos
+					SET
+						status = $this->status,
+						parcelamento = $this->Parcelamento
+					WHERE
+						id_ped = $this->IdPed
+						AND id_cliente = $this->IdCli
+				";
+			}else if($Opc === 8){
+				$this->query = "
+					SELECT
+						*
+					FROM
+						produtos
+					WHERE
+						id_prod = $this->IdProd
+				";
 			}
 		}
 		/*

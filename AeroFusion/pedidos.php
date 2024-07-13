@@ -351,12 +351,12 @@
 				</div>
 				<h1>Total: R$ <?php echo ($Pedido[0]['valor_total']); ?> </h1>
 				<!-- Forma de Pagamento -->
-				<form class="w-100 form-group mt-2" method="post" onsubmit="Pedido()">
+				<form class="w-100 form-group mt-2" method="post" onsubmit="finalizarPedido()">
 					<?php
 					if ($Pedido[0]['forma_pag'] === 'PIX') {
 						?>
 						<fieldset class="form-group">
-							<legend>Pagamento: Pix</legend>
+							<legend id="metodo">Pagamento: Pix</legend>
 							<div class="input-group mb-3">
 									<select class="custom-select" id="Metodo">
 										<option selected value="0">Mudar Pagamento</option>
@@ -369,8 +369,8 @@
 									</div>
 								</div>
 								<br><br>
-							<br><br>
-							<img src="img/qrcode_pix.svg" class="img-fluid rounded" alt="QR CODE PARA PAGAMENTO PIX">
+							<img src="img/pixelcut-export.png" class="img-fluid rounded border rounded p-1 d-block m-auto" width="250" height="250" alt="QR CODE PARA PAGAMENTO PIX" title="Redireciona para meu GitHub (IghorDrummond).">
+							<h6 class="text-success font-weight-bold d-block m-auto text-center" id="segundos">Selecione "Finalizar Pedido" para redirecionar ao pagamento efetuado.</h6>
 						</fieldset>
 				<?php
 					} else if ($Pedido[0]['forma_pag'] === 'CARTÃO') {
@@ -379,7 +379,7 @@
 						$Cartao = $Cartao->getCartao('');
 				?>
 							<fieldset>
-								<legend>Pagamento: Cartão</legend>
+								<legend id="metodo">Pagamento: Cartão</legend>
 								<div class="input-group mb-3">
 									<select class="custom-select" id="Metodo">
 										<option selected value="0">Mudar Pagamento</option>
@@ -470,7 +470,7 @@
 					} else if ($Pedido[0]['forma_pag'] === 'BOLETO') {
 						?>
 							<fieldset class="form-group">
-								<legend>Pagamento: Boleto</legend>
+								<legend id="metodo">Pagamento: Boleto</legend>
 								<div class="input-group mb-3">
 									<select class="custom-select" id="Metodo">
 										<option selected value="0">Mudar Pagamento</option>
@@ -484,41 +484,8 @@
 								</div>
 								<br><br>
 								<!-- Implementa Boleto -->
-								 <h2>Boleto Gerado:</h2>
-								<ul class="list-group text-dark">
-									<li class="list-group-item">
-										<b>Número do Cliente -</b> #<?php echo($Pedido[0]['id_cliente']) ?>
-									</li>
-									<li class="list-group-item">
-										<b>Vencimento - </b><time></time>
-									</li>
-									<li class="list-group-item">
-										<b>Items:</b><br> 
-										<?php 
-											foreach ($Pedido as $Ped) {
-												echo(mb_convert_case($Ped['nome'], MB_CASE_TITLE, 'UTF-8'));
-												if($Ped['promocao_ativo'] === 1){
-													echo "
-														- De:<del> R$ {$Ped['preco']} </del> Por: R$ {$Ped['promocao']}
-													";
-												}else{
-													echo "
-														- R$ {$Ped['preco']}
-													";												
-												}
-												echo('<br>');
-											}
-										?>
-									</li>
-									<li class="list-group-item">
-										<b>AeroFusion Company S.A</b>
-										<b>CNPJ: 61.416.543/0001-89</b><br>
-										<b>Cliente - </b><?php echo($_SESSION['Nome']) ?> <b>Email - </b><?php echo($_SESSION['Email']) ?>
-									</li>
-									<li class="list-group-item text-center">
-										<button type="button" class="btn btn-primary p-2" onclick="baixaBoleto()">Baixar Boleto</button>
-									</li>
-								</ul>
+								<h2>Baixe seu Boleto agora:</h2><br>
+								<button type="button" class="btn btn-primary p-2 d-block w-100 btn-lg" onclick="baixaBoleto()">Baixar Boleto</button>
 							</fieldset>
 						<?php
 					}
@@ -546,10 +513,6 @@
 			$Pagamento = new MetodoPagamento(IdPed: $_SESSION['IdPed'], Email: $_SESSION['Email'], Metodo: $_GET['Metodo']);
 			$Pagamento->setPagamento();
 		}
-	}
-
-	function finalizarPedido(){
-
 	}
 
 	function retornaClasseCartao($Ban){
@@ -582,5 +545,55 @@
 		$dadosboleto = $boleto->getDadosBoleto();
 		include("lib/funcoes_bradesco.php");
 		include("lib/layout_bradesco.php");
+	}
+
+	function finalizarPedido(){
+		//Atualizar pedido para aguardando
+		$Pedido = new novoPedido();
+		$Ret = $Pedido->setPagamento($_SESSION['IdPed'], $_SESSION['Email'],(isset($_GET['Parcelamento']) ? $_GET['Parcelamento'] : '1' ));
+		if($Ret === 'PAGO'){
+?>
+	<section>
+		<article class="w-100 bg-white text-center p-5">
+			<i class="fa-solid fa-circle-check fa-2xl text-success"></i>
+			<h1 class="text-success">Pagamento Efetuado com sucesso!</h1>
+			<p class="text-info">
+				Agradecemos por sua compra na Aerofusion!<br>
+
+				Estamos felizes por tê-lo(a) como nosso cliente e esperamos que esteja satisfeito(a) com sua experiência de compra.<br>
+
+				Para acompanhar o status do seu pedido, por favor, acesse o menu "Pedidos" em nosso site. Se tiver qualquer dúvida ou precisar de assistência, nossa equipe de suporte está à disposição para ajudar.<br>
+
+				Obrigado por escolher a Aerofusion!				
+			</p>
+			<br>
+			<a href="index.php" class="btn btn-primary btn-lg">Voltar para o Inicio</a>
+			<a href="home.php" class="btn btn-primary btn-lg mt-1">Ir para pedidos</a>
+		</article>
+	</section>
+<?php
+		}else{
+?>
+	<section>
+		<article class="w-100 bg-white text-center p-5">
+			<i class="fa-solid fa-ban fa-2xl text-danger"></i>
+			<h1 class="text-danger">Pedido vencido!</h1>
+			<p class="text-info">
+				Gostaríamos de informar que o seu pedido, número #<?php echo($_SESSION['IdPed']) ?>, venceu após passar 7 dias sem pagamento.<br>
+
+				Caso ainda tenha interesse em concluir a compra, por favor, realize um novo pedido através do nosso site. Se precisar de qualquer assistência ou tiver dúvidas, nossa equipe de suporte está à disposição para ajudar.<br>
+
+				Agradecemos pela compreensão e esperamos poder atendê-lo(a) novamente em breve.<br>
+			</p>
+			<br>
+			<a href="index.php" class="btn btn-primary btn-lg">Voltar para o Inicio</a>
+			<a href="home.php" class="btn btn-primary btn-lg mt-1">Ir para pedidos</a>
+		</article>
+	</section>
+		
+<?php	
+		}
+		//Deletar pedido da sessão
+		unset($_SESSION['IdPed']);	
 	}
 ?>

@@ -47,7 +47,8 @@ var dados = {
     nome: '',
     validade: '',
     cvv: '',
-    numero: ''
+    numero: '',
+    parcelamento: '1'
 }
 var ajax = null;
 //Constantes
@@ -161,7 +162,7 @@ function selecionaEndereco(element) {
     //Guarda o endereço selecionado
     End = element.id;
     //Ajusta o botão para o titulo correto
-    botao_end.textContent = element.getAttribute('data-title');
+    botao_end[0].textContent = element.getAttribute('data-title');
 }
 /*
 Função: atualizaQuantidade(Operacao, Id do carrinho, Elemento do Html)
@@ -217,12 +218,12 @@ function finalizarCompra() {
     event.preventDefault();
 
     //Valida se um endereço foi escolhido
-    if (botao_end.textContent.substr(0, 8).toUpperCase() === 'ENDEREÇO') {
+    if (botao_end[0].textContent.substr(0, 8).toUpperCase() === 'ENDEREÇO') {
         //Valida se foi escolhido um método de pagamento
-        if (pagamento.selectedIndex > 0) {
+        if (pagamento[0].selectedIndex > 0) {
             telaCarregamento(true);
             ajax = new XMLHttpRequest();
-            ajax.open('POST', 'script/pedidos.php?Opc=5&Pagamento=' + encodeURIComponent(pagamento.selectedIndex) + '&Endereco=' + encodeURIComponent(End) + '&Cupom=' + encodeURIComponent(Cupom.value));
+            ajax.open('POST', 'script/pedidos.php?Opc=5&Pagamento=' + encodeURIComponent(pagamento[0].selectedIndex) + '&Endereco=' + encodeURIComponent(End) + '&Cupom=' + encodeURIComponent(Cupom.value));
             ajax.onreadystatechange = () => {
                 telaCarregamento(false);
                 if (ajax.readyState === 4) {
@@ -579,11 +580,56 @@ Data: 07/07/2024
 Programador: Ighor Drummond   
 */
 function finalizarPedido() {
-    if (Object.values(dados).every(value => value)) {
-        ajax = new XMLHttpRequest();
+    telaCarregamento(true);
+    event.preventDefault();//Evita recarregar a página
+    let metodo  = document.getElementById("metodo").textContent;
+ 
+    //Formata campo para analisar que tipo de pagamento é
+    metodo = metodo.substr(11, metodo.length -1).toUpperCase();
 
-        ajax.open('POST', 'script/pedidos.php?Opc=10');
+    if(metodo === "CARTÃO"){
+        if (Object.values(dados).every(value => value)) {
+            $.ajax({
+                url: 'script/pedidos.php',
+                method: 'GET',
+                data: {
+                    Opc: 10,
+                    bandeira: dados.bandeira,
+                    nome: dados.nome,
+                    validade: dados.validade,
+                    cvv: dados.cvv,
+                    numero: dados.numero,
+                    parcelamento: dados.parcelamento
+                },
+                success: function(response) {
+                    telaCarregamento(false);
+                    // Carrega a resposta na tag <main>
+                    $('main').html(response);
+                    return null;
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    telaCarregamento(false);
+                    alerta('Erro na requisição AJAX:' + textStatus + errorThrown, 0);
+                }
+            });
+        }
     }
+    $.ajax({
+        url: 'script/pedidos.php',
+        method: 'GET',
+        data: {
+            Opc: 10
+        },
+        success: function(response) {
+            telaCarregamento(false);
+            // Carrega a resposta na tag <main>
+            $('main').html(response);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            telaCarregamento(false);
+            alerta('Erro na requisição AJAX:' + textStatus + errorThrown, 0);
+        }
+    });  
 }
 /*
 Função: cartaoSelecionado(Elemento selecionado)

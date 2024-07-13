@@ -105,9 +105,18 @@ article{
             animation: entradaCartao 1s;
 }
 
+/* Tela de Pós-Pagamento */
+.fa-circle-check{
+    animation: checksurgi 1s ease;
+    text-align: center;
+
+}
+
 /* Hovers */
 #cartao input:hover{
     border-bottom: 2px dashed white !important;
+    display: block;
+    margin: auto;
 }
 
 /* Animação */
@@ -131,7 +140,20 @@ article{
                 transform: translateX(0px) rotateY(0deg);
     }
 }
-
+@keyframes checksurgi{
+    0%{
+        opacity: 0;
+        width: 0px;
+        height: 0px;
+        transform: rotateX(90deg);
+    }
+    100%{
+        opacity: 1;
+        width: auto;
+        height: auto;
+        transform: rotateX(0deg);
+    }
+}
 /* Dispositivos extra small (telefones em modo retrato, com menos de 576px) */
 @media (max-width: 767.98px) { 
     article,
