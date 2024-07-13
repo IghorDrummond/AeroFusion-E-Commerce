@@ -1165,7 +1165,7 @@
 				}				
 
 				//Monta query para inserir novo cartão
-				$this->montaQuery(4);
+				$this->montaQuery(1);
 				if($this->setDados()){
 					return true;
 				}else{

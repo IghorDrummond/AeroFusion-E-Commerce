@@ -932,7 +932,11 @@ namespace Pedido {
 					$this->Parcelamento = 1;
 					break;
 				case 'CARTÃO':
-					$this->Parcelamento = $Parcelamento >= 1 and $Parcelamento <= 12 ? $Parcelamento : die();
+					if($Parcelamento >= 1 and $Parcelamento and !empty($Parcelamento) <= 12 ){
+						$this->Parcelamento = $Parcelamento;
+					}else{ 
+						$this->Parcelamento = 1;
+					}
 					break;
 				case 'BOLETO': 
 					$this->Parcelamento = 1;

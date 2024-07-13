@@ -20,6 +20,7 @@
 				//Inicia Conexão com o banco de dados
 				$this->conexao = new PDO($this->dsn, $this->usuario, $this->senha);	
 				$this->conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+				$this->conexao->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
 			}catch(PDOException $e){	
 				//print_r($e);
 				echo 'Erro: ' . $e->getCode() . ' Mensagem: ' . $e->getMessage();

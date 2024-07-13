@@ -565,7 +565,7 @@
 	function finalizarPedido(){
 		//Atualizar pedido para aguardando
 		$Pedido = new novoPedido();
-		$Ret = $Pedido->setPagamento($_SESSION['IdPed'], $_SESSION['Email'],(isset($_GET['Parcelamento']) ? $_GET['Parcelamento'] : '1' ));
+		$Ret = $Pedido->setPagamento($_SESSION['IdPed'], $_SESSION['Email'],(isset($_GET['parcelamento']) ? $_GET['parcelamento'] : '1' ));
 		if($Ret === 'PAGO'){
 ?>
 	<section>
