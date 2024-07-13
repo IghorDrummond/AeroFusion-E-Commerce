@@ -67,6 +67,9 @@
 		case '12':
 			imprimeBoleto();
 			break;
+		case '13':
+			cadastrarCartao();
+			break;
 	}
 
 	function montaTela()
@@ -429,6 +432,8 @@
 
 									</div>
 								</div>
+								<br>
+								<button class="btn btn-secondary" onclick="addCartao()">Adicionar Cartão</button>
 								<label class="mt-4">Escolha um outro cartão:</label>
 								<div class="dropdown">
 									<button class="btn btn-secondary dropdown-toggle btn-sm btn-block" data-toggle="dropdown" arial-expanded="false">Cartões</button>
@@ -499,7 +504,7 @@
 						Finalizar Pedido <i class="fa-solid fa-check fa-xl"></i>
 					</button>
 					<!-- Apagar Pedido -->
-					<button type="button" class="btn btn-danger btn-lg btn-block align-self-end">
+					<button type="button" class="btn btn-danger btn-lg btn-block align-self-end" onclick="deletarPedido()">
 						Deletar Pedido <i class="fa-solid fa-trash-can"></i>
 					</button>
 				</form>
@@ -545,6 +550,11 @@
 		$dadosboleto = $boleto->getDadosBoleto();
 		include("lib/funcoes_bradesco.php");
 		include("lib/layout_bradesco.php");
+	}
+
+	function cancelarPedido(){
+		$Pedido = new novoPedido();
+		$Pedido->delPedido($_SESSION['IdPed'], $_SESSION['Email']);
 	}
 
 	function finalizarPedido(){
@@ -595,5 +605,11 @@
 		}
 		//Deletar pedido da sessão
 		unset($_SESSION['IdPed']);	
+	}
+	function cadastrarCartao(){
+		if(!empty($_GET['bandeira']) and !empty($_GET['nome']) and !empty($_GET['validade']) and !empty($_GET['cvv']) and !empty($_GET['numero'])){
+			$Cartao = new Cartao();
+			$Cartao->setCartao($_GET['numero'], $_GET['nome'], $_GET['bandeira'], $_GET['validade'], $_GET['Cvc']);
+		}
 	}
 ?>

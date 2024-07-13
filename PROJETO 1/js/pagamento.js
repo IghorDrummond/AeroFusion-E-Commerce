@@ -52,7 +52,7 @@ var dados = {
 }
 var ajax = null;
 //Constantes
-const BandeiraClasses  = ("mastercard;elo;amex;discover;diners;jcb;jcb15;maestro;unionpay;visa").split(';');
+const BandeiraClasses = ("mastercard;elo;amex;discover;diners;jcb;jcb15;maestro;unionpay;visa").split(';');
 
 //-------------------------------Escopo
 telaCarregamento(true);
@@ -582,54 +582,32 @@ Programador: Ighor Drummond
 function finalizarPedido() {
     telaCarregamento(true);
     event.preventDefault();//Evita recarregar a página
-    let metodo  = document.getElementById("metodo").textContent;
- 
-    //Formata campo para analisar que tipo de pagamento é
-    metodo = metodo.substr(11, metodo.length -1).toUpperCase();
+    let metodo = document.getElementById("metodo").textContent;
 
-    if(metodo === "CARTÃO"){
-        if (Object.values(dados).every(value => value)) {
-            $.ajax({
-                url: 'script/pedidos.php',
-                method: 'GET',
-                data: {
-                    Opc: 10,
-                    bandeira: dados.bandeira,
-                    nome: dados.nome,
-                    validade: dados.validade,
-                    cvv: dados.cvv,
-                    numero: dados.numero,
-                    parcelamento: dados.parcelamento
-                },
-                success: function(response) {
-                    telaCarregamento(false);
-                    // Carrega a resposta na tag <main>
-                    $('main').html(response);
-                    return null;
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    telaCarregamento(false);
-                    alerta('Erro na requisição AJAX:' + textStatus + errorThrown, 0);
-                }
-            });
-        }
+    //Formata campo para analisar que tipo de pagamento é
+    metodo = metodo.substr(11, metodo.length - 1).toUpperCase();
+
+    if (metodo === "CARTÃO") {
+
     }
+
+
     $.ajax({
         url: 'script/pedidos.php',
         method: 'GET',
         data: {
             Opc: 10
         },
-        success: function(response) {
+        success: function (response) {
             telaCarregamento(false);
             // Carrega a resposta na tag <main>
             $('main').html(response);
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             telaCarregamento(false);
             alerta('Erro na requisição AJAX:' + textStatus + errorThrown, 0);
         }
-    });  
+    });
 }
 /*
 Função: cartaoSelecionado(Elemento selecionado)
@@ -641,7 +619,7 @@ function cartaoSelecionado(element) {
     var elementoPai = element.parentElement;
     var Card = elementoPai.id;
 
-    if(nAntCard === Card){
+    if (nAntCard === Card) {
         return null;
     }
 
@@ -650,59 +628,117 @@ function cartaoSelecionado(element) {
         url: 'script/pedidos.php?Opc=11&Card=' + encodeURIComponent(Card),
         type: 'POST',
         dataType: 'json',
-        success: function(CardDate){
-            if(Object.values(CardDate).every(value => value)){
+        success: function (CardDate) {
+            if (Object.values(CardDate).every(value => value)) {
                 Cartao = document.getElementById('cartao');//Recebe o elemento Cartão
                 trocarCor(CardDate[0].bandeira);//Troca Cor do Cartão
                 Cartao.getElementsByTagName('img')[0].src = CardDate[0].img_ban;//Troca bandeira do cartão
                 $('#nome_cartao').val(CardDate[0].nome_cartao);
-                $('#vencimento').val(CardDate[0].validade_formatada); 
-                $('#numero_cartao').val(CardDate[0].numero_cartao);  
-                $('#cvv').val(CardDate[0].cvv); 
+                $('#vencimento').val(CardDate[0].validade_formatada);
+                $('#numero_cartao').val(CardDate[0].numero_cartao);
+                $('#cvv').val(CardDate[0].cvv);
             }
         },
-        error: function(xhr, status, error){
+        error: function (xhr, status, error) {
             alerta('Não foi possivel buscar o seu cartão no banco de dados. Tente novamente ou mais tarde', 0);
         }
     });
 }
-
-function baixaBoleto(){
+/*
+Função: baixaBoleto()
+Descrição: Baixa boleto além de abrir o mesmo em uma nova aba
+Data: 07/07/2024
+Programador: Ighor Drummond   
+*/
+function baixaBoleto() {
     telaCarregamento(true);
     $.ajax({
         url: 'script/pedidos.php?Opc=12',
         type: 'GET',
-        success: function(response) {
+        success: function (response) {
             //Abre uma página para mostrar boleto gerado no servidor
             var popupWindow = window.open('', '_blank', 'width=800,height=600');
-            let data_hoje  = new Date();
+            let data_hoje = new Date();
             popupWindow.document.open();
             popupWindow.document.write(response);
             popupWindow.document.close();
             popupWindow.document.title = "Boleto AeroFusion";
 
             //Gerar um PDF da página
-            popupWindow.onload = function() {
+            popupWindow.onload = function () {
                 popupWindow.document.write(response);
                 // Usar a biblioteca html2pdf para gerar o PDF
                 html2pdf(popupWindow.document.body.innerHTML, {
-                    margin:       0.5,
-                    filename:     'boleto_aerofusion'+ data_hoje.getDate() + "-"+ data_hoje.getMonth() + "-" + data_hoje.getFullYear() + "-" + data_hoje.getHours() + ":" + data_hoje.getMinutes() +'.pdf',
-                    image:        { type: 'jpeg', quality: 0.98 },
-                    html2canvas:  { scale: 2, logging: true, dpi: 192, letterRendering: true },
-                    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-                }).then(function() {
+                    margin: 0.5,
+                    filename: 'boleto_aerofusion' + data_hoje.getDate() + "-" + data_hoje.getMonth() + "-" + data_hoje.getFullYear() + "-" + data_hoje.getHours() + ":" + data_hoje.getMinutes() + '.pdf',
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2, logging: true, dpi: 192, letterRendering: true },
+                    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                }).then(function () {
                     telaCarregamento(false);
                     alerta("Boleto gerado com sucesso!", 1);
-                }).catch(function(error) {
+                }).catch(function (error) {
                     telaCarregamento(false);
                     alerta('Erro ao gerar PDF!', 0);
                 });
-            };            
+            };
         },
-        error: function(xhr, status, error) {     
+        error: function (xhr, status, error) {
             telaCarregamento(false);
             alerta("Erro ao carregar boleto! ", 0);
         }
-    });   
+    });
+}
+/*
+Função: deletarPedido()
+Descrição: Seleciona um novo cartão
+Data: 13/07/2024
+Programador: Ighor Drummond   
+*/
+function deletarPedido() {
+    telaCarregamento(true);
+    $.ajax({
+        url: 'script/pedidos.php?Opc=12',
+        type: 'GET',
+        success: function (response) {
+            telaCarregamento(false);
+            window.reload();
+        },
+        error: function (xhr, status, error) {
+            telaCarregamento(false);
+            alerta("Erro ao apagar Pedido! ", 0);
+        }
+    });
+}
+/*
+Função: addCartao() 
+Descrição: Adicionar Cartão
+Data: 13/07/2024
+Programador: Ighor Drummond   
+*/
+function addCartao() {
+    if (Object.values(dados).every(value => value)) {
+        $.ajax({
+            url: 'script/pedidos.php',
+            method: 'GET',
+            data: {
+                Opc: 13,
+                bandeira: dados.bandeira,
+                nome: dados.nome,
+                validade: dados.validade,
+                cvv: dados.cvv,
+                numero: dados.numero,
+                parcelamento: dados.parcelamento
+            },
+            success: function (response) {
+                telaCarregamento(false);
+                // Carrega a resposta na tag <main>
+                $('main').html(response);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                telaCarregamento(false);
+                alerta('Erro ao adicionar Cartão: ' + textStatus + errorThrown, 0);
+            }
+        });
+    }
 }

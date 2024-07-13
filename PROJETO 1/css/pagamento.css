@@ -115,8 +115,6 @@ article{
 /* Hovers */
 #cartao input:hover{
     border-bottom: 2px dashed white !important;
-    display: block;
-    margin: auto;
 }
 
 /* Animação */

@@ -1131,7 +1131,13 @@
 				$Cvc
 			){
 				//Recupera id da bandeira
-				
+				$this->Nome = $Nome;
+				$this->Numero = $Numero;
+				$this->IdBan = $Ban;
+				$this->Validade = $Validade;
+				$this->Cvc = $Cvc;
+
+
 				//Monta query para inserir novo cartão
 				$this->montaQuery(1);
 				if($this->setDados()){
