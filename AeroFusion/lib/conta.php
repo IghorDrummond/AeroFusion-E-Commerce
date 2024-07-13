@@ -1219,6 +1219,11 @@
 							cd.id_cliente = $this->IdCli
 					";
 					$this->Query .= empty($this->IdCard) ? '' : " AND cd.id_card =  $this->IdCard ";
+				}else if($Opc === 4){
+					$this->Query =  "
+						INSERT INTO cartoes(nome_cartao, numero_cartao, cvv, validade, id_ban, id_cliente)
+						VALUES('$this->Nome', '$this->Numero', $this->Cvc, '$this->Validade', $this->IdBan, $this->IdCli);
+					";
 				}
 			}
 		}

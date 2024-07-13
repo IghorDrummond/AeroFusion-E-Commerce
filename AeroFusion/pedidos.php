@@ -433,7 +433,8 @@
 									</div>
 								</div>
 								<br>
-								<button class="btn btn-secondary" onclick="addCartao()">Adicionar Cartão</button>
+								<button type="button" class="btn btn-secondary d-block m-auto" onclick="addCartao()">Adicionar Cartão</button>
+								<br>
 								<label class="mt-4">Escolha um outro cartão:</label>
 								<div class="dropdown">
 									<button class="btn btn-secondary dropdown-toggle btn-sm btn-block" data-toggle="dropdown" arial-expanded="false">Cartões</button>
@@ -608,7 +609,7 @@
 	}
 	function cadastrarCartao(){
 		if(!empty($_GET['bandeira']) and !empty($_GET['nome']) and !empty($_GET['validade']) and !empty($_GET['cvv']) and !empty($_GET['numero'])){
-			$Cartao = new Cartao();
+			$Cartao = new Cartao($_SESSION['Email']);
 			$Cartao->setCartao($_GET['numero'], $_GET['nome'], $_GET['bandeira'], $_GET['validade'], $_GET['Cvc']);
 		}
 	}

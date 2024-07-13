@@ -107,7 +107,8 @@ article{
 
 /* Tela de Pós-Pagamento */
 .fa-circle-check{
-    animation: checksurgi 1s ease;
+    -webkit-animation: checksurgi 1s ease;
+            animation: checksurgi 1s ease;
     text-align: center;
 
 }
@@ -138,18 +139,36 @@ article{
                 transform: translateX(0px) rotateY(0deg);
     }
 }
-@keyframes checksurgi{
+@-webkit-keyframes checksurgi{
     0%{
         opacity: 0;
         width: 0px;
         height: 0px;
-        transform: rotateX(90deg);
+        -webkit-transform: rotateX(90deg);
+                transform: rotateX(90deg);
     }
     100%{
         opacity: 1;
         width: auto;
         height: auto;
-        transform: rotateX(0deg);
+        -webkit-transform: rotateX(0deg);
+                transform: rotateX(0deg);
+    }
+}
+@keyframes checksurgi{
+    0%{
+        opacity: 0;
+        width: 0px;
+        height: 0px;
+        -webkit-transform: rotateX(90deg);
+                transform: rotateX(90deg);
+    }
+    100%{
+        opacity: 1;
+        width: auto;
+        height: auto;
+        -webkit-transform: rotateX(0deg);
+                transform: rotateX(0deg);
     }
 }
 /* Dispositivos extra small (telefones em modo retrato, com menos de 576px) */
