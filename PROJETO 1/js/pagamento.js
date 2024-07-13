@@ -701,11 +701,11 @@ Programador: Ighor Drummond
 function deletarPedido() {
     telaCarregamento(true);
     $.ajax({
-        url: 'script/pedidos.php?Opc=12',
+        url: 'script/pedidos.php?Opc=14',
         type: 'GET',
         success: function (response) {
             telaCarregamento(false);
-            window.reload();
+            location.reload();
         },
         error: function (xhr, status, error) {
             telaCarregamento(false);

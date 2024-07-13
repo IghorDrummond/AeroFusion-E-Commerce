@@ -70,6 +70,9 @@
 		case '13':
 			cadastrarCartao();
 			break;
+		case '14':
+			cancelarPedido();
+			break;
 	}
 
 	function montaTela()
@@ -556,6 +559,7 @@
 	function cancelarPedido(){
 		$Pedido = new novoPedido();
 		$Pedido->delPedido($_SESSION['IdPed'], $_SESSION['Email']);
+		unset($_SESSION['IdPed']);
 	}
 
 	function finalizarPedido(){
