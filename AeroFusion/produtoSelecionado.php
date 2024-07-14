@@ -68,6 +68,9 @@
 						?>
 						<!-- Fim das Imagens -->
 						</div>		
+						<div id="3d" class="d-none bg-danger border border-success">
+							wdwdwdwdwd
+						</div>
 						<!-- Inicio dos botões do Carousel -->
 						<a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
 							<span class="carousel-control-prev-icon bg-primary rounded" col aria-hidden="true"></span>

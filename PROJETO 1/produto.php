@@ -14,6 +14,7 @@
 		</main>
 		<?php require_once('script/rodape.php'); ?>
 		<?php require_once('script/scripts.php'); ?>
+		<?php require_once('script/3dRequest.php'); ?>
 		<script type="text/javascript" src="js/produto.js"></script>
 	</body>
 </html>

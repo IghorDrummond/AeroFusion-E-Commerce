@@ -12,6 +12,8 @@ var aviso = document.getElementsByClassName('alertas');
 var aviso_texto = document.getElementsByClassName('alerta_texto');
 var quantCarrinho = document.getElementsByClassName('badge-primary');
 var produtos = document?.getElementsByClassName('produto');
+var QuadroProduto = document.getElementById('3d');
+var Carousel = document.getElementById('carouselExampleIndicators');
 //Numerico
 var tamAnt = 0;
 var Tam = 0;
@@ -24,6 +26,18 @@ var antValoresInput = [];
 var Intervalos = new Array(produtos.length).fill(null);
 // Objeto
 var ajax = null;
+var cena = null;
+var camera = null;
+var renderizacao = null;
+var carregador = null;
+var Luz = null;
+var DirLuz = null;
+var modelo = null
+var mixagem = null;
+var animacaoClip = null;
+var acaoFrame = null;
+var Orbita = null;
+
 // Função Anônima para abrir a caixa de diálogo
 var abreConfig = function () {
     // Obtenha a posição da imagem
@@ -145,6 +159,17 @@ document.querySelectorAll('input[name="CarProd"]').forEach(checkbox => {
         }
     });
 });
+/*
+*Evento: resize()
+*Descrição: Ajusta o tamanho do quadro 3d caso houver alteração de tamanho da página
+*Programador(a): Ighor Drummond
+*Data: 20/05/2024
+
+window.addEventListener('resize', () => {
+    camera.aspect = Quadro.clientWidth / Quadro.clientHeight;
+    camera.updateProjectionMatrix();
+    renderizacao.setSize(Quadro.clientWidth, Quadro.clientHeight);
+});*/
 
 // ------------------------- Funções
 /*
@@ -579,4 +604,93 @@ function favorito(event, Prod){
     }   
     //Ativa requisição
     ajax.send()
+}
+/*
+Função: visualizar3D(elemento)
+Descrição: Responsavel por configurar todo o quadro 3d
+Data: 14/06/2024
+Programador: Ighor Drummond
+*/
+function visualizar3D(element){
+    var srcObj = element.getAttribute('data-toggle');
+    telaCarregamento(true);
+    carregarCena();//Carrega cenário
+    carregarLuz();//Carregar iluminação do cenário
+    carregarObj3D(srcObj);//Adicionar objeto ao cenário
+    telaCarregamento(false);
+    element.textContent = 'voltar Carousel';
+    //<i class="fa-solid fa-panorama"></i>
+}
+/*
+Função: carregarCena()
+Descrição: Responsavel por carregar a cena, camera e adicionar ao Quadro
+Data: 14/06/2024
+Programador: Ighor Drummond
+*/
+function carregarCena(){
+    //Carrega cena para iniciar um quadro 3D
+    cena = new THREE.Scene();
+    //Ajusta a pespectiva da camera
+    camera = new THREE.PerspectiveCamera(75, Carousel.clientWidth / Carousel.clientHeight, 0.1, 1000);
+    camera.position.set(0, 1, 5); // Ajusta a posição inicial da câmera
+    renderizacao = new THREE.WebGLRenderer({antialias: true})//Liga o Anti-Aliasing
+    renderizacao.setSize(Carousel.clientWidth, Carousel.clientHeight);//Ajusta tamanho do quadro para renderizar
+    //Seta tamanho do quadro igual ao do carousel
+    QuadroProduto.clientWidth = Carousel.clientWidth;
+    QuadroProduto.clientHeight = Carousel.clientHeight;
+    //Desliga carousel
+    Carousel.classList.add('d-none');
+    //Ativa Quadro 3d
+    QuadroProduto.classList.remove('d-none');
+    //Adiciona Renderização ao corpo do elemento
+    QuadroProduto.appendChild(renderizacao.domElement);
+
+}
+/*
+Função: carregarLuz()
+Descrição: Responsavel por configurar a luz e a direção da mesma além de iniciar controle de orbita
+Data: 14/06/2024
+Programador: Ighor Drummond
+*/
+function carregarLuz(){
+    Luz = new THREE.AmbientLight(0xffffff, 0.5);//Adiciona cor e força da iluminação
+    //Adiciona ao cenário
+    cena.add(Luz);
+
+    //Aplicando uma direção a luz
+    DirLuz = new THREE.DirectionalLight(0xffffff, 0.9);
+    DirLuz.position.set(8, 100, 2);
+    cena.add(DirLuz);
+
+    //Adiciona orbita de controle
+    Orbita = new THREE.OrbitControls(camera, renderizacao.domElement);
+}
+/*
+Função: carregarObj3D(diretorio 3d)
+Descrição: Responsavel por carregar Objeto 3d e adicionar ao cenário
+Data: 14/06/2024
+Programador: Ighor Drummond
+*/
+function carregarObj3D(src){
+    //Prepara para adicionar o objeto no formato GLTF
+    carregador = new THREE.GLTFLoader();
+    //Adiciona Objeto pelo diretório e Configura objeto 3d com Orbita de controle
+    carregador.load(src, (gltf)=>{
+        modelo = gltf.scene;//Modelo recebe cena para configurar
+        modelo.position.set(0, 0.6, 0);//posiciona o elemento 
+        cena.add(modelo);//adiciona elemento cofigurado ao cenário
+
+        //Adiciona orbita controlavel
+        function animacao(){
+            requestAnimationFrame(animacao);
+            //anima orbita
+            Orbita.update();
+            //Renderiza frame 
+            renderizacao.render(cena, camera);
+        }
+
+        animacao(); //inicia animação de controle de orbita
+    }, undefined, function(error){
+        alerta('Algo deu errado ao carregar elemento 3D', 0);
+    });
 }
