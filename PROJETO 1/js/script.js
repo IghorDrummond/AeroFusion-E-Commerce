@@ -14,12 +14,14 @@ var quantCarrinho = document.getElementsByClassName('badge-primary');
 var produtos = document?.getElementsByClassName('produto');
 var QuadroProduto = document.getElementById('3d');
 var Carousel = document.getElementById('carouselExampleIndicators');
+var campoApProd = document.getElementsByTagName('article')[0];
 //Numerico
 var tamAnt = 0;
 var Tam = 0;
 var scrollHeight = 0;
 var PosicImg = 0;
 var ide = 0;
+var estadoAnima = 0;
 //Array
 var produtosSelecionados = [];
 var antValoresInput = [];
@@ -33,11 +35,7 @@ var carregador = null;
 var Luz = null;
 var DirLuz = null;
 var modelo = null
-var mixagem = null;
-var animacaoClip = null;
-var acaoFrame = null;
 var Orbita = null;
-
 // Função Anônima para abrir a caixa de diálogo
 var abreConfig = function () {
     // Obtenha a posição da imagem
@@ -164,12 +162,12 @@ document.querySelectorAll('input[name="CarProd"]').forEach(checkbox => {
 *Descrição: Ajusta o tamanho do quadro 3d caso houver alteração de tamanho da página
 *Programador(a): Ighor Drummond
 *Data: 20/05/2024
-
+*/
 window.addEventListener('resize', () => {
-    camera.aspect = Quadro.clientWidth / Quadro.clientHeight;
+    camera.aspect = campoApProd.clientWidth / campoApProd.clientHeight;
     camera.updateProjectionMatrix();
-    renderizacao.setSize(Quadro.clientWidth, Quadro.clientHeight);
-});*/
+    renderizacao.setSize(campoApProd.clientWidth, campoApProd.clientHeight);
+});
 
 // ------------------------- Funções
 /*
@@ -613,12 +611,22 @@ Programador: Ighor Drummond
 */
 function visualizar3D(element){
     var srcObj = element.getAttribute('data-toggle');
-    telaCarregamento(true);
-    carregarCena();//Carrega cenário
-    carregarLuz();//Carregar iluminação do cenário
-    carregarObj3D(srcObj);//Adicionar objeto ao cenário
-    telaCarregamento(false);
-    element.textContent = 'voltar Carousel';
+
+    if(estadoAnima === 0){
+        telaCarregamento(true);
+        estadoAnima = 1;
+        carregarCena();//Carrega cenário
+        carregarLuz();//Carregar iluminação do cenário
+        carregarObj3D(srcObj);//Adicionar objeto ao cenário
+        telaCarregamento(false);
+        element.textContent = 'voltar Carousel';
+    }else{
+        destruirCenario();
+        QuadroProduto.classList.add('d-none');
+        Carousel.classList.remove('d-none');
+        estadoAnima = 0;
+        element.textContent = '3D';
+    }
     //<i class="fa-solid fa-panorama"></i>
 }
 /*
@@ -631,14 +639,15 @@ function carregarCena(){
     //Carrega cena para iniciar um quadro 3D
     cena = new THREE.Scene();
     //Ajusta a pespectiva da camera
-    camera = new THREE.PerspectiveCamera(75, Carousel.clientWidth / Carousel.clientHeight, 0.1, 1000);
-    camera.position.set(0, 1, 5); // Ajusta a posição inicial da câmera
-    renderizacao = new THREE.WebGLRenderer({antialias: true})//Liga o Anti-Aliasing
-    renderizacao.setSize(Carousel.clientWidth, Carousel.clientHeight);//Ajusta tamanho do quadro para renderizar
-    //Seta tamanho do quadro igual ao do carousel
-    QuadroProduto.clientWidth = Carousel.clientWidth;
-    QuadroProduto.clientHeight = Carousel.clientHeight;
-    //Desliga carousel
+    camera = new THREE.PerspectiveCamera(75, campoApProd.clientWidth / campoApProd.clientHeight, 0.1, 1000);
+    camera.position.set(0, 6, 35); // Ajusta a posição inicial da câmera
+    renderizacao = new THREE.WebGLRenderer({antialias: true, alpha: true})//Liga o Anti-Aliasing
+    renderizacao.setClearColor(0x000000, 0);//Remove fundo preto do cebário, tornado transparente
+    renderizacao.setSize(campoApProd.clientWidth, campoApProd.clientHeight);//Ajusta tamanho do quadro para renderizar
+    //Seta tamanho do quadro igual ao do campoApProd
+    QuadroProduto.clientWidth = campoApProd.clientWidth;
+    QuadroProduto.clientHeight = campoApProd.clientHeight;
+    //Desliga campoApProd
     Carousel.classList.add('d-none');
     //Ativa Quadro 3d
     QuadroProduto.classList.remove('d-none');
@@ -693,4 +702,31 @@ function carregarObj3D(src){
     }, undefined, function(error){
         alerta('Algo deu errado ao carregar elemento 3D', 0);
     });
+}
+/*
+Função: destruirCenario()
+Descrição: Responsavel por destruir cenário e objetos 3d
+Data: 14/06/2024
+Programador: Ighor Drummond
+*/
+function destruirCenario(){
+    // Limpar a cena
+    cena.remove(); // Remove todos os objetos da cena
+
+    // Liberação de recursos
+    // Exemplo: se houver alguma textura ou geometria, você deve limpar também
+
+    // Remover renderizador
+    renderizacao.domElement.remove();
+
+    // Limpar controles, se existirem
+    if (Orbita) {
+        Orbita.dispose();
+        Orbita = null;
+    }
+
+    // Limpar variáveis globais
+    cena = null;
+    camera = null;
+    renderizacao = null;
 }
