@@ -80,16 +80,21 @@
 				<i class="<?php echo($Class); ?>"></i>
 		</span>
 		<?php
+
 			if($Prod['promocao_ativo'] === 1){
 		?>
-		<br>
-		<i><del>De R$ <?php echo($Prod['Preco']) ?></del></i>
-		<span class="d-inline mt-1 text-success">Por R$ <?php echo(strval($Prod['promocao'])) ?></span>
+			<br>
+			<i><del>De R$ <?php echo($Prod['Preco']) ?></del></i>
+			<span class="d-inline mt-1 text-success">Por R$ <?php echo(strval($Prod['promocao'])) ?></span>
 		<?php
 			}else{ 
 		?>
-		<span class="d-block mt-1">R$ <?php echo(strval($Prod['Preco'])) ?></span>
+			<span class="d-inline mt-1"><?php echo('R$' . strval($Prod['Preco'])) ?></span>
 		<?php
+			}
+
+			if($Prod['vizu_3d'] === 1){
+				echo "<span class='bg-secondary px-1 rounded text-white font-weight-bold float-right'> 3D <i class='fa-solid fa-cubes'></i></span>";
 			}
 		?>
 	</div>

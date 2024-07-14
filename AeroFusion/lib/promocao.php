@@ -51,6 +51,8 @@
                         prod.estoque as Estoque,
                         FORMAT(prod.promocao, 2, 'pt_BR') as promocao,
                         prod.promocao_ativo,
+                        prod.vizu_3d,
+                        prod.obj_3d,
                         cat.nome_cat as Categoria,
                         img_prod.img1,
                         img_prod.img2,

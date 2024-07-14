@@ -53,7 +53,9 @@
                         img_prod.img2 as img2,
                         img_prod.img3 as img3,
                         img_prod.img4 as img4,
-                        img_prod.img5 as img5
+                        img_prod.img5 as img5,
+                        prod.vizu_3d,
+                        prod.obj_3d
                     FROM
                         produtos AS prod
                     INNER JOIN  
@@ -187,6 +189,8 @@
                         img_prod.img3,
                         img_prod.img4,
                         img_prod.img5,
+                        prod.vizu_3d,
+                        prod.obj_3d,
                         cat.nome_cat as categoria,
 						CASE 
 						    WHEN prod.estoque > 0 THEN 'SIM'

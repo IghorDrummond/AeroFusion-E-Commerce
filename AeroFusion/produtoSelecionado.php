@@ -153,6 +153,13 @@
 					</p>
 					<?php
 						}
+						if($Produto['vizu_3d'] === 1){
+							echo "
+								<button class='btn btn-secondary' onclick='visualizar3D(this)' data-toggle='3Ds/{$Produto['obj_3d']}'>Visualizar em 3D 
+									<i class='fa-solid fa-cubes'></i>
+								</button>
+							";
+						}
 					?>
 				</article>
 			</section>
