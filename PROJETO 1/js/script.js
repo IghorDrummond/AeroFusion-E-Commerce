@@ -611,6 +611,7 @@ Programador: Ighor Drummond
 */
 function visualizar3D(element){
     var srcObj = element.getAttribute('data-toggle');
+    let i = document.createElement('i');
 
     if(estadoAnima === 0){
         telaCarregamento(true);
@@ -618,16 +619,18 @@ function visualizar3D(element){
         carregarCena();//Carrega cenário
         carregarLuz();//Carregar iluminação do cenário
         carregarObj3D(srcObj);//Adicionar objeto ao cenário
-        telaCarregamento(false);
-        element.textContent = 'voltar Carousel';
+        i.classList.add('fa-solid', 'fa-panorama');
+        element.textContent = 'Voltar para Imagens ';
+        element.appendChild(i);
     }else{
         destruirCenario();
         QuadroProduto.classList.add('d-none');
         Carousel.classList.remove('d-none');
         estadoAnima = 0;
-        element.textContent = '3D';
+        i.classList.add('fa-solid', 'fa-cubes');
+        element.textContent = 'Visualizar em 3D ';
+        element.appendChild(i);
     }
-    //<i class="fa-solid fa-panorama"></i>
 }
 /*
 Função: carregarCena()
@@ -653,7 +656,6 @@ function carregarCena(){
     QuadroProduto.classList.remove('d-none');
     //Adiciona Renderização ao corpo do elemento
     QuadroProduto.appendChild(renderizacao.domElement);
-
 }
 /*
 Função: carregarLuz()
@@ -673,6 +675,9 @@ function carregarLuz(){
 
     //Adiciona orbita de controle
     Orbita = new THREE.OrbitControls(camera, renderizacao.domElement);
+    Orbita.enableDamping = true; // Adiciona amortecimento para suavizar movimentos
+    Orbita.minDistance = 10; // Distância mínima da câmera ao objeto 
+    Orbita.maxDistance = 50; // Distância máxima da câmera ao objeto 
 }
 /*
 Função: carregarObj3D(diretorio 3d)
@@ -688,6 +693,10 @@ function carregarObj3D(src){
         modelo = gltf.scene;//Modelo recebe cena para configurar
         modelo.position.set(0, 0.6, 0);//posiciona o elemento 
         cena.add(modelo);//adiciona elemento cofigurado ao cenário
+
+        if (typeof callback === 'function') {
+            callback();
+        }
 
         //Adiciona orbita controlavel
         function animacao(){
@@ -713,9 +722,6 @@ function destruirCenario(){
     // Limpar a cena
     cena.remove(); // Remove todos os objetos da cena
 
-    // Liberação de recursos
-    // Exemplo: se houver alguma textura ou geometria, você deve limpar também
-
     // Remover renderizador
     renderizacao.domElement.remove();
 
@@ -729,4 +735,13 @@ function destruirCenario(){
     cena = null;
     camera = null;
     renderizacao = null;
+}
+/*
+Função: callback()
+Descrição: Responsavel por dar um estado de concluído ao carregar objeto
+Data: 14/06/2024
+Programador: Ighor Drummond
+*/
+function callback(){
+    telaCarregamento(false);
 }
