@@ -14,26 +14,26 @@
 	<?php require_once ('script/cabecalho.php'); ?>
 	<main class="d-flex flex-lg-row flex-column">
 		<header>
-			<nav id="nav_conteudo" class="navbar h-50">
-				<a class="navbar-brand" href="#">
+			<nav id="nav_conteudo" class="p-1 h-50">
+				<a class="navbar-brand mx-1" href="#">
 					Seu Painel
 					<img src="img/novo_usuario.png" class="rounded-circle border img-fluid" width="50" height="50"> 
 				</a>
-				<ul class="nav nav-pills flex-lg-column flex-row">
-					<li class="nav-item">
-						<a class="nav-link active" href="#pedidos">Pedidos</a>
+				<ul class="navegacao_lista">
+					<li>
+						<a class="nav-link" >Pedidos</a>
 					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#favoritos">Favoritos</a>
+					<li>
+						<a class="nav-link" >Favoritos</a>
 					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#protocolos">Protocolos</a>
+					<li>
+						<a class="nav-link" >Protocolos</a>
 					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#carrinho">Carrinho</a>
+					<li>
+						<a class="nav-link" >Carrinho</a>
 					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#configuracao">Configuração</a>
+					<li>
+						<a class="nav-link" >Configuração</a>
 					</li>
 				</ul>
 			</nav>
@@ -42,21 +42,21 @@
 		<section class="container-fluid" data-bs-spy="scroll" data-bs-target="#nav_conteudo" data-bs-offset="0" tabindex="0">
 			<h4 id="pedidos">Pedidos</h4>
 			<article class="mt-2 bg-warning rounded p-1">
-				<ul>
-					<li class="d-flex flex-lg-row flex-column">
-						<div class="border w-100 text-center">
-							<h1>#IDdoPedido</h1>
-							<time>Data do Pedido</time>
-							<h6>Status do pedido</h6>
-							<h6>Valor total</h6>
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-lg-6">
+							<h1 class="d-inline">ID DO PEDIDO</h1>
+							<h3 class="d-inline">Status do Pedido</h3>
+							<br>
+							<time>Data Pedido</time>
+							<h3>Forma de pagamento</h3>
+							<h3>valor total</h3>
 						</div>
-						<div class="w-100">
-							<h6>Nome do Produto</h6>
-							<img src="">Imagem do produto
-							<h6>quant</h6>
+						<div class="col-lg-6">
+							dados de cada item do pedido
 						</div>
-					</li>
-				</ul>
+					</div>
+				</div>
 			</article>
 			<h4 id="favoritos">Favoritos</h4>
 			<article class="mt-2 bg-warning rounded">

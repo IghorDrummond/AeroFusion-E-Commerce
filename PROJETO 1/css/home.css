@@ -6,7 +6,24 @@ article
 	max-height: 70vh;
 	overflow: auto;
 }
+/* Barra de Navegação */
+.navegacao_lista{
+	list-style-type: none;
+}
+.navegacao_lista li{
+	border-radius: 20px;
+	margin: 5px;
+	cursor: pointer;
+}
+
 /* Conteúdo */
 section{
 	 position: relative;
+}
+
+
+@media (max-width: 768px){
+	.navegacao_lista li{
+		float: left;
+	}
 }
