@@ -21,7 +21,6 @@ section{
 	 position: relative;
 }
 
-
 /* Pedidos */
 table{
 	border-collapse: separate;
@@ -46,7 +45,8 @@ tbody tr td{
 	border-right: 2px solid white;
 }
 .itens_tabela{
-	animation: expandindoParaFora 1s;
+	-webkit-animation: expandindoParaFora 1s;
+	        animation: expandindoParaFora 1s;
 }
 
 /* Hovers */
@@ -63,24 +63,53 @@ tbody tr:not(hover){
 }
 
 /* Animações */
-@keyframes expandindoParaFora {
+@-webkit-keyframes expandindoParaFora {
     0% {
-        transform: scaleY(0);
+        -webkit-transform: scale(0);
+                transform: scale(0);
         opacity: 0;
     }
     100% {
-        transform: scaleY(1);
+        -webkit-transform: scale(1);
+                transform: scale(1);
+        opacity: 1;
+    }
+}
+@keyframes expandindoParaFora {
+    0% {
+        -webkit-transform: scale(0);
+                transform: scale(0);
+        opacity: 0;
+    }
+    100% {
+        -webkit-transform: scale(1);
+                transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes expandindoParaDentro {
+    0% {
+        -webkit-transform: scaleY(0);
+                transform: scaleY(0);
+        opacity: 0;
+    }
+    100% {
+        -webkit-transform: scaleY(1);
+                transform: scaleY(1);
         opacity: 1;
     }
 }
 
 @keyframes expandindoParaDentro {
     0% {
-        transform: scaleY(0);
+        -webkit-transform: scaleY(0);
+                transform: scaleY(0);
         opacity: 0;
     }
     100% {
-        transform: scaleY(1);
+        -webkit-transform: scaleY(1);
+                transform: scaleY(1);
         opacity: 1;
     }
 }

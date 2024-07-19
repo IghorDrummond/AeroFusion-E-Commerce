@@ -17,6 +17,12 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 //--------------------------Funções
+/*
+Função: alerta()
+Descrição: Responsavel por ligar o alerta na página
+Data: 19/05/2024
+Programador: Ighor Drummond
+*/
 function ativarItens(posic, event){
     event.stopPropagation();
 
@@ -37,5 +43,29 @@ function ativarItens(posic, event){
             icone.classList.add('fa-chevron-down');
         }
     }
-
+}
+/*
+Função: alerta()
+Descrição: Responsavel por ligar o alerta na página
+Data: 19/05/2024
+Programador: Ighor Drummond
+*/
+function prosseguirPedido(Ped){
+    $('table').load('script/pedidos.php?Opc=15&Ped=' + Ped.toString(), ()=>{
+        window.location.href = "pagamento.php";
+    });
+}
+/*
+Função: alerta()
+Descrição: Responsavel por ligar o alerta na página
+Data: 19/05/2024
+Programador: Ighor Drummond
+*/
+function cancelaPedido(Ped){
+    if(confirm('Deseja realmente cancelar o pedido ' + Ped.toString() + '?')){
+        $('table').load('script/pedidos.php?Opc=15&Ped=' + Ped.toString());
+        $('table').load('script/pedidos.php?Opc=14', ()=>{
+            window.location.reload(); 
+        });     
+    }
 }

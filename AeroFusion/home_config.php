@@ -76,16 +76,38 @@
 								</div>
 							<?php 
 								}
-
 								//Fazer validaç~eos sobre os bot~eos para cada status do pedido
 							?>
-								<div class="text-lg-right text-left px-2">
-									<button class="btn btn-primary rounded">
-										Prosseguir para o pagamento
-									</button>
-									<button class="btn btn-danger rounded">
-										Cancelar Pedido
-									</button>
+								<div class="text-lg-right text-left px-2">		
+									<?php
+										if($Ped['nome'] === 'Pendente'){
+									?>
+										<button class="btn btn-primary rounded" onclick="prosseguirPedido(<?php echo($Ped['id_ped']) ?>)">
+											Prosseguir para o pagamento
+										</button>
+									<?php
+										}
+									?>
+
+									<?php
+										if($Ped['nome'] === 'Pendente' or $Ped['nome'] === 'Aguardando Envio'){
+									?>
+										<button class="btn btn-danger rounded" onclick="cancelaPedido(<?php echo($Ped['id_ped']) ?>)">
+											Cancelar Pedido
+										</button>
+									<?php
+										}
+									?>
+
+									<?php
+										if($Ped['nome'] === 'Entregue'){
+									?>
+										<button class="btn btn-info rounded" onclick="cancelaPedido(<?php echo($Ped['id_ped']) ?>)">
+											Avaliar Pedido
+										</button>
+									<?php
+										}
+									?>
 								</div>
 							</td>
 						</tr>
@@ -96,7 +118,9 @@
 				</table>
 			</article>
 
-			<article>
-				
+			<article class="mt-2 bg-warning rounded p-1">
+				<div>
+					<h4 id="pedidos">Favoritos</h4>
+				</div>
 			</article>
 		</section>

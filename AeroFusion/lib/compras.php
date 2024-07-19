@@ -974,6 +974,12 @@ namespace Pedido {
 			$this->montaQuery(6);
 			$this->getDados();
 			$this->Parcelamento = 1;
+			$this->IdCli = $this->stmt[0]['id_cliente'];
+			//Valida se o pedido já foi cancelado
+			if($this->stmt[0]['status_'] != 'Pendente' and $this->stmt[0]['status_'] != 'Aguardando Envio'){
+				return null;
+			}
+			$this->status = '6';
 			$Pedido = $this->stmt;
 			//Devolve os produtos ao estoque
 			foreach ($Pedido as $ProdQuant) {
@@ -1218,6 +1224,8 @@ namespace Pedido {
 						status as st ON st.id_sta = ped.status
 					WHERE
 						cli.email = '$this->Email'
+					ORDER BY
+						ped.id_ped DESC
 				";
 			}
 		}

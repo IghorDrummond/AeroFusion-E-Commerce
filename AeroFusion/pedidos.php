@@ -73,6 +73,9 @@
 		case '14':
 			cancelarPedido();
 			break;
+		case '15':
+			selecionarPedido();
+			break;
 	}
 
 	function montaTela()
@@ -616,6 +619,12 @@
 			$Cartao = new Cartao($_SESSION['Email']);
 			$Cartao->setCartao(str_replace(' ', '', $_GET['numero']), strtoupper($_GET['nome']), $_GET['bandeira'], $_GET['validade'], $_GET['cvv']);
 			montaTela();//Prepara a tela novamente para adição do cartão
+		}
+	}
+
+	function selecionarPedido(){
+		if(isset($_GET['Ped']) and !empty($_GET['Ped'])){
+			$_SESSION['IdPed'] = $_GET['Ped'];
 		}
 	}
 ?>
