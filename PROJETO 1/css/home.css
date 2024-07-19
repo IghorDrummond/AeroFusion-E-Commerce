@@ -22,6 +22,69 @@ section{
 }
 
 
+/* Pedidos */
+table{
+	border-collapse: separate;
+}
+tr,th{
+	cursor: pointer	;
+}
+thead tr{
+	line-height: 75px;
+}
+tbody tr{
+	line-height: 55px;
+}
+thead tr th{
+	border-top: 15px solid gray;
+	letter-spacing: 0.3em;
+}
+thead tr th,
+tbody tr td{
+	border-collapse: separate;
+	border-left: 2px solid white;
+	border-right: 2px solid white;
+}
+.itens_tabela{
+	animation: expandindoParaFora 1s;
+}
+
+/* Hovers */
+tbody tr:hover{
+	background: rgba(0,191,255, 0.6) !important;
+	-webkit-transition: all 1s;
+	-o-transition: all 1s;
+	transition: all 1s;
+}
+tbody tr:not(hover){
+	-webkit-transition: all 1s;
+	-o-transition: all 1s;
+	transition: all 1s;
+}
+
+/* Animações */
+@keyframes expandindoParaFora {
+    0% {
+        transform: scaleY(0);
+        opacity: 0;
+    }
+    100% {
+        transform: scaleY(1);
+        opacity: 1;
+    }
+}
+
+@keyframes expandindoParaDentro {
+    0% {
+        transform: scaleY(0);
+        opacity: 0;
+    }
+    100% {
+        transform: scaleY(1);
+        opacity: 1;
+    }
+}
+
 @media (max-width: 768px){
 	.navegacao_lista li{
 		float: left;

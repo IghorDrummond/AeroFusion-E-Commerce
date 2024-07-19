@@ -12,30 +12,18 @@ var aviso = document.getElementsByClassName('alertas');
 var aviso_texto = document.getElementsByClassName('alerta_texto');
 var quantCarrinho = document.getElementsByClassName('badge-primary');
 var produtos = document?.getElementsByClassName('produto');
-var QuadroProduto = document.getElementById('3d');
-var Carousel = document.getElementById('carouselExampleIndicators');
-var campoApProd = document?.getElementsByTagName('article')[0];
 //Numerico
 var tamAnt = 0;
 var Tam = 0;
 var scrollHeight = 0;
 var PosicImg = 0;
 var ide = 0;
-var estadoAnima = 0;
 //Array
 var produtosSelecionados = [];
 var antValoresInput = [];
 var Intervalos = new Array(produtos.length).fill(null);
 // Objeto
 var ajax = null;
-var cena = null;
-var camera = null;
-var renderizacao = null;
-var carregador = null;
-var Luz = null;
-var DirLuz = null;
-var modelo = null
-var Orbita = null;
 // Função Anônima para abrir a caixa de diálogo
 var abreConfig = function () {
     // Obtenha a posição da imagem
@@ -156,19 +144,6 @@ document.querySelectorAll('input[name="CarProd"]').forEach(checkbox => {
             produtosSelecionados = produtosSelecionados.filter(item => item !== event.target.value);
         }
     });
-});
-/*
-*Evento: resize()
-*Descrição: Ajusta o tamanho do quadro 3d caso houver alteração de tamanho da página
-*Programador(a): Ighor Drummond
-*Data: 20/05/2024
-*/
-window.addEventListener('resize', () => {
-    if(campoApProd && Luz){
-        camera.aspect = campoApProd.clientWidth / campoApProd.clientHeight;
-        camera.updateProjectionMatrix();
-        renderizacao.setSize(campoApProd.clientWidth, campoApProd.clientHeight);   
-    }
 });
 
 // ------------------------- Funções
@@ -604,146 +579,4 @@ function favorito(event, Prod){
     }   
     //Ativa requisição
     ajax.send()
-}
-/*
-Função: visualizar3D(elemento)
-Descrição: Responsavel por configurar todo o quadro 3d
-Data: 14/06/2024
-Programador: Ighor Drummond
-*/
-function visualizar3D(element){
-    var srcObj = element.getAttribute('data-toggle');
-    let i = document.createElement('i');
-
-    if(estadoAnima === 0){
-        telaCarregamento(true);
-        estadoAnima = 1;
-        carregarCena();//Carrega cenário
-        carregarLuz();//Carregar iluminação do cenário
-        carregarObj3D(srcObj);//Adicionar objeto ao cenário
-        i.classList.add('fa-solid', 'fa-panorama');
-        element.textContent = 'Voltar para Imagens ';
-        element.appendChild(i);
-    }else{
-        destruirCenario();
-        QuadroProduto.classList.add('d-none');
-        Carousel.classList.remove('d-none');
-        estadoAnima = 0;
-        i.classList.add('fa-solid', 'fa-cubes');
-        element.textContent = 'Visualizar em 3D ';
-        element.appendChild(i);
-    }
-}
-/*
-Função: carregarCena()
-Descrição: Responsavel por carregar a cena, camera e adicionar ao Quadro
-Data: 14/06/2024
-Programador: Ighor Drummond
-*/
-function carregarCena(){
-    //Carrega cena para iniciar um quadro 3D
-    cena = new THREE.Scene();
-    //Ajusta a pespectiva da camera
-    camera = new THREE.PerspectiveCamera(75, campoApProd.clientWidth / campoApProd.clientHeight, 0.1, 1000);
-    camera.position.set(0, 6, 35); // Ajusta a posição inicial da câmera
-    renderizacao = new THREE.WebGLRenderer({antialias: true, alpha: true})//Liga o Anti-Aliasing
-    renderizacao.setClearColor(0x000000, 0);//Remove fundo preto do cebário, tornado transparente
-    renderizacao.setSize(campoApProd.clientWidth, campoApProd.clientHeight);//Ajusta tamanho do quadro para renderizar
-    //Seta tamanho do quadro igual ao do campoApProd
-    QuadroProduto.clientWidth = campoApProd.clientWidth;
-    QuadroProduto.clientHeight = campoApProd.clientHeight;
-    //Desliga campoApProd
-    Carousel.classList.add('d-none');
-    //Ativa Quadro 3d
-    QuadroProduto.classList.remove('d-none');
-    //Adiciona Renderização ao corpo do elemento
-    QuadroProduto.appendChild(renderizacao.domElement);
-}
-/*
-Função: carregarLuz()
-Descrição: Responsavel por configurar a luz e a direção da mesma além de iniciar controle de orbita
-Data: 14/06/2024
-Programador: Ighor Drummond
-*/
-function carregarLuz(){
-    Luz = new THREE.AmbientLight(0xffffff, 0.5);//Adiciona cor e força da iluminação
-    //Adiciona ao cenário
-    cena.add(Luz);
-
-    //Aplicando uma direção a luz
-    DirLuz = new THREE.DirectionalLight(0xffffff, 0.9);
-    DirLuz.position.set(8, 100, 2);
-    cena.add(DirLuz);
-
-    //Adiciona orbita de controle
-    Orbita = new THREE.OrbitControls(camera, renderizacao.domElement);
-    Orbita.enableDamping = true; // Adiciona amortecimento para suavizar movimentos
-    Orbita.minDistance = 10; // Distância mínima da câmera ao objeto 
-    Orbita.maxDistance = 50; // Distância máxima da câmera ao objeto 
-}
-/*
-Função: carregarObj3D(diretorio 3d)
-Descrição: Responsavel por carregar Objeto 3d e adicionar ao cenário
-Data: 14/06/2024
-Programador: Ighor Drummond
-*/
-function carregarObj3D(src){
-    //Prepara para adicionar o objeto no formato GLTF
-    carregador = new THREE.GLTFLoader();
-    //Adiciona Objeto pelo diretório e Configura objeto 3d com Orbita de controle
-    carregador.load(src, (gltf)=>{
-        modelo = gltf.scene;//Modelo recebe cena para configurar
-        modelo.position.set(0, 0.6, 0);//posiciona o elemento 
-        cena.add(modelo);//adiciona elemento cofigurado ao cenário
-
-        if (typeof callback === 'function') {
-            callback();
-        }
-
-        //Adiciona orbita controlavel
-        function animacao(){
-            requestAnimationFrame(animacao);
-            //anima orbita
-            Orbita.update();
-            //Renderiza frame 
-            renderizacao.render(cena, camera);
-        }
-
-        animacao(); //inicia animação de controle de orbita
-    }, undefined, function(error){
-        alerta('Algo deu errado ao carregar elemento 3D', 0);
-    });
-}
-/*
-Função: destruirCenario()
-Descrição: Responsavel por destruir cenário e objetos 3d
-Data: 14/06/2024
-Programador: Ighor Drummond
-*/
-function destruirCenario(){
-    // Limpar a cena
-    cena.remove(); // Remove todos os objetos da cena
-
-    // Remover renderizador
-    renderizacao.domElement.remove();
-
-    // Limpar controles, se existirem
-    if (Orbita) {
-        Orbita.dispose();
-        Orbita = null;
-    }
-
-    // Limpar variáveis globais
-    cena = null;
-    camera = null;
-    renderizacao = null;
-}
-/*
-Função: callback()
-Descrição: Responsavel por dar um estado de concluído ao carregar objeto
-Data: 14/06/2024
-Programador: Ighor Drummond
-*/
-function callback(){
-    telaCarregamento(false);
 }

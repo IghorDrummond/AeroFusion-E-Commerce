@@ -374,6 +374,17 @@
             //Métodos
             /*
             *Metodo: retornaValores()
+            *Descrição: Retorna os produtos favoritados
+            *Data: 17/07/2024
+            *Programador(a): Ighor Drummond
+            */
+            public function getFavoritos(){
+                $this->montaQuery(4);
+                $this->stmt = $this->conexao->query($this->query);
+                return $this->stmt->fetchAll(\PDO::FETCH_ASSOC);
+            }
+            /*
+            *Metodo: retornaValores()
             *Descrição: Retorna valores da pesquisa da query
             *Data: 13/06/2024
             *Programador(a): Ighor Drummond
@@ -458,7 +469,7 @@
                             cliente as cli ON cli.id = fav.id_cliente
                         WHERE
                             cli.email = '$this->Email'
-                        AND id_prod = $this->IdProd 
+                            AND id_prod = $this->IdProd 
                 ";
                 }else if($Opc === 1){
                     $this->query = "
@@ -481,6 +492,17 @@
                             cliente
                         WHERE 
                             email = '$this->Email';
+                    ";
+                }else if($Opc === 4){
+                    $this->query = "
+                        SELECT 
+                            *
+                        FROM
+                            favoritos as fav
+                        INNER JOIN
+                            cliente as cli ON cli.id = fav.id_cliente
+                        WHERE
+                            cli.email = '$this->Email'
                     ";
                 }
             }

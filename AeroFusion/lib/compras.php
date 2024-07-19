@@ -896,7 +896,18 @@ namespace Pedido {
 			$this->getDados();
 			return $this->stmt;
 		}
-
+		/*
+		 *Metodo: getPedidos(Email do usuário)
+		 *Descrição: Responsavel por retornar todos os pedidos existentes
+		 *Data: 17/07/2024
+		 *Programador(a): Ighor Drummond
+		 */
+		public function getPedidos($Email){
+			$this->Email = $Email;
+			$this->montaQuery(9);
+			$this->getDados();
+			return $this->stmt;
+		}
 		/*
 		 *Metodo: setPagamento()
 		 *Descrição: Responsavel por retornar finalizar pedido após pagamento
@@ -1169,9 +1180,9 @@ namespace Pedido {
 					INNER JOIN
 						status as st ON st.id_sta = Pd.status
 					WHERE
-						Pd.id_ped = $this->IdPed
-						AND cli.email = '$this->Email'
-				";				
+						cli.email = '$this->Email'
+						AND Pd.id_ped = $this->IdPed 
+				";	
 			}else if($Opc === 7){
 				$this->query = "
 					UPDATE
@@ -1191,6 +1202,22 @@ namespace Pedido {
 						produtos
 					WHERE
 						id_prod = $this->IdProd
+				";
+			}else if($Opc === 9){
+				$this->query = "
+					SELECT
+						*,
+						CONCAT('R$ ', REPLACE(FORMAT(ped.valor_total, 2), ',', '.')) AS valor_total
+					FROM
+						pedidos as ped
+					INNER JOIN 
+						cliente as cli ON cli.id = ped.id_cliente
+					INNER JOIN 
+						forma_pagamento as fm ON fm.id_form = ped.id_form
+					INNER JOIN 
+						status as st ON st.id_sta = ped.status
+					WHERE
+						cli.email = '$this->Email'
 				";
 			}
 		}
