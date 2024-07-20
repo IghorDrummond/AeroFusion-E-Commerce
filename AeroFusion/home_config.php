@@ -137,8 +137,13 @@
 					<?php
 						$Favoritos = new Favoritos($_SESSION['Email']);
 						foreach ($Favoritos->getFavoritos() as $Key => $Fav) {
+
+							$Class = "";
+							if($Fav['disponibilidade'] != "SIM"){
+								$Class = " bg-secondary text-white ";
+							}
 					?>	
-						<tr class=" <?php echo $Key % 2 === 0 ? 'linha_ped' : '' ?> ">
+						<tr class="<?php echo $Class ?>">
 							<td onclick="maisDetalhes(<?php echo( $Fav['id_prod'] ) ?>)">
 								<!-- Inicio do carousel -->
 								<div class="carousel slide" data-ride="carousel" data-interval="3000" data-pause="false">
@@ -166,6 +171,10 @@
 								?>
 							</td>
 							<td class="text-center">
+
+							<?php
+								if($Fav['disponibilidade'] === "SIM"){
+							?>
 								<h6><?php echo mb_convert_case($Fav['nome'], MB_CASE_TITLE, 'UTF-8');?></h6>
 								<small class="text-info"><?php echo mb_convert_case($Fav['nome_cat'], MB_CASE_TITLE, 'UTF-8');?></small>
 								<br>
@@ -188,6 +197,18 @@
 								<button class="btn btn-danger" onclick="favorito(this, <?php echo($Fav['id_prod']); ?>)">
 									Remover <i class="fa-solid fa-star"></i>
 								</button>
+							<?php
+								}else{
+							?>
+								<p class="text-danger font-weight-bold">
+									Produto fora de estoque!!!
+								</p>
+								<button class="btn btn-danger" onclick="favorito(this, <?php echo($Fav['id_prod']); ?>)">
+									Remover <i class="fa-solid fa-star"></i>
+								</button>
+							<?php
+								}
+							?>
 							</td>	
 						</tr>
 					<?php
@@ -203,6 +224,13 @@
 
 			<article class="mt-2 bg-warning rounded p-1">
 				<h4>Carrinho</h4>
+				<table>
+					<thead>
+						<tr>
+							<th>Item</th>
+						</tr>
+					</thead>
+				</table>	
 			</article>
 			
 			<article class="mt-2 bg-warning rounded p-1">
