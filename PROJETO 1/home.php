@@ -20,19 +20,19 @@
 				</a>
 				<ul class="navegacao_lista">
 					<li>
-						<a class="nav-link" >Pedidos</a>
+						<a class="nav-link" href="#Pedidos">Pedidos</a>
 					</li>
 					<li>
-						<a class="nav-link" >Favoritos</a>
+						<a class="nav-link" href="#Favoritos">Favoritos</a>
 					</li>
 					<li>
-						<a class="nav-link" >Protocolos</a>
+						<a class="nav-link" href="#Protocolos">Protocolos</a>
 					</li>
 					<li>
-						<a class="nav-link" >Carrinho</a>
+						<a class="nav-link" href="#Carrinho">Carrinho</a>
 					</li>
 					<li>
-						<a class="nav-link" >Configuração</a>
+						<a class="nav-link" href="#Configuracao">Configuração</a>
 					</li>
 				</ul>
 			</nav>

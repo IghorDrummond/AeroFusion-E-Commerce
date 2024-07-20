@@ -216,10 +216,15 @@ namespace Compra {
 					prod.promocao,
 					prod.promocao_ativo,
 					prod.preco,
+					prod.vizu_3d,
 					cli.nome,
 					car.quant,
 					car.id_car,
 					img_prod.img1 as img,
+					img_prod.img2 as img2,
+					img_prod.img3 as img3,
+					img_prod.img4 as img4,
+					img_prod.img5 as img5,
 					tam.nome_tam as tamanho,
 					FORMAT(CASE
 						WHEN 

@@ -1,5 +1,5 @@
 <?php
-	require ('../AeroFusion/home_config.php');
+	require ('../../AeroFusion/home_config.php');
     /*
         Aviso aos que tentam invadir ou hackear este sistema:
         

@@ -14,7 +14,13 @@
 	use Pedido\novoPedido;
 	use Produto\Favoritos;
 
+	if(session_status() === PHP_SESSION_NONE){
+		session_start();
+	}
+
 	//Declaração de variaveis
+	//String
+	$Opc = (!isset($_GET['Opc']) or empty($_GET['Opc'])) ? '' : $_GET['Opc'];
 	//Objetos
 	$Compras = null;
 	$Cartao = null;
@@ -31,15 +37,39 @@
 
 	*/
 
+	switch ($Opc) {
+		case '2':
+			Pedidos();
+			break;
+		case '3':
+			Favoritos();
+			break;
+		case '4':
+			Protocolos();
+			break;
+		case '5':
+			Carrinho();
+			break;
+		case '6':
+			Configuracao();
+			break;
+		default: 
+			Pedidos();
+			Favoritos();
+			Protocolos();
+			Carrinho();
+			Configuracao();
+			break;
+	}
 
 	//Escopo
-	$Compras = new novoPedido();
-	$Favoritos = new Favoritos($_SESSION['Email']);
+	function Pedidos(){
+		$Compras = new novoPedido();
 ?>
 		<!-- Inicio dos conteúdos -->
 		<section class="w-100">
-			<article class="mt-2 bg-warning rounded p-1">
-				<h4 id="pedidos">Pedidos Efetuados</h4>
+			<article id="Pedidos" class="mt-2 bg-warning rounded p-1">
+				<h1>Pedidos Efetuados</h1>
 				<table class="w-100 bg-white shadow rounded text-center">
 					<thead >
 						<tr>
@@ -56,7 +86,7 @@
 						?>
 						<tr <?php echo ($key % 2 === 0 ? 'class="bg-light linha_ped"' : '') ?>>
 							<td>#<?php echo $Ped['id_ped']; ?></td>
-							<td><time><?php echo date('d/m/Y H:i:s', strtotime($Ped['data_pedido'])); ?></time></td>
+							<td><time><?php echo date('d/m/Y H:i', strtotime($Ped['data_pedido'])); ?></time></td>
 							<td><?php echo $Ped['nome']; ?></td>
 							<td class="text-right"><?php echo $Ped['valor_total']; ?></td>
 							<td class="p-3">
@@ -124,10 +154,15 @@
 					</tbody>
 				</table>
 			</article>
+<?php
+	}
 
-			<article class="mt-2 bg-warning rounded p-1">
+	function Favoritos(){
+		$Favoritos = new Favoritos($_SESSION['Email']);
+?>
+			<article id="Favoritos" class="mt-2 bg-warning rounded p-1">
+				<h1>Favoritos</h1>
 				<div>
-					<h4 id="pedidos">Favoritos</h4>
 					<table class="w-100 mt-2 bg-white">
 						<thead class="text-center">
 							<th>Imagens</th>
@@ -194,8 +229,8 @@
 								<button class="btn btn-primary" onclick="maisDetalhes(<?php echo( $Fav['id_prod'] ) ?>)">
 									Ver Produto
 								</button>
-								<button class="btn btn-danger" onclick="favorito(this, <?php echo($Fav['id_prod']); ?>)">
-									Remover <i class="fa-solid fa-star"></i>
+								<button class="btn btn-danger" onclick="deletarFav(<?php echo($Fav['id_prod']); ?>)">
+									Remover
 								</button>
 							<?php
 								}else{
@@ -203,7 +238,7 @@
 								<p class="text-danger font-weight-bold">
 									Produto fora de estoque!!!
 								</p>
-								<button class="btn btn-danger" onclick="favorito(this, <?php echo($Fav['id_prod']); ?>)">
+								<button class="btn btn-danger" onclick="deletarFav(<?php echo $Key ?>, <?php echo($Fav['id_prod']); ?>)">
 									Remover <i class="fa-solid fa-star"></i>
 								</button>
 							<?php
@@ -217,23 +252,119 @@
 					</tbody>
 				</table>
 			</article>
+<?php
+	}
 
-			<article class="mt-2 bg-warning rounded p-1">
+	function Protocolos(){
+		$Favoritos = new Favoritos($_SESSION['Email']);
+?>
+			<article id="Protocolos" class="mt-2 bg-warning rounded p-1">
 				<h4>Protocolos</h4>
 			</article>
+<?php
+	}
 
-			<article class="mt-2 bg-warning rounded p-1">
-				<h4>Carrinho</h4>
-				<table>
+	function Carrinho(){
+		$Carrinho = new VerCarrinho($_SESSION['Email']);
+		$Carrinho = $Carrinho->retornaValores();
+		$Total = isset($Carrinho[0]['total_carrinho']) ? $Carrinho[0]['total_carrinho'] : 0;
+?>
+			<article id="Carrinho" class="mt-2 bg-warning rounded p-1">
+				<h1>Carrinho</h1>
+				<table class="w-100 bg-white">
 					<thead>
-						<tr>
-							<th>Item</th>
+						<tr class="text-center">
+							<th>Imagens</th>
+							<th>Detalhes do Carrinho</th>
 						</tr>
 					</thead>
+					<tbody>
+						<?php
+							foreach($Carrinho as $Car){
+						?>
+						<tr>
+							<td onclick="maisDetalhes(<?php echo( $Car['id_prod'] ) ?>)" >
+								<!-- Inicio do carousel -->
+								<div class="carousel slide" data-ride="carousel" data-interval="3000" data-pause="false">
+									<div class="carousel-inner">
+										<!-- Imagens do carousel -->
+										<div class="carousel-item active">
+											<img src="img/<?php echo($Car['img']); ?>" class="imagem_carousel img-fluid">
+										</div>
+										<?php 
+											for($i = 2; $i <= 5; $i++){
+												if($Car['img' . strval($i)] === ''){
+													continue;
+												}
+										?>	
+										<div class="carousel-item <?php print($i === 2 ? "active" : "") ?>">
+											<img src="img/<?php echo($Car['img' . strval($i)]); ?>" class="imagem_carousel img-fluid">
+										</div>
+										<?php
+											}
+										?>
+									</div>
+								</div>
+								<?php
+									if($Car['vizu_3d'] === 1){
+										echo "<span class='bg-secondary px-1 rounded text-white font-weight-bold float-left'> 3D <i class='fa-solid fa-cubes'></i></span>";
+									}
+								?>
+							</td>								
+							<td class="text-center">
+								<h6><?php echo mb_convert_case($Car['produto'], MB_CASE_TITLE, 'UTF-8');?></h6>
+								<h6>Preço do Item:
+								<?php
+									if($Car['promocao_ativo'] === 1){
+								?>
+									<del>De R$ <?php echo($Car['preco']) ?></del>
+									<span class="d-inline mt-1 text-success">Por R$ <?php echo(strval($Car['promocao'])) ?></span>
+								<?php
+									}else{ 
+								?>
+									<span class="d-inline mt-1"><?php echo('R$ ' . strval($Car['preco'])) ?></span>
+								<?php
+									}
+								?>
+								</h6>
+								<h6>Tamanho: <?php echo('R$ ' . strval($Car['tamanho'])) ?></h6>
+								<h6>Quantidade: <?php echo($Car['quant']) ?></h6>
+								<h5>Total do Item: <?php echo('R$ ' . strval($Car['total_item'])) ?></h5>
+								<div class="btn-group text-white font-weight-bold bg-primary rounded" role="group">
+									<button class="btn btn-primary rounded"
+										onclick="atualizaQuant('+', <?php echo ($Car['id_car']); ?>, this)">
+										+
+									</button>
+									<span class="mx-2 quantidade_acao"><?php echo ($Car['quant']); ?></span>
+									<button type="button" class="btn btn-primary rounded"
+										onclick="atualizaQuant('-', <?php echo ($Car['id_car']); ?>, this)">
+										-
+									</button>
+								</div>
+								<button class="btn btn-danger text-white font-weight-bold"
+									onclick="deletaProdCar(<?php echo ($Car['id_car']); ?>)">
+									Deletar <i class="fa-solid fa-trash-can"></i>
+								</button>
+							</td>	
+						</tr>	
+						<?php
+							}
+						?>
+					</tbody>
+					<tfoot class="bg-white border rounded mt-2">
+						<h2>Total do Carrinho: <?php echo('R$ ' . strval($Total) ) ?></h2>
+					</tfoot>
 				</table>	
 			</article>
-			
-			<article class="mt-2 bg-warning rounded p-1">
-				<h4>Configuração</h4>
+<?php
+	}
+
+	function Configuracao(){
+?>			
+			<h1>Configuração</h1>
+			<article id="Configuracao" class="mt-2 bg-warning rounded p-1">
 			</article>
 		</section>
+<?php
+	}
+?>	
