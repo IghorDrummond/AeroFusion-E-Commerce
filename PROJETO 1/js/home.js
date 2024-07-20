@@ -67,8 +67,9 @@ Programador: Ighor Drummond
 function cancelaPedido(Ped){
     if(confirm('Deseja realmente cancelar o pedido ' + Ped.toString() + '?')){
         $(Artigos[0]).load('script/pedidos.php?Opc=15 &Ped=' + Ped.toString());
-        $(Artigos[0]).load('script/pedidos.php?Opc=14');
-        attPagina(0, 2);    
+        $(Artigos[0]).load('script/pedidos.php?Opc=14', ()=>{
+            attPagina(0, 2); 
+        });   
     }
 }
 /*
@@ -78,8 +79,9 @@ Data: 20/07/2024
 Programador: Ighor Drummond
 */
 function deletarFav(Prod){
-    $(Artigos[1]).load('script/favoritar.php?Opc=0&Produto=' + encodeURIComponent(Prod));
-    attPagina(1, 3);   
+    $(Artigos[1]).load('script/favoritar.php?Opc=0&Produto=' + encodeURIComponent(Prod), ()=>{
+        attPagina(1, 3);   
+    });
 }
 
 /*
@@ -105,8 +107,8 @@ function atualizaQuant(Opc, IdCar, element) {
     }
     $(Artigos[2]).load('script/pedidos.php?Opc=4&IdCar=' + encodeURIComponent(IdCar) + '&Quant=' + encodeURIComponent(Quantidade), ()=>{
         telaCarregamento(false);
+        attPagina(3, 5);   
     });
-    attPagina(3, 5);   
 }
 /*
 Função: atualizaQuant(Operacao, Id do carrinho, Elemento do Html)

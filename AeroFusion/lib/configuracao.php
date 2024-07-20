@@ -57,13 +57,14 @@
 		*Data: 20/07/2024
 		*Programador(a): Ighor Drummond
 		*/
-		class AtualizaProduto(){
+		class AtualizaProduto{
 			//Declaração
 			private $Query = null;
 			private $stmt = null;
 			private $con = null;
 			private $IdProd = null;
 			private $Estoque = null;
+			private $Log = null;
 
 			//Construtor
 			public function __construct(){
@@ -81,6 +82,7 @@
 			public function arrumaEstoque(){
 				$this->montaQuery(1);
 				$this->getDados();
+				date_default_timezone_set('America/Sao_Paulo');
 				//Valida se existe produtos sem estoque
 				if(isset($this->stmt[0]['id_prod'])){	
 					for ($nCont=0; $nCont <= count($this->stmt) -1 ; $nCont++) { 
@@ -89,7 +91,10 @@
 						$this->IdProd = $this->stmt[$nCont]['id_prod'];
 						$this->montaQuery(2);
 						$this->pushDados();
+						$this->Log .= date('d/m/Y H:i:s') . " - Produto atualizado: $this->IdProd - Estoque adicionado $this->Estoque" . PHP_EOL;
 					}
+
+					return $this->Log;
 				}
 			}
 

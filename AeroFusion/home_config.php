@@ -239,7 +239,7 @@
 									Produto fora de estoque!!!
 								</p>
 								<button class="btn btn-danger" onclick="deletarFav(<?php echo $Key ?>, <?php echo($Fav['id_prod']); ?>)">
-									Remover <i class="fa-solid fa-star"></i>
+									Remover
 								</button>
 							<?php
 								}
@@ -282,8 +282,8 @@
 						<?php
 							foreach($Carrinho as $Car){
 						?>
-						<tr>
-							<td onclick="maisDetalhes(<?php echo( $Car['id_prod'] ) ?>)" >
+						<tr class=" <?php echo $Car['estoque'] <= 0 ? 'bg-secondary' : '' ?>">
+							<td class="px-2" onclick="maisDetalhes(<?php echo( $Car['id_prod'] ) ?>)" >
 								<!-- Inicio do carousel -->
 								<div class="carousel slide" data-ride="carousel" data-interval="3000" data-pause="false">
 									<div class="carousel-inner">
@@ -330,6 +330,9 @@
 								<h6>Tamanho: <?php echo('R$ ' . strval($Car['tamanho'])) ?></h6>
 								<h6>Quantidade: <?php echo($Car['quant']) ?></h6>
 								<h5>Total do Item: <?php echo('R$ ' . strval($Car['total_item'])) ?></h5>
+								<?php 
+									if($Car['estoque'] > 0){
+								?>
 								<div class="btn-group text-white font-weight-bold bg-primary rounded" role="group">
 									<button class="btn btn-primary rounded"
 										onclick="atualizaQuant('+', <?php echo ($Car['id_car']); ?>, this)">
@@ -341,6 +344,11 @@
 										-
 									</button>
 								</div>
+								<?php 
+									}else{
+										echo "<h5 class='text-danger'>Produto fora de estoque.</h6>";
+									}
+								?>
 								<button class="btn btn-danger text-white font-weight-bold"
 									onclick="deletaProdCar(<?php echo ($Car['id_car']); ?>)">
 									Deletar <i class="fa-solid fa-trash-can"></i>
