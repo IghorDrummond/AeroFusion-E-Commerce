@@ -78,7 +78,7 @@ Data: 20/07/2024
 Programador: Ighor Drummond
 */
 function deletarFav(Prod){
-    $(Artigos[1]).load('script/favoritar.php?Opc=1&Produto="' + encodeURIComponent(Prod));
+    $(Artigos[1]).load('script/favoritar.php?Opc=0&Produto=' + encodeURIComponent(Prod));
     attPagina(1, 3);   
 }
 
