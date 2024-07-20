@@ -259,7 +259,7 @@
 		$Favoritos = new Favoritos($_SESSION['Email']);
 ?>
 			<article id="Protocolos" class="mt-2 bg-warning rounded p-1">
-				<h4>Protocolos</h4>
+				<h1>Protocolos</h1>
 			</article>
 <?php
 	}
@@ -361,8 +361,8 @@
 
 	function Configuracao(){
 ?>			
-			<h1>Configuração</h1>
 			<article id="Configuracao" class="mt-2 bg-warning rounded p-1">
+				<h1>Configuração</h1>
 			</article>
 		</section>
 <?php
