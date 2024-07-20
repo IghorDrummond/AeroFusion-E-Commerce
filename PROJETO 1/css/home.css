@@ -49,6 +49,15 @@ tbody tr td{
 	        animation: expandindoParaFora 1s;
 }
 
+/* Favoritos */
+.imagem_carousel{
+    width: 260px !important;
+    height: 180px !important;
+}
+.favoritos{
+    width: 50%;
+}
+
 /* Hovers */
 tbody tr:hover{
 	background: rgba(0,191,255, 0.6) !important;
@@ -118,4 +127,10 @@ tbody tr:not(hover){
 	.navegacao_lista li{
 		float: left;
 	}
+    .favoritos{
+        width: 100%;
+    }
+    .favoritos div{
+        width: 100%;
+    }
 }

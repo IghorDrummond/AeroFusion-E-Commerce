@@ -496,9 +496,33 @@
                 }else if($Opc === 4){
                     $this->query = "
                         SELECT 
-                            *
+                            pd.nome,
+                            pd.descricao,
+                            FORMAT(pd.preco, 2, 'pt_BR') as preco,
+                            pd.estoque,
+                            FORMAT(pd.promocao, 2, 'pt_BR') as promocao,
+                            pd.promocao_ativo,
+                            pd.tamanho,
+                            pd.id_prod,
+                            img.img1,
+                            img.img2,
+                            img.img3,
+                            img.img4,
+                            img.img5,
+                            pd.vizu_3d,
+                            cat.nome_cat,
+                            CASE 
+                                WHEN pd.estoque > 0 THEN 'SIM'
+                                ELSE 'FALTA ESTOQUE'
+                            END AS disponibilidade 
                         FROM
                             favoritos as fav
+                        LEFT JOIN 
+                            produtos as pd ON pd.id_prod = fav.id_prod
+                        LEFT JOIN 
+                            imagens_prod as img ON img.id_prod = pd.id_prod
+                        LEFT JOIN
+                            categoria as cat ON cat.id_cat = pd.id_cat
                         INNER JOIN
                             cliente as cli ON cli.id = fav.id_cliente
                         WHERE

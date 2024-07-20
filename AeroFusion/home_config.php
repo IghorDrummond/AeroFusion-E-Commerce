@@ -25,6 +25,13 @@
 	$ItemPed = null;
 	$Favoritos = null;
 
+	/*
+		Falta atualizar favoritos removido
+		Falta Criar o Cron Job
+
+	*/
+
+
 	//Escopo
 	$Compras = new novoPedido();
 	$Favoritos = new Favoritos($_SESSION['Email']);
@@ -121,6 +128,84 @@
 			<article class="mt-2 bg-warning rounded p-1">
 				<div>
 					<h4 id="pedidos">Favoritos</h4>
-				</div>
+					<table class="w-100 mt-2 bg-white">
+						<thead class="text-center">
+							<th>Imagens</th>
+							<th>Detalhes</th>
+						</thead>	
+						<tbody>
+					<?php
+						$Favoritos = new Favoritos($_SESSION['Email']);
+						foreach ($Favoritos->getFavoritos() as $Key => $Fav) {
+					?>	
+						<tr class=" <?php echo $Key % 2 === 0 ? 'linha_ped' : '' ?> ">
+							<td onclick="maisDetalhes(<?php echo( $Fav['id_prod'] ) ?>)">
+								<!-- Inicio do carousel -->
+								<div class="carousel slide" data-ride="carousel" data-interval="3000" data-pause="false">
+									<div class="carousel-inner">
+										<!-- Imagens do carousel -->
+										<?php 
+											for($i = 1; $i <= 5; $i++){
+												if($Fav['img' . strval($i)] === ''){
+													continue;
+												}
+										?>	
+										<div class="carousel-item <?php print($i === 2 ? "active" : "") ?>">
+											<img src="img/<?php echo($Fav['img' . strval($i)]); ?>" class="imagem_carousel img-fluid">
+										</div>
+										<?php
+											}
+										?>
+									</div>
+								</div>
+
+								<?php
+									if($Fav['vizu_3d'] === 1){
+										echo "<span class='bg-secondary px-1 rounded text-white font-weight-bold float-left'> 3D <i class='fa-solid fa-cubes'></i></span>";
+									}
+								?>
+							</td>
+							<td class="text-center">
+								<h6><?php echo mb_convert_case($Fav['nome'], MB_CASE_TITLE, 'UTF-8');?></h6>
+								<small class="text-info"><?php echo mb_convert_case($Fav['nome_cat'], MB_CASE_TITLE, 'UTF-8');?></small>
+								<br>
+								<?php
+									if($Fav['promocao_ativo'] === 1){
+								?>
+									<del>De R$ <?php echo($Fav['preco']) ?></del>
+									<span class="d-inline mt-1 text-success">Por R$ <?php echo(strval($Fav['promocao'])) ?></span>
+								<?php
+									}else{ 
+								?>
+									<span class="d-inline mt-1"><?php echo('R$ ' . strval($Fav['preco'])) ?></span>
+								<?php
+									}
+								?>
+								<br>
+								<button class="btn btn-primary" onclick="maisDetalhes(<?php echo( $Fav['id_prod'] ) ?>)">
+									Ver Produto
+								</button>
+								<button class="btn btn-danger" onclick="favorito(this, <?php echo($Fav['id_prod']); ?>)">
+									Remover <i class="fa-solid fa-star"></i>
+								</button>
+							</td>	
+						</tr>
+					<?php
+						}
+					?>
+					</tbody>
+				</table>
+			</article>
+
+			<article class="mt-2 bg-warning rounded p-1">
+				<h4>Protocolos</h4>
+			</article>
+
+			<article class="mt-2 bg-warning rounded p-1">
+				<h4>Carrinho</h4>
+			</article>
+			
+			<article class="mt-2 bg-warning rounded p-1">
+				<h4>Configuração</h4>
 			</article>
 		</section>
