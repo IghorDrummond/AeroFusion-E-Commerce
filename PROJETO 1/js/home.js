@@ -18,11 +18,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
-
 //--------------------------Funções
 /*
-Função: alerta()
-Descrição: Responsavel por ligar o alerta na página
+Função: ativarItens(posic, event)
+Descrição: Responsavel 
 Data: 19/07/2024
 Programador: Ighor Drummond
 */
@@ -48,8 +47,8 @@ function ativarItens(posic, event){
     }
 }
 /*
-Função: alerta()
-Descrição: Responsavel por ligar o alerta na página
+Função: prosseguirPedido(Ped)
+Descrição: Responsavel por continuar o pedido para pagamento
 Data: 19/07/2024
 Programador: Ighor Drummond
 */
@@ -59,8 +58,8 @@ function prosseguirPedido(Ped){
     });
 }
 /*
-Função: alerta()
-Descrição: Responsavel por ligar o alerta na página
+Função: cancelaPedido(Ped)
+Descrição: Responsavel por cancelar o Pedido desejado
 Data: 19/07/2024
 Programador: Ighor Drummond
 */
@@ -73,8 +72,8 @@ function cancelaPedido(Ped){
     }
 }
 /*
-Função: atualizaQuantidade(Operacao, Id do carrinho, Elemento do Html)
-Descrição: Responsavel por aumentar ou diminuir a quantidade do item desejado
+Função: deletarFav(Id do Produto)
+Descrição: Responsavel por deletar o produto do favorito
 Data: 20/07/2024
 Programador: Ighor Drummond
 */
@@ -111,8 +110,8 @@ function atualizaQuant(Opc, IdCar, element) {
     });
 }
 /*
-Função: atualizaQuant(Operacao, Id do carrinho, Elemento do Html)
-Descrição: Responsavel por aumentar ou diminuir a quantidade do item desejado
+Função: deletaProdCar(Id do Carrinho)
+Descrição: Responsavel por deletar o produto no carrinho
 Data: 20/07/2024
 Programador: Ighor Drummond
 */
@@ -121,11 +120,36 @@ function deletaProdCar(Car){
     attPagina(3, 5);   
 }
 /*
-Função: atualizaQuant(Operacao, Id do carrinho, Elemento do Html)
-Descrição: Responsavel por aumentar ou diminuir a quantidade do item desejado
+Função: attPagina(Posição, Opção)
+Descrição: Responsavel por atualizar o article responsável  
 Data: 20/07/2024
 Programador: Ighor Drummond
 */
 function attPagina(Posic, Opc){
     $(Artigos[Posic]).load('script/home_config_js.php?Opc=' + Opc.toString());      
 }
+
+$('#FormularioImagem').on('submit', function(e){
+    e.preventDefault();
+
+    let formData = new FormData();
+    let arquivo = $("#arquivo")[0].files[0];
+
+    formData.append('file', arquivo);
+    if(arquivo){
+        $.ajax({
+            url: 'script/home_config_js.php?Opc=7',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                //$('#response').html(response); 
+                alerta('Hello ', 1);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alerta('Erro: ' + textStatus + ' - ' + errorThrown, 0);
+            }
+        });
+    }
+});

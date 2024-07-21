@@ -13,6 +13,7 @@
 	use Compra\atualizaCarrinho;
 	use Pedido\novoPedido;
 	use Produto\Favoritos;
+	use Configuracao\Configuracao;
 
 	if(session_status() === PHP_SESSION_NONE){
 		session_start();
@@ -52,6 +53,9 @@
 			break;
 		case '6':
 			Configuracao();
+			break;
+		case '7':
+			AtualizarImagem();
 			break;
 		default: 
 			Pedidos();
@@ -371,8 +375,105 @@
 ?>			
 			<article id="Configuracao" class="mt-2 bg-warning rounded p-1">
 				<h1>Configuração</h1>
+				<div class="bg-white rounded m-3 p-1">
+					<form class="form-group" id="FormularioImagem" method="POST" enctype="multipart/form-data">
+						<fieldset>
+							<legend for="foto_perfil">Atualize sua foto de perfil</legend>
+							<img name="foto_perfil" src="img/<?php ?>" width="350" class="rounded-circle border border-dark img-fluid">
+							<br><br>
+							<div class="input-group">
+								<div class="input-group-prepend">
+									<span class="input-group-text">Upload</span>
+								</div>
+								<div class="custom-file">
+									<input id="arquivo" type="file" class="custom-file-input" name="Arquivo" aria-describedby="inputGroupFileAddon01" accept=".png,.jpeg,.jpg,.gif" required>
+    								<label class="custom-file-label" for="Arquivo">Procurar...</label>								
+								</div>
+							</div>	
+							<p class="text-warning">
+								Só pode formatos PNG, JPEG, JPG e GIF.<br>
+								Imagem de no máximo 500kb.
+							</p>
+							<button type="submit" class="btn btn-primary rounded mt-2">
+								Enviar <i class="fa-solid fa-paper-plane"></i>
+							</button>
+						</fieldset>
+					</form>
+					<hr>
+					<form class="form-gorup" onsubmit="atualizarNome()">
+						<fieldset>
+							<legend>Atualizar Nome:</legend>
+							<label for="nome">Nome atual: <b><?php echo($_SESSION['Nome']); ?></b>.</label>
+							<input type="text" name="nome" class="form-control" required>
+							<button type="submit" class="btn btn-primary rounded mt-2">
+								Enviar <i class="fa-solid fa-paper-plane"></i>
+							</button>
+						</fieldset>
+					</form>
+					<hr>
+					<form class="form-group" onsubmit="atualizarEndereco()">
+						<fieldset>
+							<legend>Adicionar Endereço:</legend>
+							<button type="submit" class="btn btn-primary rounded mt-2">
+								Enviar <i class="fa-solid fa-paper-plane"></i>
+							</button>
+						</fieldset>						
+					</form>
+					<hr>
+					<form class="form-group" onsubmit="atualizarEndereco()">
+						<fieldset>
+							<legend>Adicionar Cartão:</legend>
+							<button type="submit" class="btn btn-primary rounded mt-2">
+								Enviar <i class="fa-solid fa-paper-plane"></i>
+							</button>
+						</fieldset>						
+					</form>
+				</div>
 			</article>
 		</section>
 <?php
+	}
+
+	function AtualizarImagem(){
+		//Constantes
+		define('MAXTAMANHO', (500 * 1024));
+		define('FORMATO', ['image/png', 'image/jpeg', 'image/jpg', 'image/gif']);
+		//Declaração de Variaveis
+		//Objeto
+		$AttImagem = null;
+
+		//Verifica se foi enviado o arquivo
+		if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])){
+
+			//Valida se o tamanho é maior que o permitido
+		    if ($_FILES['file']['size'] > MAXTAMANHO) {
+		        echo "TAMANHO";
+		        exit;
+		    }
+		    //Valida se o formato não é o padrão exigido
+    		if (!in_array($_FILES['file']['type'], FORMATO)) {
+        		echo "FORMATO";
+        		exit;
+    		}		    
+    		//Valida se houve problemas no envio do arquivo
+		    if ($_FILES['file']['error'] === UPLOAD_ERR_OK) {
+		    	if (!is_dir('../img/')) {
+            		mkdir('../img/', 0777, true);//Da permissão de criar o diretorio e ainda com escrita
+       		 	}
+
+		        $diretorio = '../img/' . $_FILES['file']['name'];
+
+		        // Move o arquivo para o diretório de upload
+		        if (move_uploaded_file($_FILES['file']['tmp_name'], $diretorio)) {
+		        	$AttImagem = new Configuracao($_SESSION['Email']);
+		        	$AttImagem->setImagem($_FILES['file']['full_path']);
+		            echo "SUCESSO";
+		        } else {
+		            echo "ERRO";
+		        }
+		    } else {
+		        echo "ARQUIVO";
+		    }
+		}
 	}
 ?>	
