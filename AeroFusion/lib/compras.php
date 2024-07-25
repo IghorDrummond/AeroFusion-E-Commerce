@@ -802,7 +802,7 @@ namespace Pedido {
 			try{
 				date_default_timezone_set('America/Sao_Paulo'); // Configura data e hora do servidor
 				// Responsável por retorna os IDs dos produtos correspondente ao carrinho do usuário
-				$this->montaQuery(0); // Monta query para retorna os items do pedido
+				$this->montaQuery(0); // Monta query para retorna os itens do pedido
 				$this->getDados(); // Recupera os dados
 				// Valida se trouxe os dados correspondentes
 				if (isset($this->stmt[0]['id_cliente'])) {

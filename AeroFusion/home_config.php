@@ -77,7 +77,7 @@
 				<table class="w-100 bg-white shadow rounded text-center">
 					<thead >
 						<tr>
-							<th>Pedido</th>
+							<th>Código do Pedido</th>
 							<th>Data de Abertura</th>
 							<th>Status</th>
 							<th>Valor</th>
@@ -467,6 +467,7 @@
 		        if (move_uploaded_file($_FILES['file']['tmp_name'], $diretorio)) {
 		        	$AttImagem = new Configuracao($_SESSION['Email']);
 		        	$AttImagem->setImagem($_FILES['file']['full_path']);
+					$_SESSION['Foto'] = $_FILES['file']['full_path'];
 		            echo "SUCESSO";
 		        } else {
 		            echo "ERRO";

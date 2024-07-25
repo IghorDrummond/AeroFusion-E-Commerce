@@ -190,6 +190,7 @@
 				$this->con = $this->con->conexao();	
 				//Retornar o Id do Cliente
 				$this->montaQuery(1);
+				$this->getDados();
 				$this->IdCli = $this->stmt[0]['id_cliente'];
 			}
 
@@ -203,7 +204,7 @@
 			public function setImagem($Imagem){
 				$this->Src = $Imagem;
 				$this->montaQuery(2);
-				//$this->setDados();
+				$this->setDados();
 			}
 			/*
 			 *Metodo: montaQuery(Opção)

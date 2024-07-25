@@ -8,5 +8,6 @@
 		}
 	}else{
 		$_SESSION['Login'] = false;
+		header('location: login.php');
 	}
 ?>

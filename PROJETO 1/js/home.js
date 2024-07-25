@@ -65,7 +65,7 @@ Programador: Ighor Drummond
 */
 function cancelaPedido(Ped){
     if(confirm('Deseja realmente cancelar o pedido ' + Ped.toString() + '?')){
-        $(Artigos[0]).load('script/pedidos.php?Opc=15 &Ped=' + Ped.toString());
+        $(Artigos[0]).load('script/pedidos.php?Opc=15&Ped=' + Ped.toString());
         $(Artigos[0]).load('script/pedidos.php?Opc=14', ()=>{
             attPagina(0, 2); 
         });   
@@ -144,8 +144,23 @@ $('#FormularioImagem').on('submit', function(e){
             contentType: false,
             processData: false,
             success: function (response) {
-                //$('#response').html(response); 
-                alerta('Hello ', 1);
+                switch(response.trim()){
+                    case 'TAMANHO':
+                        alerta('Arquivo ultrapassa o limite de 500Kb.', 0);
+                        break;
+                    case 'FORMATO':
+                        alerta('Arquivo não respeita o formtado exigido.', 0);
+                        break;
+                    case 'SUCESSO':
+                        alerta('Imagem atualizada com sucesso!', 1);
+                        break;
+                    case 'ARQUIVO':
+                        alerta('Arquivo está corrompido.', 0);
+                        break;
+                    case 'ERRO':
+                        alerta('Houve um erro ao tentar atualizar imagem.', 0);
+                        break;
+                }
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 alerta('Erro: ' + textStatus + ' - ' + errorThrown, 0);
