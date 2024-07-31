@@ -796,7 +796,8 @@ namespace Pedido {
 				"sem_estoque" => "",
 				"Pedido" => "",
 				"Total" => 0.0,
-				"Cupom" => ''
+				"Cupom" => '',
+				"mensagem"=>""
 			];
 
 			try{
@@ -838,6 +839,23 @@ namespace Pedido {
 							$this->stmt = $aux;//Devolve os produtos para a stmt tratar mais a frente
 						}
 					}
+
+		            // Verificar estoques dos produtos considerando o tamanho para evitar quantidades maiores que o estoque
+					for($nCont = 0; $nCont <= count($this->stmt) -1; $nCont++){
+						$estoque = $this->stmt[$nCont]["quant"];
+						//Valida se a posição encontrada é verdadeira e é maior que a posição atual
+						for($nCont2 = $nCont +1; $nCont2 <= count($this->stmt)-1; $nCont2++){
+							if($this->stmt[$nCont]['id_prod'] === $this->stmt[$nCont2]['id_prod']){
+								$estoque += $this->stmt[$nCont2]["quant"];
+							}
+						}
+						
+						if($estoque > $this->stmt[$nCont]['estoque']){
+							$Ret['mensagem'] = "Produtos ({$this->stmt[$nCont]['nome']}) com tamanhos diferentes estão com quantidade maior que o estoque disponível. Por favor, Alterar a quantidade." ;
+							return false;
+						}
+					}
+
 					// Guarda data do novo pedido
 					$this->Data = date('Y-m-d H:i:s');
 					// Cria um novo pedido com os dados informados
@@ -880,6 +898,7 @@ namespace Pedido {
 			} catch (\PDOException $e) {
 				echo $e->getMessage();
 				$this->con->rollBack();
+				$Ret['mensagem'] = 'Houve um erro no interno no servidor. Por favor, tente novamente ou mais tarde.';
 				$this->__destruct();
 			} finally {
 				return $Ret;
@@ -1059,6 +1078,7 @@ namespace Pedido {
 							car.id_prod,
 							car.quant,
 							prod.estoque,
+							prod.nome,
 							car.id_tam,
 							FORMAT(
 								CASE

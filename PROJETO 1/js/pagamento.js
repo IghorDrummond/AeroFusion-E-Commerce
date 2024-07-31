@@ -233,8 +233,8 @@ function finalizarCompra() {
                                 //Atualiza para página para pagar o pedido
                                 $('main').load('script/pedidos.php?Opc=8');
                                 break;
-                            case 'N':
-                                alerta('Houve um erro interno em nosso servidor. Tente novamente ou mais tarde.', 0);
+                            default:
+                                alerta(ajax.responseText.trim(), 0);
                                 break;
                         }
                     } else {

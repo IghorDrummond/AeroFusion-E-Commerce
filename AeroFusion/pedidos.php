@@ -240,7 +240,7 @@
 			unset($_SESSION['Produtos']);//Apaga o registro de produtos
 			$_SESSION['IdPed'] = $Ret['Pedido'];
 		} else {
-			echo 'N';
+			echo $Ret['mensagem'];
 		}
 	}
 
