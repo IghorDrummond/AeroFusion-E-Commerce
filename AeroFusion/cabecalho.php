@@ -68,14 +68,14 @@ if(isset($_SESSION['Login']) and $_SESSION['Login']){
 		if ($logado) {
 			?>
 			<li class="nav-item d-flex flex-column">
-				<button class="text-warning" onclick="solicitacao(0)">Pedidos</button>
+				<a class="text-warning" href="home.php#Pedidos">Pedidos</a>
 				<hr>
-				<button class="text-warning" onclick="solicitacao(1)">Protocolos/Garantia</button>
+				<a class="text-warning" href="home.php#Protocolos">Protocolos/Garantia</a>
 				<hr>
-				<button class="text-warning" onclick="solicitacao(2)">Favoritos</button>
+				<a class="text-warning" href="home.php#Favoritos">Favoritos</a>
 				<hr>
-				<button class="text-warning" onclick="solicitacao(3)">Configuração</button>
-				<hr>
+				<a class="text-warning" href="home.php#Configuracao">Configuração</a>
+				<hr> 
 				<button class="text-warning" onclick="solicitacao(4)">
 					Sair <i class="fa-solid fa-right-to-bracket"></i>
 				</button>
