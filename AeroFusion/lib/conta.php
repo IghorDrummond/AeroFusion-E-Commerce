@@ -212,8 +212,9 @@
 			*Data: 15/06/2024
 			*Programador(a): Ighor Drummond
 			*/
-			public function setEndereco( $Rua, $Complemento, $Cep, $Referencia, $Bairro, $Uf, $Numero, $Cidade){				$EndExiste = false;
-
+			public function setEndereco( $Rua, $Complemento, $Cep, $Referencia, $Bairro, $Uf, $Numero, $Cidade){				
+				$EndExiste = false;
+				
 				try{
 					//Valida se foi passado os endereço corretamente
 					if(!empty($Rua) and !empty($Cep) and !empty($Bairro) and !empty($Uf) and !empty($Numero) and !empty($Cidade)){

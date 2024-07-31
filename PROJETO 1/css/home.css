@@ -80,6 +80,11 @@ tbody tr:not(hover){
 }
 
 
+#enderecos_cadastrados{
+    height: 300px;
+    overflow: auto;
+}
+
 /* Animações */
 @-webkit-keyframes expandindoParaFora {
     0% {

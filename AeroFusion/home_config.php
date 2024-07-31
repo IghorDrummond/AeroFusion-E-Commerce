@@ -442,9 +442,29 @@
 					<hr> 
 					<div class="mx-3">
 						<legend>Adicionar Endereço:</legend>
+						<div id="enderecos_cadastrados">
+							<?php
+								$Endereco = new Endereco($_SESSION['Email']);
+
+								foreach($Endereco->getEndereco() as $End){
+							?>
+							<div class="p-2 border rounded my-1">
+								<h6>Cep: <?php echo(mb_convert_case($End['cep'], MB_CASE_TITLE, 'UTF-8')) ?></h6>
+								<h6>Rua: <?php echo(mb_convert_case($End['rua'], MB_CASE_TITLE, 'UTF-8')) ?></h6>
+								<h6>Numero:	<?php echo(mb_convert_case($End['numero'], MB_CASE_TITLE, 'UTF-8')) ?></h6>
+								<h6>Cidade: <?php echo(mb_convert_case($End['cidade'], MB_CASE_TITLE, 'UTF-8')) ?></h6>
+								<h6>Bairro: <?php echo(mb_convert_case($End['bairro'], MB_CASE_TITLE, 'UTF-8')) ?></h6>
+								<h6>Estado: <?php echo(mb_convert_case($End['uf'], MB_CASE_TITLE, 'UTF-8')) ?></h6>
+								<h6>Complemento: <?php echo(mb_convert_case($End['complemento'], MB_CASE_TITLE, 'UTF-8')) ?></h6>
+								<h6>Referência: <?php echo(mb_convert_case($End['referencia'], MB_CASE_TITLE, 'UTF-8')) ?></h6>
+							</div>
+							<?php
+								}
+							?>
+						</div>
 						<p class="text-warning">Selecione um endereço valido para cadastrar em sua conta.</p>
 						<button type="button" class="btn btn-primary rounded mt-2" onclick="adicionarEnd()">
-							Enviar <i class="fa-solid fa-paper-plane"></i>
+							Cadastrar um novo endereço <i class="fa-solid fa-paper-plane"></i>
 						</button>
 					</div>
 					<hr>

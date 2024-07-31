@@ -281,7 +281,7 @@
 			$cidade = strtoupper($_GET['cidade']);
 
 			// Certifique-se de que a função setEndereco está correta
-			$Endereco->setEndereco($rua, $complemento, $cep, $referencia, $bairro, $estado, $numero, $cidade);
+			echo $Endereco->setEndereco($rua, $complemento, $cep, $referencia, $bairro, $estado, $numero, $cidade);
 		} else {
 			echo 'ERROR';
 		}

@@ -810,6 +810,12 @@ function cadastrarEnd(event) {
                     case 'FALTADADOS':
                         alerta('Cep inválido! Por favor, preencha com um código postal válido.', 0);
                         break;
+                    case 'OK':
+                        alerta('Endereço Inserido com sucesso!', 1);
+                        setTimeout(()=>{
+                            location.reload(true);
+                        }, 2000);
+                        break;
                     default:
                         alerta('Ocorreu um erro interno em nosso servidor. tente novamente ou mais tarde.', 0);
                         break;
