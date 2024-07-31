@@ -493,25 +493,15 @@ function deletarCartao(element){
         var elementoPai = element.parentElement;
         var Card = elementoPai.id;
         $.ajax({
-            url: 'script/pedidos.php?Opc=&Card=' + encodeURIComponent(Card),
-            type: 'POST',
-            dataType: 'json',
+            url: 'script/pedidos.php?Opc=16&Card=' + encodeURIComponent(Card),
+            method: 'POST',
             success: function (CardDate) {
                 telaCarregamento(false);
-                if (Object.values(CardDate).every(value => value)) {
-                    Cartao = document.getElementById('cartao');//Recebe o elemento Cartão
-                    trocarCor(CardDate[0].bandeira);//Troca Cor do Cartão
-                    Cartao.getElementsByTagName('img')[0].src = CardDate[0].img_ban;//Troca bandeira do cartão
-                    $('#nome_cartao').val(CardDate[0].nome_cartao);
-                    $('#vencimento').val(CardDate[0].validade_formatada);
-                    $('#numero_cartao').val(CardDate[0].numero_cartao);
-                    $('#cvv').val(CardDate[0].cvv);
-                    //Guarda Informações do cartão selecionado
-                    dados.nome = CardDate[0].nome_cartao;
-                    dados.validade = CardDate[0].validade_formatada;
-                    dados.numero = CardDate[0].numero_cartao;
-                    dados.cvv = CardDate[0].cvv;
-                    dados.bandeira = CardDate[0].bandeira;
+                attPagina(4, 6);//Atualiza Pagina
+                if(CardDate === 'DELETADO'){
+                    alerta('Cartão deletado com sucesso!', 1);
+                }else{
+                    alerta('Não foi possivel buscar o seu cartão no banco de dados. Tente novamente ou mais tarde', 0);
                 }
             },
             error: function (xhr, status, error) {

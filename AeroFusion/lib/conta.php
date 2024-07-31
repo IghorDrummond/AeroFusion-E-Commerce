@@ -1200,7 +1200,7 @@
 			public function delCartao($Cartao){
 				$this->IdCard = $Cartao;
 				$this->montaQuery(5);
-				echo $this->setDados() ? 'DELETADO' : 'ERROR';
+				return $this->setDados() ? 'DELETADO' : 'ERROR';
 			}
 			/*
 			*Metodo: setDados()

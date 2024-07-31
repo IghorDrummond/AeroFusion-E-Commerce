@@ -76,6 +76,9 @@
 		case '15':
 			selecionarPedido();
 			break;
+		case '16':
+			deletarCartao();
+			break;
 	}
 
 	function montaTela()
@@ -630,8 +633,9 @@
 
 	function deletarCartao(){
 		if(isset($_GET['Card']) and !empty($_GET['Card'])){
+			$_GET['Card'] = str_replace('#X', '', $_GET['Card']);
 			$Cartao = new Cartao(Email: $_SESSION['Email']);
-			$Cartao->delCartao($_GET['Card']);
+			echo $Cartao->delCartao($_GET['Card']);
 		}
 	}
 ?>
