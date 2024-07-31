@@ -71,6 +71,11 @@ tbody tr:not(hover){
     transition: all 1s;
 }
 
+#foto_perfil{
+    width: 50px !important;
+    height: 50px !important;
+}
+
 /* Animações */
 @-webkit-keyframes expandindoParaFora {
     0% {

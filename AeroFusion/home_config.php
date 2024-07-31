@@ -380,7 +380,7 @@
 						<fieldset>
 							<legend for="foto_perfil">Atualize sua foto de perfil</legend>
 							Preview da Imagem:
-							<img id="foto_perfil" name="foto_perfil" src="img/<?php echo($_SESSION['Foto']) ?>" class="rounded-circle border border-dark img-fluid" width="50" height="50">
+							<img id="foto_perfil" name="foto_perfil" src="img/<?php echo($_SESSION['Foto']) ?>" class="rounded-circle border border-dark img-fluid">
 							<br><br>
 							<div class="input-group">
 								<div class="input-group-prepend">

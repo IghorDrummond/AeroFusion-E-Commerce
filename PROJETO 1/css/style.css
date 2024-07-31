@@ -225,6 +225,10 @@ dialog:ntd-child(3) div{
 	font-family: 'Hot Kiss';
 	font-size: 1.2em;
 }
+#informacoes{
+    width: 40px !important;
+    height: 40px !important;
+}
 /* Menu para Dispositivo Desktop */
 .navegacao{
 	position: fixed;
@@ -335,6 +339,10 @@ html::-webkit-scrollbar-thumb {
 	background: transparent;
 	border: none;
 	color: white;
+}
+.img_fluid img{
+	width: 50px !important;
+	height: 80px !important;
 }
 
 /* Lados do cartão */
