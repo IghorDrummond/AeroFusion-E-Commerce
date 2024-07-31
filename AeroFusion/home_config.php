@@ -14,6 +14,7 @@
 	use Pedido\novoPedido;
 	use Produto\Favoritos;
 	use Configuracao\Configuracao;
+	use Configuracao\AtualizaUsuario;
 
 	if(session_status() === PHP_SESSION_NONE){
 		session_start();
@@ -56,6 +57,9 @@
 			break;
 		case '7':
 			AtualizarImagem();
+			break;
+		case '8':
+			AtualizaNome();
 			break;
 		default: 
 			Pedidos();
@@ -500,6 +504,14 @@
 		    } else {
 		        echo "ARQUIVO";
 		    }
+		}
+	}
+
+	function AtualizaNome(){
+		$Perfil = new AtualizaUsuario(Email: $_SESSION['Email']);
+
+		if(!empty($_GET['Nome']) and isset($_GET['Nome'])){
+			$Perfil->setNome($_GET['Nome']);
 		}
 	}
 ?>	
