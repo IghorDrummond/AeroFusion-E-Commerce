@@ -487,7 +487,7 @@
 						</button>
 					</div>
 					<hr>
-					<div class="mx-3 text-center">
+					<div class="mx-3">
 						<legend>Adicionar Cartão:</legend>
 
 						<div class="caixa_cartao">
@@ -531,43 +531,45 @@
 
 							</div>
 						</div>
-						<label class="mt-4">Escolha um outro cartão:</label>
-						<div class="dropdown">
-							<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
-								arial-expanded="false">Cartões</button>
-							<div class="dropdown-menu">
-								<?php
-								$Cartao = new Cartao(Email: $_SESSION['Email']);
-								$Cartao = $Cartao->getCartao('');
-								if (isset($Cartao[0]['numero_cartao'])) {
-									foreach ($Cartao as $nCont => $Cartoes) {
-										?>
-										<div class="dropdown-tem p-2" id="#X<?php print ($Cartoes['id_card']) ?>">
-											<h3>Cartão:
-												<?php echo (substr($Cartoes['numero_cartao'], 0, 4)) . ' **** **** **' . substr($Cartoes['numero_cartao'], 17, 19) ?>
-											</h3>
-											<small>Nome: <?php echo strtoupper($Cartoes['nome_cartao']); ?></small><br>
-											<small>Vencimento: <time>
-													<?php echo $Cartoes['validade_formatada'] ?></time></small><br>
-											<small>Bandeira: <img src="<?php echo ($Cartoes['img_ban']) ?>" class="img-fluid" width="50"
-													height="50" alt="<?php print retornaClasseCartao($Cartoes['nome_ban']); ?>"></small>
-											<br>
-											<button type="button" class="btn btn-primary btn-sm mt-2"
-												onclick="cartaoSelecionado(this)">Selecionar</button>
-											<button class="btn btn-danger btn-sm mt-2" onclick="deletarCartao(this)">Deletar</button>
-										</div>
-										<hr>
-										<?php
+						<div class="text-center">
+							<label class="mt-4">Escolha um outro cartão:</label>
+							<div class="dropdown">
+								<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
+									arial-expanded="false">Cartões</button>
+								<div class="dropdown-menu">
+									<?php
+									$Cartao = new Cartao(Email: $_SESSION['Email']);
+									$Cartao = $Cartao->getCartao('');
+									if (isset($Cartao[0]['numero_cartao'])) {
+										foreach ($Cartao as $nCont => $Cartoes) {
+											?>
+											<div class="dropdown-tem p-2" id="#X<?php print ($Cartoes['id_card']) ?>">
+												<h3>Cartão:
+													<?php echo (substr($Cartoes['numero_cartao'], 0, 4)) . ' **** **** **' . substr($Cartoes['numero_cartao'], 17, 19) ?>
+												</h3>
+												<small>Nome: <?php echo strtoupper($Cartoes['nome_cartao']); ?></small><br>
+												<small>Vencimento: <time>
+														<?php echo $Cartoes['validade_formatada'] ?></time></small><br>
+												<small>Bandeira: <img src="<?php echo ($Cartoes['img_ban']) ?>" class="img-fluid" width="50"
+														height="50" alt="<?php print retornaClasseCartao($Cartoes['nome_ban']); ?>"></small>
+												<br>
+												<button type="button" class="btn btn-primary btn-sm mt-2"
+													onclick="cartaoSelecionado(this)">Selecionar</button>
+												<button class="btn btn-danger btn-sm mt-2" onclick="deletarCartao(this)">Deletar</button>
+											</div>
+											<hr>
+											<?php
+										}
 									}
-								}
-								?>
+									?>
+								</div>
 							</div>
+							OU<br>
+							<button type="submit" class="btn btn-primary rounded mt-2" onclick="addCartao()">
+								Adicionar Cartão<i class="fa-solid fa-paper-plane"></i>
+							</button>
+							</duv>
 						</div>
-						OU<br>
-						<button type="submit" class="btn btn-primary rounded mt-2" onclick="addCartao()">
-							Adicionar Cartão<i class="fa-solid fa-paper-plane"></i>
-						</button>
-						</duv>
 					</div>
 			</article>
 		</section>

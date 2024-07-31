@@ -252,9 +252,21 @@ Programador: Ighor Drummond
 function atualizarNome(){
     event.preventDefault();
     var Nome = document.getElementsByName('nome')[0].value;
-    $('body').load('script/home_config_js.php?Opc=8&Nome=' + encodeURIComponent(Nome),()=>{
-        attPagina(4, 6);
-    });   
+    $.ajax({
+        url: 'script/home_config_js.php?Opc=8&Nome=' + encodeURIComponent(Nome),
+        method: 'POST',
+        success: function (response) {
+            telaCarregamento(false);
+            alerta('Nome alterado com sucesso!', 1);
+            setTimeout(()=>{
+                location.reload();
+            }, 2000);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            telaCarregamento(false);
+            alerta('Erro ao alterar o nome: ' + textStatus + errorThrown, 0);
+        }
+    });
 }
 /*
 Função: virarCartao(direção do cartão)
