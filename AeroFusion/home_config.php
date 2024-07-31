@@ -34,10 +34,10 @@
 	$Favoritos = null;
 
 	/*
-			  Falta atualizar favoritos removido
-			  Falta Criar o Cron Job
-
-		  */
+		Falta Criar o Cron Job
+		Falta apagar cartão 
+		Falta "apagar" endereço
+	*/
 
 	switch ($Opc) {
 		case '2':
@@ -551,8 +551,10 @@
 													<?php echo $Cartoes['validade_formatada'] ?></time></small><br>
 											<small>Bandeira: <img src="<?php echo ($Cartoes['img_ban']) ?>" class="img-fluid" width="50"
 													height="50" alt="<?php print retornaClasseCartao($Cartoes['nome_ban']); ?>"></small>
-											<button type="button" class="btn btn-primary btn-sm btn-block mt-2"
+											<br>
+											<button type="button" class="btn btn-primary btn-sm mt-2"
 												onclick="cartaoSelecionado(this)">Selecionar</button>
+											<button class="btn btn-danger btn-sm mt-2" onclick="deletarCartao(this)">Deletar</button>
 										</div>
 										<hr>
 										<?php

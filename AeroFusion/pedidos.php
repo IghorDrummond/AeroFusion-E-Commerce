@@ -627,4 +627,11 @@
 			$_SESSION['IdPed'] = $_GET['Ped'];
 		}
 	}
+
+	function deletarCartao(){
+		if(isset($_GET['Card']) and !empty($_GET['Card'])){
+			$Cartao = new Cartao(Email: $_SESSION['Email']);
+			$Cartao->delCartao($_GET['Card']);
+		}
+	}
 ?>

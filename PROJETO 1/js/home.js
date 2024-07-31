@@ -415,7 +415,6 @@ function cartaoSelecionado(element) {
                 $('#vencimento').val(CardDate[0].validade_formatada);
                 $('#numero_cartao').val(CardDate[0].numero_cartao);
                 $('#cvv').val(CardDate[0].cvv);
-
                 //Guarda Informações do cartão selecionado
                 dados.nome = CardDate[0].nome_cartao;
                 dados.validade = CardDate[0].validade_formatada;
@@ -438,8 +437,8 @@ Programador: Ighor Drummond
 */
 function addCartao() {
     //Recupera valores importante para validar dados
-    telaCarregamento(true);
     if (Object.values(dados).every(value => value)) {
+        telaCarregamento(true);
         $.ajax({
             url: 'script/pedidos.php',
             method: 'GET',
@@ -482,4 +481,43 @@ Programador: Ighor Drummond
 */
 function guardaCvv(element) {
     dados.cvv = element.value;
+}
+/*
+Função: deletarCartao(element)
+Descrição: Deleta cartão desejado
+Data: 31/07/2024
+Programador: Ighor Drummond   
+*/
+function deletarCartao(element){
+    if(confirm('Tem certeza que deseja deletar este cartão? Após este processo, o cartão será deletado permanentemente.')){
+        var elementoPai = element.parentElement;
+        var Card = elementoPai.id;
+        $.ajax({
+            url: 'script/pedidos.php?Opc=&Card=' + encodeURIComponent(Card),
+            type: 'POST',
+            dataType: 'json',
+            success: function (CardDate) {
+                telaCarregamento(false);
+                if (Object.values(CardDate).every(value => value)) {
+                    Cartao = document.getElementById('cartao');//Recebe o elemento Cartão
+                    trocarCor(CardDate[0].bandeira);//Troca Cor do Cartão
+                    Cartao.getElementsByTagName('img')[0].src = CardDate[0].img_ban;//Troca bandeira do cartão
+                    $('#nome_cartao').val(CardDate[0].nome_cartao);
+                    $('#vencimento').val(CardDate[0].validade_formatada);
+                    $('#numero_cartao').val(CardDate[0].numero_cartao);
+                    $('#cvv').val(CardDate[0].cvv);
+                    //Guarda Informações do cartão selecionado
+                    dados.nome = CardDate[0].nome_cartao;
+                    dados.validade = CardDate[0].validade_formatada;
+                    dados.numero = CardDate[0].numero_cartao;
+                    dados.cvv = CardDate[0].cvv;
+                    dados.bandeira = CardDate[0].bandeira;
+                }
+            },
+            error: function (xhr, status, error) {
+                telaCarregamento(false);
+                alerta('Não foi possivel buscar o seu cartão no banco de dados. Tente novamente ou mais tarde', 0);
+            }
+        });
+    }
 }

@@ -1124,6 +1124,12 @@
 			}
 
 			//Métodos
+			/*
+			*Metodo: setCartao
+			*Descrição: adiciona um novo cartão para u´suário
+			*Data: 03/07/2024
+			*Programador(a): Ighor Drummond
+			*/
 			public function setCartao(
 				$Numero,
 				$Nome, 
@@ -1173,14 +1179,35 @@
 					return false;
 				}
 			}
-
+			/*
+			*Metodo: getCartao
+			*Descrição: retorna os cartões do usuário
+			*Data: 03/07/2024
+			*Programador(a): Ighor Drummond
+			*/
 			public function getCartao($Cartao){
 				$this->IdCard = (empty($Cartao) or is_null($Cartao)) ? '' : $Cartao;
 				$this->montaQuery(3);
 				$Ret = $this->getDados();
 				return $Ret;
 			}
-
+			/*
+			*Metodo: delCartao()
+			*Descrição: deleta cartão especifico
+			*Data: 31/07/2024
+			*Programador(a): Ighor Drummond
+			*/
+			public function delCartao($Cartao){
+				$this->IdCard = $Cartao;
+				$this->montaQuery(5);
+				echo $this->setDados() ? 'DELETADO' : 'ERROR';
+			}
+			/*
+			*Metodo: setDados()
+			*Descrição: atualiza dados no banco
+			*Data: 03/07/2024
+			*Programador(a): Ighor Drummond
+			*/
 			private function setDados(){
 				$Ret = false;
 
@@ -1196,7 +1223,12 @@
 					return $Ret;
 				}
 			}
-
+			/*
+			*Metodo: getDados
+			*Descrição: retorna dados de uma pesquisa SQL
+			*Data: 03/07/2024
+			*Programador(a): Ighor Drummond
+			*/
 			private function getDados(){
 				$Ret = [];
 				try{
@@ -1208,6 +1240,12 @@
 					return $Ret;
 				}
 			}
+			/*
+			*Metodo: montaQuery(Opções)
+			*Descrição: monta query desejada.
+			*Data: 03/07/2024
+			*Programador(a): Ighor Drummond
+			*/
 			private function montaQuery($Opc){
 				if($Opc === 1){
 					$this->Query =  "
@@ -1256,6 +1294,15 @@
 							id_cliente = $this->IdCli
 							AND numero_cartao = '$this->Numero'
 							AND cvv = $this->Cvc
+					";
+				}else if($Opc === 5){
+					$this->Query = "
+						DELETE FROM 
+							cartoes
+						WHERE 
+							id_card = $this->IdCard
+							AND id_cliente = $this->IdCli
+						;
 					";
 				}
 			}
