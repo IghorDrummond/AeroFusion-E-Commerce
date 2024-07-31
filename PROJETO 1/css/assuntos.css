@@ -1,14 +1,50 @@
-main{
+main {
     height: auto;
     background: url('../img/fundo.png');
 }
+
 .formatar_texto {
-    white-space: pre-wrap;
     /* Respeita as quebras de linha */
     font-family: Arial, sans-serif;
-    line-height: 1.6;
+    line-height: 1.6em;
     margin: 20px;
     padding: 10px;
     border: 1px solid #ddd;
     background-color: #f9f9f9;
+}
+
+.formatar_texto h1,
+.formatar_texto h2,
+.formatar_texto h3,
+.formatar_texto h4,
+.formatar_texto h5,
+.formatar_texto h6 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+/*Setando as cores para tags de titulos*/
+.formatar_texto h1{
+    color: orange;
+}
+.formatar_texto h2{
+    color: blueviolet;
+}
+.formatar_texto h3{
+    color: orangered;
+}
+.formatar_texto h4{
+    color: orchid;
+}
+/*Formantando tag paragrafos e listas*/
+.formatar_texto p,
+.formatar_texto li {
+    margin-bottom: 10px;
+}
+
+.formatar_texto ul,
+.formatar_texto ol {
+    margin-left: 20px;
+    margin-bottom: 10px;
 }
