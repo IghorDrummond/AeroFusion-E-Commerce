@@ -1,0 +1,14 @@
+main{
+    height: auto;
+    background: url('../img/fundo.png');
+}
+.formatar_texto {
+    white-space: pre-wrap;
+    /* Respeita as quebras de linha */
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+}
