@@ -18,6 +18,72 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+/*
+* Evento: submit
+* Descrição: Envia a nova imagem ao servidor após usuário inserir a imagem desejada
+* Programador(a): Ighor Drummond
+* Data: 31/07/2024
+*/
+$('#FormularioImagem').on('submit', function(e){
+    e.preventDefault();
+
+    let formData = new FormData();
+    let arquivo = $("#arquivo")[0].files[0];
+
+    formData.append('file', arquivo);
+    if(arquivo){
+        // Enviar a imagem via AJAX
+        $.ajax({
+            url: 'script/home_config_js.php?Opc=7',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                switch(response.trim()){
+                    case 'TAMANHO':
+                        alerta('Arquivo ultrapassa o limite de 500Kb.', 0);
+                        break;
+                    case 'FORMATO':
+                        alerta('Arquivo não respeita o formato exigido.', 0);
+                        break;
+                    case 'SUCESSO':
+                        alerta('Imagem atualizada com sucesso!', 1);
+                        break;
+                    case 'ARQUIVO':
+                        alerta('Arquivo está corrompido.', 0);
+                        break;
+                    case 'ERRO':
+                        alerta('Houve um erro ao tentar atualizar imagem.', 0);
+                        break;
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alerta('Erro: ' + textStatus + ' - ' + errorThrown, 0);
+            }
+        });
+    }
+});
+/*
+* Evento: change
+* Descrição: Carrega a imagem no img preview para o usuário analisar como irá ficar
+* Programador(a): Ighor Drummond
+* Data: 31/07/2024
+*/
+document.getElementById('arquivo').addEventListener('change', function(event) {
+    let arquivo = event.target.files[0];
+
+    if (arquivo) {
+        // Exibir pré-visualização da imagem
+        let reader = new FileReader();
+        reader.onload = function(e) {
+            const imagem_preview = document.getElementById('foto_perfil');
+            imagem_preview.src = e.target.result;
+        }
+        reader.readAsDataURL(arquivo);
+    }
+});
+
 //--------------------------Funções
 /*
 Função: ativarItens(posic, event)
@@ -128,43 +194,3 @@ Programador: Ighor Drummond
 function attPagina(Posic, Opc){
     $(Artigos[Posic]).load('script/home_config_js.php?Opc=' + Opc.toString());      
 }
-
-$('#FormularioImagem').on('submit', function(e){
-    e.preventDefault();
-
-    let formData = new FormData();
-    let arquivo = $("#arquivo")[0].files[0];
-
-    formData.append('file', arquivo);
-    if(arquivo){
-        $.ajax({
-            url: 'script/home_config_js.php?Opc=7',
-            type: 'POST',
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function (response) {
-                switch(response.trim()){
-                    case 'TAMANHO':
-                        alerta('Arquivo ultrapassa o limite de 500Kb.', 0);
-                        break;
-                    case 'FORMATO':
-                        alerta('Arquivo não respeita o formtado exigido.', 0);
-                        break;
-                    case 'SUCESSO':
-                        alerta('Imagem atualizada com sucesso!', 1);
-                        break;
-                    case 'ARQUIVO':
-                        alerta('Arquivo está corrompido.', 0);
-                        break;
-                    case 'ERRO':
-                        alerta('Houve um erro ao tentar atualizar imagem.', 0);
-                        break;
-                }
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alerta('Erro: ' + textStatus + ' - ' + errorThrown, 0);
-            }
-        });
-    }
-});

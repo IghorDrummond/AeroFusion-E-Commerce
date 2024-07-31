@@ -379,7 +379,8 @@
 					<form class="form-group" id="FormularioImagem" method="POST" enctype="multipart/form-data">
 						<fieldset>
 							<legend for="foto_perfil">Atualize sua foto de perfil</legend>
-							<img name="foto_perfil" src="img/<?php ?>" width="350" class="rounded-circle border border-dark img-fluid">
+							Preview da Imagem:
+							<img id="foto_perfil" name="foto_perfil" src="img/<?php echo($_SESSION['Foto']) ?>" class="rounded-circle border border-dark img-fluid" width="50" height="50">
 							<br><br>
 							<div class="input-group">
 								<div class="input-group-prepend">
@@ -404,7 +405,7 @@
 						<fieldset>
 							<legend>Atualizar Nome:</legend>
 							<label for="nome">Nome atual: <b><?php echo($_SESSION['Nome']); ?></b>.</label>
-							<input type="text" name="nome" class="form-control" required>
+							<input type="text" name="nome" class="form-control" placeholder="Exemplo: Fulano de Tal " required>
 							<button type="submit" class="btn btn-primary rounded mt-2">
 								Enviar <i class="fa-solid fa-paper-plane"></i>
 							</button>
