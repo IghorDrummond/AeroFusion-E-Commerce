@@ -198,7 +198,6 @@ function deletarFav(Prod){
         attPagina(1, 3);   
     });
 }
-
 /*
 Função: atualizaQuant(Operacao, Id do carrinho, Elemento do Html)
 Descrição: Responsavel por aumentar ou diminuir a quantidade do item desejado

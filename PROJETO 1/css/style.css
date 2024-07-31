@@ -344,6 +344,10 @@ html::-webkit-scrollbar-thumb {
 	width: 50px !important;
 	height: 80px !important;
 }
+.dropdown div{
+	height: 200px !important;
+	overflow: auto !important;
+}
 
 /* Lados do cartão */
 .cartaoLado:nth-child(1),
