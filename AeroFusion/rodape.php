@@ -12,16 +12,16 @@
 					<h5 class="py-2">Departamentos</h5>	
 					<ul class="text-white">
 						<li class="mt-2">
-							<a href="#">Prazos de Entrega</a>
+							<a href="assuntos.php#prazo">Prazos de Entrega</a>
 						</li>
 						<li class="mt-2">
-							<a href="#">Trocas e Devoluções</a>
+							<a href="assuntos.php#troca">Trocas e Devoluções</a>
 						</li>
 						<li class="mt-2">
-							<a href="#">Perguntas Frequentes</a>
+							<a href="assuntos.php#perguntas">Perguntas Frequentes</a>
 						</li>
 						<li class="mt-2">
-							<a href="#">Termos de Uso e Privacidade</a>
+							<a href="assuntos.php#termos">Termos de Uso e Privacidade</a>
 						</li>
 					</ul>		
 				</div>

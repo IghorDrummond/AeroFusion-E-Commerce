@@ -61,7 +61,7 @@
 
 		        <h3>Procedimento para Solicitação</h3>
 		        <h4>Contato Inicial</h4>
-		        <p>Entre em contato com nossa equipe de atendimento ao cliente através do e-mail <a href="mailto:aerofusion@gmail.com">aerofusion@gmail.com</a> ou pelo telefone (XX) XXXX-XXXX. Informe seu nome, número do pedido, produto a ser trocado ou devolvido e o motivo da solicitação.</p>
+		        <p>Entre em contato com nossa equipe de atendimento ao cliente através do e-mail <a href="mailto:aerofusion@gmail.com">aerofusion@gmail.com</a> ou pelo telefone (11) 9999-9999. Informe seu nome, número do pedido, produto a ser trocado ou devolvido e o motivo da solicitação.</p>
 
 		        <h4>Análise da Solicitação</h4>
 		        <p>Após receber sua solicitação, nossa equipe analisará o pedido e fornecerá as orientações necessárias para o envio do produto de volta à AeroFusion. Caso a devolução seja por defeito, pedimos que envie fotos do produto para agilizar a análise.</p>
@@ -123,7 +123,7 @@
 		        <p>Sim, nossa loja utiliza tecnologia de criptografia para proteger seus dados pessoais e financeiros. Trabalhamos com parceiros confiáveis e estamos comprometidos em garantir uma experiência de compra segura para nossos clientes.</p>
 
 		        <h3>8. Como posso entrar em contato com o atendimento ao cliente?</h3>
-		        <p>Você pode entrar em contato com nossa equipe de atendimento ao cliente através do e-mail <a href="mailto:aerofusion@gmail.com">aerofusion@gmail.com</a> ou pelo telefone (XX) XXXX-XXXX. Nosso horário de atendimento é de segunda a sexta, das 9h às 18h.</p>
+		        <p>Você pode entrar em contato com nossa equipe de atendimento ao cliente através do e-mail <a href="mailto:aerofusion@gmail.com">aerofusion@gmail.com</a> ou pelo telefone (11) 9999-9999. Nosso horário de atendimento é de segunda a sexta, das 9h às 18h.</p>
 
 		        <h3>9. A AeroFusion oferece garantia nos produtos?</h3>
 		        <p>Sim, todos os nossos produtos possuem garantia contra defeitos de fabricação. O período de garantia varia de acordo com o produto e está especificado na descrição de cada item.</p>
@@ -189,7 +189,7 @@
 		        <p>Podemos atualizar nossa política de privacidade periodicamente. Notificaremos você sobre quaisquer alterações publicando a nova política de privacidade em nosso site. Recomendamos que você revise esta política periodicamente para quaisquer alterações.</p>
 
 		        <h3>Contato</h3>
-		        <p>Se você tiver alguma dúvida sobre nossos termos de uso ou política de privacidade, por favor, entre em contato conosco pelo e-mail <a href="mailto:aerofusion@gmail.com">aerofusion@gmail.com</a> ou pelo telefone (XX) XXXX-XXXX. Agradecemos por escolher a AeroFusion.</p>					
+		        <p>Se você tiver alguma dúvida sobre nossos termos de uso ou política de privacidade, por favor, entre em contato conosco pelo e-mail <a href="mailto:aerofusion@gmail.com">aerofusion@gmail.com</a> ou pelo telefone (11) 9999-9999. Agradecemos por escolher a AeroFusion.</p>
 			</section>
 		</main>
 		<?php require_once('script/rodape.php'); ?>
