@@ -254,7 +254,7 @@ function atualizarNome(){
     event.preventDefault();
     var Nome = document.getElementsByName('nome')[0].value;
     $('body').load('script/home_config_js.php?Opc=8&Nome=' + encodeURIComponent(Nome),()=>{
-        location.reload(true);
+        attPagina(4, 6);
     });   
 }
 /*
@@ -439,7 +439,7 @@ Programador: Ighor Drummond
 */
 function addCartao() {
     //Recupera valores importante para validar dados
-
+    telaCarregamento(true);
     if (Object.values(dados).every(value => value)) {
         $.ajax({
             url: 'script/pedidos.php',
@@ -454,8 +454,8 @@ function addCartao() {
             },
             success: function (response) {
                 telaCarregamento(false);
-                // Carrega a resposta na tag <main>
-                $('main').html(response);
+                alerta('Cartão cadastrado com sucesso!', 1);
+                attPagina(4, 6);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 telaCarregamento(false);
@@ -465,4 +465,22 @@ function addCartao() {
     } else {
         alerta('Falta preencher dados no cartão!', 0);
     }
+}
+/*
+Função: guardaNome(element)
+Descrição: Guarda nome do cartão
+Data: 13/07/2024
+Programador: Ighor Drummond   
+*/
+function guardaNome(element) {
+    dados.nome = element.value;
+}
+/*
+Função: guardaCvv(element)
+Descrição: Guarda o Cvv do cartão
+Data: 13/07/2024
+Programador: Ighor Drummond   
+*/
+function guardaCvv(element) {
+    dados.cvv = element.value;
 }
