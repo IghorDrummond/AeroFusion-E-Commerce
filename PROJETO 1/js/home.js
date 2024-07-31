@@ -49,6 +49,9 @@ $('#FormularioImagem').on('submit', function(e){
                         break;
                     case 'SUCESSO':
                         alerta('Imagem atualizada com sucesso!', 1);
+                        setTimeout(()=>{
+                            location.reload(true);
+                        }, 2000);
                         break;
                     case 'ARQUIVO':
                         alerta('Arquivo está corrompido.', 0);
@@ -73,14 +76,18 @@ $('#FormularioImagem').on('submit', function(e){
 document.getElementById('arquivo').addEventListener('change', function(event) {
     let arquivo = event.target.files[0];
 
-    if (arquivo) {
+    if (arquivo && arquivo.type.startsWith('image/')) {
         // Exibir pré-visualização da imagem
         let reader = new FileReader();
+
         reader.onload = function(e) {
             const imagem_preview = document.getElementById('foto_perfil');
             imagem_preview.src = e.target.result;
-        }
+        };
+
         reader.readAsDataURL(arquivo);
+    } else {
+        alerta('Por favor, selecione um arquivo de imagem.', 0);
     }
 });
 
@@ -193,4 +200,17 @@ Programador: Ighor Drummond
 */
 function attPagina(Posic, Opc){
     $(Artigos[Posic]).load('script/home_config_js.php?Opc=' + Opc.toString());      
+}
+/*
+Função: atualizaNome()
+Descrição: Responsavel por atualizar o nome do usuário
+Data: 31/07/2024
+Programador: Ighor Drummond
+*/
+function atualizarNome(){
+    event.preventDefault();
+    var Nome = document.getElementsByName('nome')[0].value;
+    $('body').load('script/home_config_js.php?Opc=8&Nome=' + encodeURIComponent(Nome),()=>{
+        location.reload(true);
+    });   
 }

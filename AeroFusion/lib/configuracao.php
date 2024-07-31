@@ -268,7 +268,7 @@
 		*Data: 31/07/2024
 		*Programador(a): Ighor Drummond
 		*/
-		class AtualizaUsuario extends AnotherClass
+		class AtualizaUsuario
 		{
 			//Atributos
 			private $con = null;
@@ -293,7 +293,7 @@
 
 			//Metodos
 			/*
-			 *Metodo: AtualizaNome(Novo Nome do usuário)
+			 *Metodo: setNome(Novo Nome do usuário)
 			 *Descrição: Responsavel por alterar nome do usuário
 			 *Data: 31/07/2024
 			 *Programador(a): Ighor Drummond
@@ -308,7 +308,7 @@
 			 *Descrição: Responsavel por montar as querys
 			 *Data: 21/07/2024
 			 *Programador(a): Ighor Drummond
-			 */
+			*/
 			private function montaQuery($Opc){
 				if($Opc === 1){
 					$this->query = "
@@ -335,7 +335,7 @@
 			 *Descrição: Responsavel por recuperar dados de uma pesquisa
 			 *Data: 31/07/2024
 			 *Programador(a): Ighor Drummond
-			 */
+			*/
 			private function getDados(){
 				try{
 					$this->stmt = $this->con->query($this->query);
@@ -349,7 +349,7 @@
 			 *Descrição: Responsavel por guardar dados
 			 *Data: 31/07/2024
 			 *Programador(a): Ighor Drummond
-			 */
+			*/
 			private function setDados(){
 				try{
 					$this->con->exec($this->query);

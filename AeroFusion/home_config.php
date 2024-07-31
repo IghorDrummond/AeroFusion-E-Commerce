@@ -511,7 +511,8 @@
 		$Perfil = new AtualizaUsuario(Email: $_SESSION['Email']);
 
 		if(!empty($_GET['Nome']) and isset($_GET['Nome'])){
-			$Perfil->setNome($_GET['Nome']);
+			$Perfil->setNome(strtoupper($_GET['Nome']));
+			$_SESSION['Nome'] =	mb_convert_case(strtoupper($_GET['Nome']), MB_CASE_TITLE, 'UTF-8');
 		}
 	}
 ?>	
