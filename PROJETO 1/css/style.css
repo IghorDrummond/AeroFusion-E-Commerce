@@ -407,6 +407,24 @@ html::-webkit-scrollbar-thumb {
 	background: linear-gradient(to left, red, orange) !important;
 }
 
+/* Tela de adição de endereço */
+.end_body {
+    position: fixed;
+    z-index: 999;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+    -webkit-animation: surgir 2s;
+            animation: surgir 2s;
+    top: 0;
+    left: 0;
+}
+.end_dados {
+    width: 50%;
+}
+
 /*Rodapé*/
 footer i{
 	cursor: pointer;
@@ -604,4 +622,12 @@ footer i:not(:hover){
 	.form-inline{
 		width: 90%;
 	}
+    .end_body,
+    .end_dados {
+        height: 100vh;
+        overflow: auto;
+    }
+    .end_dados {
+        width: 90%;
+    }
 }

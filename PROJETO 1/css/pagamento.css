@@ -79,24 +79,6 @@ article{
     flex-wrap: wrap;
 }
 
-/* Tela de adição de endereço */
-.end_body {
-    position: absolute;
-    z-index: 999;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.5);
-    -webkit-backdrop-filter: blur(10px);
-            backdrop-filter: blur(10px);
-    -webkit-animation: surgir 2s;
-            animation: surgir 2s;
-    top: 0;
-    left: 0;
-}
-.end_dados {
-    width: 50%;
-}
-
 /* Página de pagamento */
 
 /* Cartão */
@@ -176,13 +158,6 @@ article{
     article,
     article form {
         width: 100%;
-    }
-    .end_body,
-    .end_dados {
-        height: auto;
-    }
-    .end_dados {
-        width: 90%;
     }
     #cartao{
         width: 95%;

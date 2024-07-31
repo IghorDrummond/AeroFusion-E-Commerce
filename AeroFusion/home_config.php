@@ -439,15 +439,14 @@
 							</button>
 						</fieldset>
 					</form>
-					<hr>
-					<form class="form-group" onsubmit="atualizarEndereco()">
-						<fieldset>
-							<legend>Adicionar Endereço:</legend>
-							<button type="submit" class="btn btn-primary rounded mt-2">
-								Enviar <i class="fa-solid fa-paper-plane"></i>
-							</button>
-						</fieldset>						
-					</form>
+					<hr> 
+					<div class="mx-3">
+						<legend>Adicionar Endereço:</legend>
+						<p class="text-warning">Selecione um endereço valido para cadastrar em sua conta.</p>
+						<button type="button" class="btn btn-primary rounded mt-2" onclick="adicionarEnd()">
+							Enviar <i class="fa-solid fa-paper-plane"></i>
+						</button>
+					</div>
 					<hr>
 					<form class="form-group" onsubmit="atualizarEndereco()">
 						<fieldset>
