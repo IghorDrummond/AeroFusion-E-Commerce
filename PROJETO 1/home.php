@@ -16,7 +16,7 @@
 			<nav id="nav_conteudo" class="p-1 h-50">
 				<a class="navbar-brand mx-1" href="#">
 					Seu Painel
-					<img src="img/<?php echo($_SESSION['Foto']); ?>" class="rounded-circle border img-fluid" width="50" height="50"> 
+					<img id="foto_perfil" src="img/<?php echo($_SESSION['Foto']); ?>" class="rounded-circle border img-fluid" width="50" height="50"> 
 				</a>
 				<ul class="navegacao_lista">
 					<li>

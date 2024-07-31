@@ -91,7 +91,31 @@
 						<tr <?php echo ($key % 2 === 0 ? 'class="bg-light linha_ped"' : '') ?>>
 							<td>#<?php echo $Ped['id_ped']; ?></td>
 							<td><time><?php echo date('d/m/Y H:i', strtotime($Ped['data_pedido'])); ?></time></td>
-							<td><?php echo $Ped['nome']; ?></td>
+							<td>
+								<?php 
+									//Valida qual é o status do pedido
+									switch($Ped['nome']){
+										case 'Cancelado':
+											echo("<i class='fa-solid fa-ban mx-1' style='color: red; margin-top: 15px;'></i>Cancelado");
+											break;
+										case 'Pendente':
+											echo("<i class='fa-solid fa-spinner mx-1' style='color: orangered; margin-top: 15px;'></i>Pendente");
+											break;
+										case 'Aguardando Envio':
+											echo("<i class='fa-solid fa-dolly mx-1' style='color: orange; margin-top: 15px;'></i>" . $Ped['nome']);
+											break;		
+										case 'Transportando':
+											echo("<i class='fa-solid fa-truck-fast mx-1' style='color: blueviolet; margin-top: 15px;'></i>" . $Ped['nome']);
+											break;
+										case 'Saiu para entrega':
+											echo("<i class='fa-solid fa-truck-arrow-right mx-1' style='color: blue; margin-top: 15px;'></i>" . $Ped['nome']);
+											break;	
+										case 'Entregue':
+											echo("<i class='fa-solid fa-check-to-slot mx-1' style='color: green; margin-top: 15px;'></i>" . $Ped['nome']);
+											break;	
+									} 
+								?>		
+							</td>
 							<td class="text-right"><?php echo $Ped['valor_total']; ?></td>
 							<td class="p-3">
 								<button class="btn btn-transparent text-center w-100 d-block" onclick="ativarItens(<?php echo $key; ?>, event)">

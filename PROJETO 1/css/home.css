@@ -6,6 +6,10 @@ article
     max-height: 70vh;
     overflow: auto;
 }
+section {
+    scroll-behavior: smooth;
+}
+
 /* Barra de Navegação */
 .navegacao_lista{
     list-style-type: none;
@@ -36,7 +40,6 @@ tbody tr{
 }
 thead tr th{
     border-top: 15px solid gray;
-    letter-spacing: 0.3em;
 }
 thead tr th,
 tbody tr td{
@@ -75,6 +78,7 @@ tbody tr:not(hover){
     width: 50px !important;
     height: 50px !important;
 }
+
 
 /* Animações */
 @-webkit-keyframes expandindoParaFora {
