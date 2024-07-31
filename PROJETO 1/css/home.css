@@ -85,6 +85,11 @@ tbody tr:not(hover){
     overflow: auto;
 }
 
+/* Tamanho do cartão */
+#cartao{
+    width: 30% !important;
+}
+
 /* Animações */
 @-webkit-keyframes expandindoParaFora {
     0% {
@@ -146,5 +151,8 @@ tbody tr:not(hover){
     }
     .favoritos div{
         width: 100%;
+    }
+    #cartao{
+        width: 95% !important;
     }
 }
