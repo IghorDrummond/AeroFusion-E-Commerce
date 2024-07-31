@@ -124,7 +124,7 @@ document.getElementById('arquivo').addEventListener('change', function(event) {
         let reader = new FileReader();
 
         reader.onload = function(e) {
-            const imagem_preview = document.getElementById('foto_perfil');
+            const imagem_preview = document.getElementsByName('foto_perfil')[0];
             imagem_preview.src = e.target.result;
         };
 
