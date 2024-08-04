@@ -1,6 +1,6 @@
 <?php
 	//Biblioteca
-	require_once('../lib/configuracao.php');
+	require_once('C:/Users/Drummond/Documents/FullStack/Gits/AeroFusion-E-Commerce/AeroFusion/lib/configuracao.php');
 	use Jobs\AtualizaProduto;
 	//Declaração de variaveis
 	$Produto = null;

@@ -107,7 +107,7 @@
 			private function getDados()
 			{
 				try {
-					$this->stmt = $this->con->query($this->query);
+					$this->stmt = $this->con->query($this->Query);
 					$this->stmt = $this->stmt->fetchAll(\PDO::FETCH_ASSOC);
 				} catch (\PDOException $e) {
 					echo $e->getMessage();
@@ -124,7 +124,7 @@
 			{
 				try {
 					$this->con->beginTransaction();
-					if ($this->con->exec($this->query) > 0) {
+					if ($this->con->exec($this->Query) > 0) {
 						$this->con->commit();
 						return true;
 					} else {
