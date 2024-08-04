@@ -214,14 +214,14 @@
 							 */
 							case 1:
 								//Calcula a diferença da data e verifica se já passou do prazo de 7 dias para processar - Pendente
-								$Diferenca = calculaData($Ped['data_ped']);
+								$Diferenca = $this->calculaData($Ped['data_ped']);
 								if($Diferenca->days >= 7){
 									//Atualiza status do pedido para 6 de cancelado
 									$log .= PHP_EOL . date('d/m/Y H:i:s') . " - Pedido {$Ped['id_ped']} foi cancelado por passar do 7 dias para pagar - Data do Pedido Inicial: {$Ped['data_ped']}";
 								}
 								break;
 							case 2:
-								$Diferenca = calculaData($Ped['data_rastreio']);//Calcula a diferença da data do rastreio
+								$Diferenca = $this->calculaData($Ped['data_rastreio']);//Calcula a diferença da data do rastreio
 								//Valida pedido que está sendo preparado para envio - Aguardando Envio
 								if($Ped['status_ras'] === 1 and $Diferenca->i > 5){
 									//Atualiza status do rastreio para 2 de saiu do armazem
