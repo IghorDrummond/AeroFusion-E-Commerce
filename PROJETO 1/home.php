@@ -12,31 +12,6 @@
 <body>
 	<?php require_once ('script/cabecalho.php'); ?>
 	<main class="d-flex flex-lg-row flex-column">
-		<aside class="p-3">
-			<nav id="nav_conteudo" class="p-1 h-50">
-				<a class="navbar-brand mx-1" href="#">
-					Seu Painel
-					<img id="foto_perfil" src="img/<?php echo($_SESSION['Foto']); ?>" class="rounded-circle border img-fluid" width="50" height="50"> 
-				</a>
-				<ul class="navegacao_lista">
-					<li>
-						<a class="nav-link" href="#Pedidos">Pedidos</a>
-					</li>
-					<li>
-						<a class="nav-link" href="#Favoritos">Favoritos</a>
-					</li>
-					<li>
-						<a class="nav-link" href="#Protocolos">Protocolos</a>
-					</li>
-					<li>
-						<a class="nav-link" href="#Carrinho">Carrinho</a>
-					</li>
-					<li>
-						<a class="nav-link" href="#Configuracao">Configuração</a>
-					</li>
-				</ul>
-			</nav>
-		</aside>
 		<?php require_once('script/home_config.php'); ?>
 	</main>
 	<?php require_once ('script/rodape.php'); ?>

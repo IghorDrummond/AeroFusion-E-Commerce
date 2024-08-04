@@ -71,10 +71,35 @@
 	}
 
 	//Escopo
-	function Pedidos()
-	{
+	function Pedidos(){
 		$Compras = new novoPedido();
-		?>
+?>
+		<!-- Campo de seleção de areas -->
+		<aside class="p-3">
+			<nav id="nav_conteudo" class="p-1 h-50">
+				<a class="navbar-brand mx-1" href="#">
+					Seu Painel
+					<img id="foto_perfil" src="img/<?php echo($_SESSION['Foto']); ?>" class="rounded-circle border img-fluid" width="50" height="50"> 
+				</a>
+				<ul class="navegacao_lista">
+					<li>
+						<a class="nav-link" href="#Pedidos">Pedidos</a>
+					</li>
+					<li>
+						<a class="nav-link" href="#Favoritos">Favoritos</a>
+					</li>
+					<li>
+						<a class="nav-link" href="#Protocolos">Protocolos</a>
+					</li>
+					<li>
+						<a class="nav-link" href="#Carrinho">Carrinho</a>
+					</li>
+					<li>
+						<a class="nav-link" href="#Configuracao">Configuração</a>
+					</li>
+				</ul>
+			</nav>
+		</aside>
 		<!-- Inicio dos conteúdos -->
 		<section class="w-100">
 			<article id="Pedidos" class="mt-2 bg-warning rounded p-1">
@@ -148,7 +173,7 @@
 										</div>
 										<?php
 									}
-									//Fazer validaç~eos sobre os bot~eos para cada status do pedido
+									//Fazer validações sobre os botãos para cada status do pedido
 									?>
 									<div class="text-lg-right text-left px-2">
 										<?php
@@ -192,13 +217,12 @@
 					</tbody>
 				</table>
 			</article>
-			<?php
+<?php
 	}
 
-	function Favoritos()
-	{
+	function Favoritos(){
 		$Favoritos = new Favoritos($_SESSION['Email']);
-		?>
+?>
 			<article id="Favoritos" class="mt-2 bg-warning rounded p-1">
 				<h1>Favoritos</h1>
 				<div>
@@ -295,30 +319,28 @@
 						</tbody>
 					</table>
 			</article>
-			<?php
+<?php
 	}
 
-	function Protocolos()
-	{
+	function Protocolos(){
 		$Favoritos = new Favoritos($_SESSION['Email']);
-		?>
+?>
 			<article id="Protocolos" class="mt-2 bg-warning rounded p-1">
 				<h1>Protocolos</h1>
 			</article>
-			<?php
+<?php
 	}
 
-	function Carrinho()
-	{
+	function Carrinho(){
 		$Carrinho = new VerCarrinho($_SESSION['Email']);
 		$Carrinho = $Carrinho->retornaValores();
 		$Total = isset($Carrinho[0]['total_carrinho']) ? $Carrinho[0]['total_carrinho'] : 0;
-		?>
+?>
 			<article id="Carrinho" class="mt-2 bg-warning rounded p-1">
 				<h1>Carrinho</h1>
 				<table class="w-100 bg-white">
 					<thead>
-						<tr class="text-center">
+						<tr class="text-center">n
 							<th>Imagens</th>
 							<th>Detalhes do Carrinho</th>
 						</tr>
@@ -414,8 +436,7 @@
 			<?php
 	}
 
-	function Configuracao()
-	{
+	function Configuracao(){
 		?>
 			<article id="Configuracao" class="mt-2 bg-warning rounded p-1">
 				<h1>Configuração</h1>
@@ -476,6 +497,7 @@
 									<h6>Complemento: <?php echo (mb_convert_case($End['complemento'], MB_CASE_TITLE, 'UTF-8')) ?>
 									</h6>
 									<h6>Referência: <?php echo (mb_convert_case($End['referencia'], MB_CASE_TITLE, 'UTF-8')) ?></h6>
+									<button class="btn btn-sm btn-danger" onclick="deletarEnd(this)">Deletar</button>
 								</div>
 								<?php
 							}

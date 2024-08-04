@@ -528,3 +528,47 @@ function deletarCartao(element){
         });
     }
 }
+/*
+Função: deletarEnd(element)
+Descrição: Deletar endereço desejado
+Data: 04/07/2024
+Programador: Ighor Drummond   
+*/
+function deletarEnd(element){
+    var titulos = element.parentElement.getElementsByTagName('h6');
+    var nCont = 0;
+    var dadosEnd = {
+        cep: '',
+        rua: '',
+        numero: '',
+        cidade: '',
+        bairro: '',
+        estado: '',
+        complemento: '',
+        referencia: ''
+    };
+
+    //Prepara a mascará para remover palavras e caracteres indesejados
+    let palavrasMortas = /(Cep:|Rua:|Estado:|Referência:|Complemento:|Numero:|Cidade:|Bairro:|:\s*|\s+)/gi;
+
+    //Adiciona os dados do endereço para ser deletado
+    for(const chave in dadosEnd){
+        if(dadosEnd.hasOwnProperty(chave)){
+            dadosEnd[chave] = titulos[nCont].textContent.replace(palavrasMortas, ' ').trimStart();
+            nCont++;
+        }
+    }
+    
+    //Envia dados para o servidor
+    $.ajax({
+        url: 'script/home_config_js?Opc=20',
+        method: 'POST',
+        data: dadosEnd,
+        success: function(response){
+            console.log(response);
+        },
+        error: function(xhr, status, error){
+            console.log(xhr + status + error);
+        }
+    });
+}
