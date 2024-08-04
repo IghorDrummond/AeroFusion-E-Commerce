@@ -297,3 +297,27 @@ CREATE TABLE carrinho(
     FOREIGN KEY (id_cliente) REFERENCES cliente(id),
     FOREIGN KEY (id_tam) REFERENCES tamanho(id_tam)
 );
+
+#CRIANDO TABELA DE REGISTRO DE RASTREIO
+CREATE TABLE rastreio(
+    id_ras int primary key auto_increment not null,
+    id_ped int not null,
+    data_rastreio datetime not null,
+    status_ras int not null,
+    mensagem varchar(150) not null default '',
+    FOREIGN KEY (id_ped) REFERENCES pedidos(id_ped)
+)
+
+#CRIANDO TABELA DE STATUS DE RASTREIO
+CREATE TABLE status_rastreio(
+    id_sta int primary key auto_increment not null,
+    status_ras varchar(50) not null,
+    descricao_ras varchar(250) default ''
+)
+
+#INSIRINDO FORMA DE PAGAMENTOS
+INSERT INTO status_rastreio(status_ras, descricao_ras) VALUES('SAIU DO ARMAZÉM', 'Saiu do armazém para a distribuidora');
+INSERT INTO status_rastreio(status_ras, descricao_ras) VALUES('RECEBIDO PELA TRANSPORTADORA', 'TRANSPORTADORA COLETOU O PRODUTO(OS) DO PEDIDO');
+INSERT INTO status_rastreio(status_ras, descricao_ras) VALUES('DESLOCANDO PARA SUA CIDADE', 'TRANSPORTADORA ESTÁ SE DESLOCANDO PARA SUA CIDADE');
+INSERT INTO status_rastreio(status_ras, descricao_ras) VALUES('SAIU PARA ENTREGA', 'A TRANSPORTADORA ESTÁ LEVANDO SEU PRODUTO(OS) PARA SUA RESIDÊNCIA');
+INSERT INTO status_rastreio(status_ras, descricao_ras) VALUES('ENTREGUE', 'PRODUTO(OS) ENTREGUE PARA O DESTINATÁRIO');

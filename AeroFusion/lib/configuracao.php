@@ -373,6 +373,7 @@
 			private $estado = null;
 			private $numero = null;
 			private $IdCli = null;
+			private $IdEnd = null;
 
 			//Construtor
 			public function __construct(public $Email = null){
@@ -382,7 +383,7 @@
 				//Retornar o Id do Cliente
 				$this->montaQuery(1);
 				$this->getDados();
-				$this->IdCli = $this->stmt[0]['id_cliente'];						
+				$this->IdCli = $this->stmt['id_cliente']	;						
 			}
 
 			//Métodos
@@ -402,7 +403,6 @@
 				$this->estado = $estado;
 				$this->numero = $numero;				
 
-				//deleta Endereço
 				try{
 					$this->montaQuery(2);
 					if($this->con->exec($this->query) > 0){
@@ -424,7 +424,7 @@
 			private function getDados(){
 				try{
 					$this->stmt = $this->con->query($this->query);
-					$this->stmt = $this->stmt->fetchAll(\PDO::FETCH_ASSOC);
+					$this->stmt = $this->stmt->fetch(\PDO::FETCH_ASSOC);
 				}catch(\PDOException $e){
 					echo $e->getMessage();
 				}
