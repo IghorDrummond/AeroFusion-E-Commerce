@@ -91,11 +91,13 @@
 						$this->IdProd = $this->stmt[$nCont]['id_prod'];
 						$this->montaQuery(2);
 						$this->pushDados();
-						$this->Log .= date('d/m/Y H:i:s') . " - Produto atualizado: $this->IdProd - Estoque adicionado $this->Estoque" . PHP_EOL;
+						$this->Log .= PHP_EOL . date('d/m/Y H:i:s') . " - Produto atualizado: $this->IdProd - Estoque adicionado $this->Estoque";
 					}
-
-					return $this->Log;
+				}else{
+					$this->Log .= PHP_EOL . date('d/m/Y H:i:s') . " Não existem produtos sem estoque para atualizar.";
 				}
+				//Retorna o Log da execução realizada
+				return $this->Log;
 			}
 
 			/*
@@ -124,7 +126,7 @@
 			{
 				try {
 					$this->con->beginTransaction();
-					if ($this->con->exec($this->Query) > 0) {
+					if ($this->con->exec($this->query) > 0) {
 						$this->con->commit();
 						return true;
 					} else {

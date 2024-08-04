@@ -27,11 +27,8 @@
 	        $handle = fopen($LogArq, 'a') or die("Não foi possível abrir o arquivo de log.");
 	    }
 	    
-	    // Obter a hora atual para registro no log
-	    $HojaHoje = date('H:i:s');
-	    
-	    // Escrever a mensagem no arquivo de log
-	    fwrite($handle, "[$HojaHoje] $msg" . PHP_EOL);
+		// Escrever a mensagem no arquivo de log
+	    fwrite($handle, "$msg");
 	    
 	    // Fechar o arquivo de log
 	    fclose($handle);
