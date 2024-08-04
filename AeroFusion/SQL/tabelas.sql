@@ -306,12 +306,13 @@ CREATE TABLE rastreio(
     id_ped int not null,
     data_rastreio datetime not null,
     status_ras int not null,
-    FOREIGN KEY (id_ped) REFERENCES pedidos(id_ped)
+    FOREIGN KEY (id_ped) REFERENCES pedidos(id_ped),
+    FOREIGN KEY (status_ras) REFERENCES status_rastreio(id_sta_ras)
 );
 
 #CRIANDO TABELA DE STATUS DE RASTREIO
 CREATE TABLE status_rastreio(
-    id_sta int primary key auto_increment not null,
+    id_sta_ras int primary key auto_increment not null,
     status_ras varchar(50) not null,
     descricao_ras varchar(250) default ''
 );

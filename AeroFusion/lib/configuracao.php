@@ -203,8 +203,17 @@
 					date_default_timezone_set('America/Sao_Paulo'); // Configura data e hora do servidor
 					foreach ($this->stmt as $Ped){
 						switch($Ped['status']){
+							/*
+							INSERT INTO status_rastreio(status_ras, descricao_ras) VALUES('PREPARANDO PRODUTOS(OS)', 'A AEROFUSION ESTÁ PREPARANDO SEU PRODUTO(OS)');
+							INSERT INTO status_rastreio(status_ras, descricao_ras) VALUES('SAIU DO ARMAZÉM', 'SAIU DO ARMAZÉM PARA A DISTRIBUIDORA');
+							INSERT INTO status_rastreio(status_ras, descricao_ras) VALUES('RECEBIDO PELA TRANSPORTADORA', 'TRANSPORTADORA COLETOU O PRODUTO(OS) DO PEDIDO');
+							INSERT INTO status_rastreio(status_ras, descricao_ras) VALUES('DESLOCANDO PARA SUA CIDADE', 'TRANSPORTADORA ESTÁ SE DESLOCANDO PARA SUA CIDADE');
+							INSERT INTO status_rastreio(status_ras, descricao_ras) VALUES('SAIU PARA ENTREGA', 'A TRANSPORTADORA ESTÁ LEVANDO SEU PRODUTO(OS) PARA SUA RESIDÊNCIA');
+							INSERT INTO status_rastreio(status_ras, descricao_ras) VALUES('ENTREGUE', 'PRODUTO(OS) ENTREGUE PARA O DESTINATÁRIO');
+							INSERT INTO status_rastreio(status_ras, descricao_ras) VALUES('DEVOLVIDO', 'PRODUTO(OS) FOI DEVOLVIDO AO ARMAZÉM PARA A AEROFUSION');
+							 */
 							case 1:
-								//Calcula a diferença da data e verifica se já passou do prazo de 7 dias para processar
+								//Calcula a diferença da data e verifica se já passou do prazo de 7 dias para processar - Pendente
 								$Data_Ped = new \DateTime($Ped['data_ped']);
 								$Data_Atual = new \DateTime(date('Y-m-d'));
 								$Diferenca = $Data_Atual->diff($Data_Ped);
@@ -214,12 +223,34 @@
 								}
 								break;
 							case 2:
-								//Verifica se o pedido foi pago
-								
+								$Data_Ras  = new \DateTime($Ped['data_rastreio']);
+								$Data_Atual = new \DateTime(date('Y-m-d'));	
+								$Diferenca = $Data_Atual->diff($Data_Ped);		
+								//Valida pedido que está sendo preparado para envio - Aguardando Envio
+								if($Ped['status_ras'] === 1 and $Diferenca->i > 5){
+									//Atualiza status do rastreio para 2 de saiu do armazem
+									$this->AtualizaStatusRastreio($Ped['id_ped'],2);
+									$log .= PHP_EOL . date('d/m/Y H:i:s') . " - Rastreio do Pedido {$Ped['id_ped']} atualizado - Saiu do Armazém";
+								}else if($Ped['status_ras'] === 2 and $Diferenca->i > 5){
+									//Atualiza status do rastreio para 3 de recebido pela transportadora
+									$this->AtualizaStatusRastreio($Ped['id_ped'], 3);
+									$log .= PHP_EOL . date('d/m/Y H:i:s') . " - Rastreio do Pedido {$Ped['id_ped']} atualizado - Recebido pela Transportadora";
+								}else if($Ped['status_ras'] === 3 and $Diferenca->i > 5){
+									//Atualiza status do rastreio para 4 de deslocando para sua cidade e o pedido atualizado para Transportando
+									$this->AtualizaStatusRastreio($Ped['id_ped'], 3);
+									$this->status = 3;
+									$this->IdPed = $Ped['id_ped'];
+									$this->montaQuery(2);
+									$this->setDados();
+									$log .= PHP_EOL . date('d/m/Y H:i:s') . " - Rastreio do Pedido {$Ped['id_ped']} atualizado - Recebido pela Transportadora";
+									$log .= PHP_EOL . date('d/m/Y H:i:s') . " - Pedido {$Ped['id_ped']} está sendo transportado para a cidade do destinatário";
+								}
 								break;
 							case 3:
+								//Valida pedido que está sendo transportado - Transportando
 								break;
 							case 4:
+								//Valida pedido que foi entregue - Saiu para entrega
 								break;
 						}
 					}
@@ -245,7 +276,7 @@
 						INNER JOIN	
 							rastreio as ras ON ras.id_ped = ped.id_ped
 						WHERE
-							status BETWEEN 1 AND 5
+							status BETWEEN 1 AND 4
 					";
 				}else if($Opc === 2){
 					$this->Query = "
@@ -285,10 +316,23 @@
 			 */
 			private function setDados(){
 				try{
-					$this->con->exec($this->query);
+					$this->con->exec($this->Query);
 				}catch(\PDOException $e){
 					echo $e->getMessage();
 				}
+			}
+			/*
+			 *Metodo: AtualizaStatusRastreio(id do pedido, id do status do rastreio)
+			 *Descrição: Atualiza rastreio do pedido para um novo status definido 
+			 *Data: 04/08/2024
+			 *Programador(a): Ighor Drummond
+			 */
+			private function AtualizaStatusRastreio($IdPed, $Opc){
+				$this->IdPed = $IdPed;
+				$this->status_ras = $Opc;
+				$this->Data_Ras = date('Y-m-d H:i:s');
+				$this->montaQuery(3);
+				$this->setDados();
 			}
 		}
 	}
