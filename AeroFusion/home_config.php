@@ -69,6 +69,7 @@
 			cadastrarCartao();
 			break;
 		default:
+			Categorias();
 			Pedidos();
 			Favoritos();
 			Protocolos();
@@ -78,9 +79,8 @@
 	}
 
 	//Escopo
-	function Pedidos(){
-		$Compras = new novoPedido();
-?>
+	function Categorias(){
+?>	
 		<!-- Campo de seleção de areas -->
 		<aside class="p-3">
 			<nav id="nav_conteudo" class="p-1 h-50">
@@ -107,6 +107,11 @@
 				</ul>
 			</nav>
 		</aside>
+<?php
+ 	}
+	function Pedidos(){
+		$Compras = new novoPedido();
+?>
 		<!-- Inicio dos conteúdos -->
 		<section class="w-100">
 			<article id="Pedidos" class="mt-2 bg-warning rounded p-1">
