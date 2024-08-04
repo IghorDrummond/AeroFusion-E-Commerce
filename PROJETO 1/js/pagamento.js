@@ -387,12 +387,17 @@ function maskNumero(element) {
     var numero = element;
     var numeroMask = '';
 
-    for (nCont = 0; nCont <= (numero.value.length) - 1; nCont++) {
-        if ((nCont === 4 && numero.value[4] != ' ')
-            ||
-            (nCont === 9 && numero.value[9] != ' ')
-            ||
-            (nCont === 14 && numero.value[14] != ' ')) {
+    numero.value = numero.value.replace(/\s+/g, '');
+
+    if(numero.value.length > 16){
+        numero.style.border = '2px solid yellow';
+        return
+    }
+
+    numero.style.border = 'none';
+     
+    for (let nCont = 0; nCont < (numero.value.length); nCont++) {
+        if (nCont > 0 && nCont % 4 === 0) {
             numeroMask += ' ';
         }
         numeroMask += numero.value[nCont];
