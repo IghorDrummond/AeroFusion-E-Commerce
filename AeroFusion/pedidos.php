@@ -624,8 +624,9 @@
 	function cadastrarCartao(){
 		if(!empty($_GET['bandeira']) and !empty($_GET['nome']) and !empty($_GET['validade']) and !empty($_GET['cvv']) and !empty($_GET['numero'])){
 			$Cartao = new Cartao($_SESSION['Email']);
-			$Cartao->setCartao(str_replace(' ', '', $_GET['numero']), strtoupper($_GET['nome']), $_GET['bandeira'], $_GET['validade'], $_GET['cvv']);
-			montaTela();//Prepara a tela novamente para adição do cartão
+			if($Cartao->setCartao(str_replace(' ', '', $_GET['numero']), strtoupper($_GET['nome']), $_GET['bandeira'], $_GET['validade'], $_GET['cvv'])){
+				montaTela();//Prepara a tela novamente para adição do cartão
+			};
 		}
 	}
 

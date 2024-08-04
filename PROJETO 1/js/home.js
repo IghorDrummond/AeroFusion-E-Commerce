@@ -457,10 +457,10 @@ function addCartao() {
     if (Object.values(dados).every(value => value)) {
         telaCarregamento(true);
         $.ajax({
-            url: 'script/pedidos.php',
+            url: 'script/home_config_js.php',
             method: 'GET',
             data: {
-                Opc: 13,
+                Opc: 10,
                 bandeira: dados.bandeira,
                 nome: dados.nome,
                 validade: dados.validade,
@@ -469,12 +469,25 @@ function addCartao() {
             },
             success: function (response) {
                 telaCarregamento(false);
-                alerta('Cartão cadastrado com sucesso!', 1);
-                attPagina(4, 6);
+                switch(response){
+                    case 'DATA':
+                        alerta('Data de validade inserida incorretamente.', 0);
+                        break;
+                    case 'EXISTE': 
+                        alerta('Cartão já está cadastrado.', 0);
+                        break;
+                    case 'VENCIDO':
+                        alerta('Cartão com data de validade vencida.', 0);
+                        break;
+                    default:
+                        attPagina(4, 6);
+                        alerta('Cartão cadastrado com sucesso!', 1);
+                        break;
+                }
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 telaCarregamento(false);
-                alerta('Erro ao adicionar Cartão: ' + textStatus + errorThrown, 0);
+                alerta('Erro ao adicionar Cartão: ' + errorThrown, 0);
             }
         });
     } else {
@@ -548,6 +561,10 @@ function deletarEnd(element){
         referencia: ''
     };
 
+    if(!confirm('Tem certeza que deseja deletar o endereço selecionado?')){
+        return null;
+    }
+
     //Prepara a mascará para remover palavras e caracteres indesejados
     let palavrasMortas = /(CEP:|RUA:|ESTADO:|REFERÊNCIA:|COMPLEMENTO:|NUMERO:|CIDADE:|BAIRRO:|:\s*|\s+)/gi;
 
@@ -569,6 +586,8 @@ function deletarEnd(element){
             telaCarregamento(false);
             switch(response){
                 case 'OK':
+                    //Atualiza a aba de configuração
+                    attPagina(4, 6);
                     alerta('Endereço Deletado com sucesso!', 1);
                     break;
                 case 'PALAVRA':
@@ -581,8 +600,6 @@ function deletarEnd(element){
                     alerta('Ocorreu um erro interno do nosso servidor. Por favor, tente novamente ou mais tarde.', 0);
                     break;
             }
-            //Atualiza a aba de configuração
-            attPagina(4, 6);
         },
         error: function(xhr, status, error){
             telaCarregamento(false);

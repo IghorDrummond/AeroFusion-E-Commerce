@@ -1185,12 +1185,14 @@
 				if((int)$Validade[0] >= 1 and (int)$Validade[0] <= 12){
 					$this->Validade = $Validade[1] . '-' . $Validade[0] . '-' . '01';					
 				}else{
+					echo 'DATA';
 					return false;
 				}
 
-				//Valida se este cartão a ser inserido já existe0
+				//Valida se este cartão a ser inserido já existe
 				$this->montaQuery(4);
 				if(isset($this->getDados()[0]['id_card'])){
+					echo 'EXISTE';
 					return false;
 				}
 
@@ -1205,6 +1207,7 @@
 				$diferenca = $dataInicial->diff($dataFinal);
 				//Valida se a data inicial é menor que a data final
 				if($diferenca->y > 0 and $diferenca->invert === 0){
+					echo 'VENCIDO';
 					return false;
 				}				
 
