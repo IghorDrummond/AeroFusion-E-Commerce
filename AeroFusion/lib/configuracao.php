@@ -51,6 +51,7 @@
 
 	namespace Jobs{
 		require_once('conexao.php');
+		require_once('compras.php');
 		/*
 		*Classes: AtualizaProduto
 		*Descrição: Atualiza Produto sem estoque
@@ -199,8 +200,28 @@
 				$this->getDados();
 
 				if(isset($this->stmt[0]['id_ped'])){
-					foreach ($this->stmt as $Ped) {
-						//Verifica se o pedido está com status ainda não finalizado
+					date_default_timezone_set('America/Sao_Paulo'); // Configura data e hora do servidor
+					foreach ($this->stmt as $Ped){
+						switch($Ped['status']){
+							case 1:
+								//Calcula a diferença da data e verifica se já passou do prazo de 7 dias para processar
+								$Data_Ped = new \DateTime($Ped['data_ped']);
+								$Data_Atual = new \DateTime(date('Y-m-d'));
+								$Diferenca = $Data_Atual->diff($Data_Ped);
+								if($Diferenca->days >= 7){
+									//Atualiza status do pedido para 6 de cancelado
+									$log .= PHP_EOL . date('d/m/Y H:i:s') . " - Pedido {$Ped['id_ped']} foi cancelado por passar do 7 dias para pagar - Data do Pedido Inicial: {$Ped['data_ped']}";
+								}
+								break;
+							case 2:
+								//Verifica se o pedido foi pago
+								
+								break;
+							case 3:
+								break;
+							case 4:
+								break;
+						}
 					}
 				}else{
 					$log .= date('d/m/Y H:i:s') . " - Nenhum pedido encontrado para atualização.";
@@ -224,7 +245,7 @@
 						INNER JOIN	
 							rastreio as ras ON ras.id_ped = ped.id_ped
 						WHERE
-							status BETWEEN 2 AND 5
+							status BETWEEN 1 AND 5
 					";
 				}else if($Opc === 2){
 					$this->Query = "
