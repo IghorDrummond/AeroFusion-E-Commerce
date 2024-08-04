@@ -549,19 +549,20 @@ function deletarEnd(element){
     };
 
     //Prepara a mascará para remover palavras e caracteres indesejados
-    let palavrasMortas = /(Cep:|Rua:|Estado:|Referência:|Complemento:|Numero:|Cidade:|Bairro:|:\s*|\s+)/gi;
+    let palavrasMortas = /(CEP:|RUA:|ESTADO:|REFERÊNCIA:|COMPLEMENTO:|NUMERO:|CIDADE:|BAIRRO:|:\s*|\s+)/gi;
 
     //Adiciona os dados do endereço para ser deletado
     for(const chave in dadosEnd){
         if(dadosEnd.hasOwnProperty(chave)){
-            dadosEnd[chave] = titulos[nCont].textContent.replace(palavrasMortas, ' ').trimStart();
+            dadosEnd[chave] = titulos[nCont].textContent.replace(palavrasMortas, ' ').trimStart().toUpperCase();
             nCont++;
         }
     }
-    
+    console.log(dadosEnd);
+
     //Envia dados para o servidor
     $.ajax({
-        url: 'script/home_config_js?Opc=20',
+        url: 'script/home_config_js.php?Opc=9',
         method: 'POST',
         data: dadosEnd,
         success: function(response){

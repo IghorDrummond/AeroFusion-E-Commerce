@@ -15,6 +15,7 @@
 	use Produto\Favoritos;
 	use Configuracao\Configuracao;
 	use Configuracao\AtualizaUsuario;
+	use Configuracao\ConfigEndereco;
 
 	if (session_status() === PHP_SESSION_NONE) {
 		session_start();
@@ -60,6 +61,9 @@
 			break;
 		case '8':
 			AtualizaNome();
+			break;
+		case '9':
+			deletarEnd();
 			break;
 		default:
 			Pedidos();
@@ -666,6 +670,36 @@
 			if ($BanVetor[0][$nCont] === $Ban) {
 				return $BanVetor[1][$nCont];
 			}
+		}
+	}
+
+
+	function deletarEnd(){
+	    //Palavras a serem validadas
+	    $palavrasParaRemover = ["CEP:", "RUA:", "ESTADO:", "REFERENCIA:", "COMPLEMENTO:", "NUMERO:", "CIDADE:", "BAIRRO:"];
+	    $nCont = 0;
+
+	    // Verificar se as palavras estão presentes nos dados
+	    foreach ($_POST as $valor) {
+	    	if(stripos($palavrasParaRemover[$nCont], trim(strtoupper($valor))) != false){
+	    		echo 'PALAVRA';
+	    		return null;
+	    	}
+	    	$nCont++;
+	    }
+
+		//Valida se todos os dados estão correspondentes ao necessário
+		if(
+			isset($_POST['cep']) and isset($_POST['rua']) and isset($_POST['numero']) 
+			and isset($_POST['bairro']) and isset($_POST['cidade']) and isset($_POST['estado'])
+			and isset($_POST['complemento']) and isset($_POST['referencia'])
+		){	
+			//Deleta o endereço caso for encontrado
+			$Endereco = new ConfigEndereco($_SESSION['Email']);
+			$Endereco->delEnd($_POST['cep'], $_POST['rua'], $_POST['numero'], $_POST['bairro'], $_POST['cidade'], $_POST['estado'], $_POST['complemento'], $_POST['referencia']);
+		}else{
+			echo 'DADOS';
+			return null;
 		}
 	}
 ?>

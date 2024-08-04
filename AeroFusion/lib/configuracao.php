@@ -358,5 +358,116 @@
 				}
 			}						
 		}
+
+		class ConfigEndereco {
+			//Atributos
+			private $con = null;
+			private $stmt = null;
+			private $query = null;
+			private $cep = null;
+			private $rua = null;
+			private $bairro = null;
+			private $referencia = null;
+			private $complemento = null;
+			private $cidade = null;
+			private $estado = null;
+			private $numero = null;
+			private $IdCli = null;
+
+			//Construtor
+			public function __construct(public $Email = null){
+				//Conexão com o banco de dadoss
+				$this->con = new \IniciaServer();
+				$this->con = $this->con->conexao();	
+				//Retornar o Id do Cliente
+				$this->montaQuery(1);
+				$this->getDados();
+				$this->IdCli = $this->stmt[0]['id_cliente'];						
+			}
+
+			//Métodos
+			/*
+			 *Metodo: delEnd(dados do endereço para apagar)
+			 *Descrição: Responsavel por deletar o endereço desejado do usuário
+			 *Data: 04/07/2024
+			 *Programador(a): Ighor Drummond
+			*/
+			public function delEnd($cep, $rua, $numero, $bairro, $cidade, $estado, $complemento, $referencia){
+				$this->cep = $cep;
+				$this->rua = $rua;
+				$this->bairro = $bairro;
+				$this->referencia = $referencia;
+				$this->complemento = $complemento;
+				$this->cidade = $cidade;
+				$this->estado = $estado;
+				$this->numero = $numero;				
+
+				//deleta Endereço
+				try{
+					$this->montaQuery(2);
+					if($this->con->exec($this->query) > 0){
+						return true;
+					}else{
+						return false;
+					}
+				}catch(\PDOException $e){
+					echo $e->getMessage();
+					return false;
+				}
+			}
+			/*
+			 *Metodo: getDados
+			 *Descrição: Responsavel por recuperar dados de uma pesquisa
+			 *Data: 04/07/2024
+			 *Programador(a): Ighor Drummond
+			*/
+			private function getDados(){
+				try{
+					$this->stmt = $this->con->query($this->query);
+					$this->stmt = $this->stmt->fetchAll(\PDO::FETCH_ASSOC);
+				}catch(\PDOException $e){
+					echo $e->getMessage();
+				}
+			}
+			/*
+			 *Metodo: montaQuery(Opção)
+			 *Descrição: Responsavel por montar as querys
+			 *Data: 04/07/2024
+			 *Programador(a): Ighor Drummond
+			*/
+			private function montaQuery($Opc){
+				if($Opc === 1){
+					$this->query = "
+						SELECT
+							id as id_cliente
+						FROM
+							cliente
+						WHERE
+							email = '$this->Email'
+					";
+				}else if($Opc === 2){
+					$this->query = "
+						DELETE FROM
+							endereco
+						WHERE
+							cep = '$this->cep'
+							AND rua = '$this->rua'
+							AND bairro = '$this->bairro'
+							AND cidade = '$this->cidade'
+							AND uf = '$this->estado'
+							AND numero = $this->numero
+							AND id_cliente = $this->IdCli
+					";
+					//Dados extras mas não obrigatórios
+					if(!empty($this->referencia)){
+						$this->query .= "AND referencia = '$this->referencia'" . PHP_EOL;
+					}
+					if(!empty($this->complemento)){
+						$this->query .= "AND complemento = '$this->complemento'" . PHP_EOL;
+					}						
+				}
+			}
+		}
 	}
+	
 ?>
