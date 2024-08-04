@@ -802,7 +802,12 @@ function cadastrarEnd(event) {
                 fecharEnd();//Fecha tela de endereço
                 switch (ajax.responseText.trim()) {
                     case 'OK':
-                        novoPedido();
+                        alerta('Endereço Cadastrado com Sucesso!', 1);
+                        if(typeof attPagina === 'function'){
+                            attPagina(4, 6);
+                        }else{
+                            novoPedido();
+                        }
                         break;
                     case 'EXISTE':
                         alerta('Endereço já cadastrado! Por favor, informe um endereço diferente.', 0);

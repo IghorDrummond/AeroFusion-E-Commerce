@@ -447,8 +447,10 @@
 					";
 				}else if($Opc === 2){
 					$this->query = "
-						DELETE FROM
+						UPDATE 
 							endereco
+						SET	
+							end_ativo = false
 						WHERE
 							cep = '$this->cep'
 							AND rua = '$this->rua'

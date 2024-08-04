@@ -158,9 +158,13 @@
 							Selecione um Endereço
 						</button>
 						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-							<?php
+						<?php
 							foreach ($Endereco->getEndereco() as $i => $End) {
-								?>
+								//Valida se o endereço está ativo ou não
+								if($End['end_ativo'] === 0){
+									continue;
+								}
+						?>
 								<a class="dropdown-item" id="<?php echo ($End['id_end']); ?>" onclick="selecionaEndereco(this)"
 									data-title="Endereço <?php echo (($i + 1)); ?>">
 									<ul>

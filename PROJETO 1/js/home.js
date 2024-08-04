@@ -551,6 +551,7 @@ function deletarEnd(element){
     //Prepara a mascará para remover palavras e caracteres indesejados
     let palavrasMortas = /(CEP:|RUA:|ESTADO:|REFERÊNCIA:|COMPLEMENTO:|NUMERO:|CIDADE:|BAIRRO:|:\s*|\s+)/gi;
 
+    telaCarregamento(true);
     //Adiciona os dados do endereço para ser deletado
     for(const chave in dadosEnd){
         if(dadosEnd.hasOwnProperty(chave)){
@@ -558,7 +559,6 @@ function deletarEnd(element){
             nCont++;
         }
     }
-    console.log(dadosEnd);
 
     //Envia dados para o servidor
     $.ajax({
@@ -566,10 +566,27 @@ function deletarEnd(element){
         method: 'POST',
         data: dadosEnd,
         success: function(response){
-            console.log(response);
+            telaCarregamento(false);
+            switch(response){
+                case 'OK':
+                    alerta('Endereço Deletado com sucesso!', 1);
+                    break;
+                case 'PALAVRA':
+                    alerta('Houve um erro ao enviar os dados para o servidor.', 0);
+                    break;
+                case 'DADOS':
+                    alerta('Dados incompletos foram enviados para o servidor. Impossível prosseguir com a solicitação', 0);
+                    break;
+                default: 
+                    alerta('Ocorreu um erro interno do nosso servidor. Por favor, tente novamente ou mais tarde.', 0);
+                    break;
+            }
+            //Atualiza a aba de configuração
+            attPagina(4, 6);
         },
         error: function(xhr, status, error){
-            console.log(xhr + status + error);
+            telaCarregamento(false);
+            alerta('Ocorreu um erro interno do nosso servidor. Error: ' + error, 0);
         }
     });
 }

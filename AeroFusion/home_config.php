@@ -490,6 +490,10 @@
 							$Endereco = new Endereco($_SESSION['Email']);
 
 							foreach ($Endereco->getEndereco() as $End) {
+								//Valida se o endereço está ativo
+								if($End['end_ativo'] === 0){
+									continue;
+								}
 								?>
 								<div class="p-2 border rounded my-1">
 									<h6>Cep: <?php echo (mb_convert_case($End['cep'], MB_CASE_TITLE, 'UTF-8')) ?></h6>
@@ -696,7 +700,11 @@
 		){	
 			//Deleta o endereço caso for encontrado
 			$Endereco = new ConfigEndereco($_SESSION['Email']);
-			$Endereco->delEnd($_POST['cep'], $_POST['rua'], $_POST['numero'], $_POST['bairro'], $_POST['cidade'], $_POST['estado'], $_POST['complemento'], $_POST['referencia']);
+			if($Endereco->delEnd($_POST['cep'], $_POST['rua'], $_POST['numero'], $_POST['bairro'], $_POST['cidade'], $_POST['estado'], $_POST['complemento'], $_POST['referencia'])){
+				echo 'OK';
+			}else{
+				echo 'ERROR';
+			}
 		}else{
 			echo 'DADOS';
 			return null;

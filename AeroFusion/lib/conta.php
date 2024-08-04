@@ -176,6 +176,7 @@
 			private $query = null;
 			private $stmt = null;
 			private $IdCli = null;
+			private $IdEnd = null;
 
 			//Construtor
 			public function __construct(
@@ -224,9 +225,17 @@
 						$this->stmt = $this->retornaValores();
 						
 						foreach ($this->stmt as $end) {
-							if($end['cep'] === $Cep and trim(strtoupper($end['rua'])) === trim(strtoupper($Rua)) and strval($end['numero']) === $Numero ){
-								$EndExiste = true;
-								break;
+							if($end['cep'] === $Cep and trim(strtoupper($end['rua'])) === trim(strtoupper($Rua)) and strval($end['numero']) === $Numero){
+								if($end['end_ativo'] === 1){
+									$EndExiste = true;
+									break;
+								}else{
+									//Caso o usuário inserir o mesmo endereço após desativa-lo/excluir, iremos reativa-lo novamente.
+									$this->IdEnd = $end['id_end'];
+									$this->montaQuery(3);
+									$this->reativaEnd();
+									return null;//Retorna Null após a conclusão do processo
+								}
 							}
 						}
 						
@@ -276,7 +285,8 @@
 						    ende.numero,
 						    ende.complemento,
 						    cli.id,
-						    ende.id_end
+						    ende.id_end,
+							ende.end_ativo
 						FROM
 							endereco as ende
 						INNER JOIN
@@ -297,6 +307,15 @@
 						WHERE
 							cli.email = '$this->Email'
 					";
+				}else if($Val === 3){
+					$this->query = "
+						UPDATE
+							endereco
+						SET
+							end_ativo = true
+						WHERE
+							id_end = $this->IdEnd
+					";
 				}
 			}
 			
@@ -313,6 +332,24 @@
 					echo $e->getMessage();
 				}finally{
 					return $this->stmt->fetchAll(\PDO::FETCH_ASSOC);
+				}
+			}
+			/*
+			*Metodo: reativaEnd()
+			*Descrição: Responsavel por reativar o endereço deletado/desativado
+			*Data: 04/07/2024
+			*Programador(a): Ighor Drummond
+			*/
+			private function reativaEnd(){
+				$this->montaQuery(3);
+				try{
+					$this->con->beginTransaction();
+					$this->con->exec($this->query);
+					$this->con->commit();
+					echo 'OK';//da status de Ok após o cadastro
+				}catch(\PDOException $e){
+					echo $e->getMessage();
+					$this->con->rollBack();
 				}
 			}
 		}
