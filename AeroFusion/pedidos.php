@@ -159,16 +159,18 @@
 						</button>
 						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 						<?php
-							foreach ($Endereco->getEndereco() as $i => $End) {
+							$i = 0;
+							foreach ($Endereco->getEndereco() as $End) {
 								//Valida se o endereço está ativo ou não
 								if($End['end_ativo'] === 0){
 									continue;
 								}
+								$i++;
 						?>
 								<a class="dropdown-item" id="<?php echo ($End['id_end']); ?>" onclick="selecionaEndereco(this)"
-									data-title="Endereço <?php echo (($i + 1)); ?>">
+									data-title="Endereço <?php echo (($i)); ?>">
 									<ul>
-										<li><strong>Endereço <?php echo ($i + 1); ?></strong></li>
+										<li><strong>Endereço <?php echo ($i); ?></strong></li>
 										<li>Rua: <?php echo mb_convert_case($End['rua'], MB_CASE_TITLE, 'UTF-8'); ?></li>
 										<li>Bairro: <?php echo mb_convert_case($End['bairro'], MB_CASE_TITLE, 'UTF-8'); ?></li>
 										<li>Número: <?php echo $End['numero']; ?></li>
@@ -624,9 +626,8 @@
 	function cadastrarCartao(){
 		if(!empty($_GET['bandeira']) and !empty($_GET['nome']) and !empty($_GET['validade']) and !empty($_GET['cvv']) and !empty($_GET['numero'])){
 			$Cartao = new Cartao($_SESSION['Email']);
-			if($Cartao->setCartao(str_replace(' ', '', $_GET['numero']), strtoupper($_GET['nome']), $_GET['bandeira'], $_GET['validade'], $_GET['cvv'])){
-				montaTela();//Prepara a tela novamente para adição do cartão
-			};
+			$Cartao->setCartao(str_replace(' ', '', $_GET['numero']), strtoupper($_GET['nome']), $_GET['bandeira'], $_GET['validade'], $_GET['cvv']);
+			montaTela();//Prepara a tela novamente para adição do cartão
 		}
 	}
 
