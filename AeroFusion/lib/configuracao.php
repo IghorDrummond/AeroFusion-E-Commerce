@@ -126,7 +126,7 @@
 			{
 				try {
 					$this->con->beginTransaction();
-					if ($this->con->exec($this->query) > 0) {
+					if ($this->con->exec($this->Query) > 0) {
 						$this->con->commit();
 						return true;
 					} else {
@@ -163,6 +163,110 @@
 						WHERE
 							id_prod = $this->IdProd
 					";
+				}
+			}
+		}
+		/*
+		*Classes: AtualizaPedidos
+		*Descrição: Atualiza todos os pedidos e seus rastreios
+		*Data: 04/08/2024
+		*Programador(a): Ighor Drummond
+		*/
+		class AtualizaPedidos{
+			//Atributos
+			private $con = null;
+			private $Query = null;
+			private $IdPed = null;
+			private $IdCli = null;
+			private $stmt = null;
+			private $status = null;
+			private $status_ras = null;
+			private $Data_Ras = null;
+
+			
+			//Construtor
+			public function __construct(){
+				$this->con = new \IniciaServer();
+				$this->con = $this->con->conexao();
+			}
+
+			//Métodos
+			public function attPeds(){
+				$log = '';
+
+				//Pesquisa Pedidos que estão com status ainda não finalizados
+				$this->montaQuery(0);
+				$this->getDados();
+
+				if(isset($this->stmt[0]['id_ped'])){
+					foreach ($this->stmt as $Ped) {
+						//Verifica se o pedido está com status ainda não finalizado
+					}
+				}else{
+					$log .= date('d/m/Y H:i:s') . " - Nenhum pedido encontrado para atualização.";
+				}	
+
+				return $log;
+			}
+			/*
+			 *Metodo: montaQuery(Opção)
+			 *Descrição: Responsavel por montar as querys
+			 *Data: 04/08/2024
+			 *Programador(a): Ighor Drummond
+			 */
+			private function montaQuery($Opc){
+				if($Opc === 1){
+					$this->Query = "
+						SELECT
+							*
+						FROM
+							pedidos ped
+						INNER JOIN	
+							rastreio as ras ON ras.id_ped = ped.id_ped
+						WHERE
+							status BETWEEN 2 AND 5
+					";
+				}else if($Opc === 2){
+					$this->Query = "
+						UPDATE
+							pedidos
+						SET
+							status = $this->status
+						WHERE
+							id_ped = $this->IdPed
+					";						
+				}else if($Opc === 3){
+					$this->Query = "
+						INSERT INTO rastreio(id_ped, data_rastreio, status_ras)
+						VALUES($this->IdPed, '$this->Data_Ras', $this->status_ras);
+					";
+				}
+			}
+			/*
+			 *Metodo: getDados()
+			 *Descrição: Responsavel por retornar dados
+			 *Data: 04/08/2024
+			 *Programador(a): Ighor Drummond
+			 */
+			private function getDados(){
+				try{
+					$this->stmt = $this->con->query($this->Query);
+					$this->stmt = $this->stmt->fetchAll(\PDO::FETCH_ASSOC);
+				}catch(\PDOException $e){
+					echo $e->getMessage();
+				}
+			}
+			/*
+			 *Metodo: setDados()
+			 *Descrição: Responsavel por guardar dados
+			 *Data: 04/08/2024
+			 *Programador(a): Ighor Drummond
+			 */
+			private function setDados(){
+				try{
+					$this->con->exec($this->query);
+				}catch(\PDOException $e){
+					echo $e->getMessage();
 				}
 			}
 		}

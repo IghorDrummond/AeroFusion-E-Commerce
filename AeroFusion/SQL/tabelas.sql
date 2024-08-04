@@ -306,7 +306,6 @@ CREATE TABLE rastreio(
     id_ped int not null,
     data_rastreio datetime not null,
     status_ras int not null,
-    mensagem varchar(150) not null default '',
     FOREIGN KEY (id_ped) REFERENCES pedidos(id_ped)
 );
 

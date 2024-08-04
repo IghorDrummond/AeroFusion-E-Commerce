@@ -867,6 +867,7 @@ namespace Pedido {
 					} else {
 						throw new \PDOException("Falha ao inserir o pedido.");
 					}
+
 					// Vai dar a baixa na quantidade dos produtos e adicionar o item do pedido
 					foreach ($this->stmt as $nCont => $Dados) {
 						if ($Dados['disponibilidade'] === 'SIM') {
@@ -893,6 +894,11 @@ namespace Pedido {
 					$Ret['sem_estoque'] = strlen($Ret['sem_estoque']) > 0 ? substr($Ret['sem_estoque'], 0, strlen($Ret['sem_estoque']) - 1) : '';
 					// Retorna operação concluída
 					$Ret['Inclusão'] = true;
+
+					//Adiciona o rastreio ao pedido criado
+					$this->status = self::STATUS;//Atualiza status do rastreio
+					$this->montaQuery(10);
+					$this->pushDados();
 				}
 			} catch (\PDOException $e) {
 				echo $e->getMessage();
@@ -1251,6 +1257,11 @@ namespace Pedido {
 					ORDER BY
 						ped.id_ped DESC
 				";
+			}else if($Opc === 10){
+				$this->query = "
+					INSERT INTO rastreio(id_ped, data_rastreio, status_ras)
+					VALUES($this->IdPed, '$this->Data', $this->status);
+				";				
 			}
 		}
 		/*
