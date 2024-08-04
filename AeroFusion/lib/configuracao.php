@@ -214,18 +214,14 @@
 							 */
 							case 1:
 								//Calcula a diferença da data e verifica se já passou do prazo de 7 dias para processar - Pendente
-								$Data_Ped = new \DateTime($Ped['data_ped']);
-								$Data_Atual = new \DateTime(date('Y-m-d'));
-								$Diferenca = $Data_Atual->diff($Data_Ped);
+								$Diferenca = calculaData($Ped['data_ped']);
 								if($Diferenca->days >= 7){
 									//Atualiza status do pedido para 6 de cancelado
 									$log .= PHP_EOL . date('d/m/Y H:i:s') . " - Pedido {$Ped['id_ped']} foi cancelado por passar do 7 dias para pagar - Data do Pedido Inicial: {$Ped['data_ped']}";
 								}
 								break;
 							case 2:
-								$Data_Ras  = new \DateTime($Ped['data_rastreio']);
-								$Data_Atual = new \DateTime(date('Y-m-d'));	
-								$Diferenca = $Data_Atual->diff($Data_Ped);		
+								$Diferenca = calculaData($Ped['data_rastreio']);//Calcula a diferença da data do rastreio
 								//Valida pedido que está sendo preparado para envio - Aguardando Envio
 								if($Ped['status_ras'] === 1 and $Diferenca->i > 5){
 									//Atualiza status do rastreio para 2 de saiu do armazem
@@ -333,6 +329,17 @@
 				$this->Data_Ras = date('Y-m-d H:i:s');
 				$this->montaQuery(3);
 				$this->setDados();
+			}
+			/*
+			 *Metodo: calculaData(Data anterior)
+			 *Descrição: Calcula a diferença da data anterior para a atual e retorna 
+			 *Data: 04/08/2024
+			 *Programador(a): Ighor Drummond
+			 */
+			private function calculaData($Data_Ant){
+				$Data_Ant  = new \DateTime($Data_Ant);
+				$Data_Atual = new \DateTime(date('Y-m-d'));	
+				return $Data_Atual->diff($Data_Ant);	
 			}
 		}
 	}
