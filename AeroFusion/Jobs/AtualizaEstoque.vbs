@@ -1,2 +1,2 @@
 Set WshShell = CreateObject("WScript.Shell")
-WshShell.Run "Jobs.bat", 0, False
+WshShell.Run """C:\Users\Drummond\Downloads\Jobs.bat""", 0, False
