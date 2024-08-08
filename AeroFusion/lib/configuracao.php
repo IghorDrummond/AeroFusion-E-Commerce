@@ -203,19 +203,14 @@
 					date_default_timezone_set('America/Sao_Paulo'); // Configura data e hora do servidor
 					foreach ($this->stmt as $Ped){
 						switch($Ped['status']){
-							/*
-							INSERT INTO status_rastreio(status_ras, descricao_ras) VALUES('PREPARANDO PRODUTOS(OS)', 'A AEROFUSION ESTÁ PREPARANDO SEU PRODUTO(OS)');
-							INSERT INTO status_rastreio(status_ras, descricao_ras) VALUES('SAIU DO ARMAZÉM', 'SAIU DO ARMAZÉM PARA A DISTRIBUIDORA');
-							INSERT INTO status_rastreio(status_ras, descricao_ras) VALUES('RECEBIDO PELA TRANSPORTADORA', 'TRANSPORTADORA COLETOU O PRODUTO(OS) DO PEDIDO');
-							INSERT INTO status_rastreio(status_ras, descricao_ras) VALUES('DESLOCANDO PARA SUA CIDADE', 'TRANSPORTADORA ESTÁ SE DESLOCANDO PARA SUA CIDADE');
-							INSERT INTO status_rastreio(status_ras, descricao_ras) VALUES('SAIU PARA ENTREGA', 'A TRANSPORTADORA ESTÁ LEVANDO SEU PRODUTO(OS) PARA SUA RESIDÊNCIA');
-							INSERT INTO status_rastreio(status_ras, descricao_ras) VALUES('ENTREGUE', 'PRODUTO(OS) ENTREGUE PARA O DESTINATÁRIO');
-							INSERT INTO status_rastreio(status_ras, descricao_ras) VALUES('DEVOLVIDO', 'PRODUTO(OS) FOI DEVOLVIDO AO ARMAZÉM PARA A AEROFUSION');
-							 */
 							case 1:
 								//Calcula a diferença da data e verifica se já passou do prazo de 7 dias para processar - Pendente
 								$Diferenca = $this->calculaData($Ped['data_ped']);
 								if($Diferenca->days >= 7){
+									//Implementar herança aqui nesse código para deletar o pedido
+
+									//Atualiza rastreio para devolvido a AeroFusion - Cancelado
+									$this->AtualizaStatusRastreio($Ped['id_ped'], 7);
 									//Atualiza status do pedido para 6 de cancelado
 									$log .= PHP_EOL . date('d/m/Y H:i:s') . " - Pedido {$Ped['id_ped']} foi cancelado por passar do 7 dias para pagar - Data do Pedido Inicial: {$Ped['data_ped']}";
 								}
@@ -233,7 +228,7 @@
 									$log .= PHP_EOL . date('d/m/Y H:i:s') . " - Rastreio do Pedido {$Ped['id_ped']} atualizado - Recebido pela Transportadora";
 								}else if($Ped['status_ras'] === 3 and $Diferenca->i > 5){
 									//Atualiza status do rastreio para 4 de deslocando para sua cidade e o pedido atualizado para Transportando
-									$this->AtualizaStatusRastreio($Ped['id_ped'], 3);
+									$this->AtualizaStatusRastreio($Ped['id_ped'], 4);
 									$this->status = 3;
 									$this->IdPed = $Ped['id_ped'];
 									$this->montaQuery(2);
@@ -243,9 +238,27 @@
 								}
 								break;
 							case 3:
-								//Valida pedido que está sendo transportado - Transportando
+								$Diferenca = $this->calculaData($Ped['data_rastreio']);//Calcula a diferença da data do rastreio
+								//Valida pedido que está saiu para entrega - Saiu para entrega
+								if($Diferenca->i > 5 and $Ped['status_ras'] === 4){
+									$this->AtualizaStatusRastreio($Ped['id_ped'], 5);
+									$this->status = 4;
+									$this->IdPed = $Ped['id_ped'];
+									$this->montaQuery(2);
+									$this->setDados();									
+								}
+
 								break;
 							case 4:
+								$Diferenca = $this->calculaData($Ped['data_rastreio']);//Calcula a diferença da data do rastreio
+								//Valida pedido que foi entregue ao destinatario - Entregue
+								if($Diferenca->i > 5 and $Ped['status_ras'] === 5){
+									$this->AtualizaStatusRastreio($Ped['id_ped'], 6);
+									$this->status = 5;
+									$this->IdPed = $Ped['id_ped'];
+									$this->montaQuery(2);
+									$this->setDados();									
+								}
 								//Valida pedido que foi entregue - Saiu para entrega
 								break;
 						}
