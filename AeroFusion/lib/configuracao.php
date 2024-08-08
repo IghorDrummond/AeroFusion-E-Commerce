@@ -245,9 +245,10 @@
 									$this->status = 4;
 									$this->IdPed = $Ped['id_ped'];
 									$this->montaQuery(2);
-									$this->setDados();									
+									$this->setDados();	
+									$log .= PHP_EOL . date('d/m/Y H:i:s') . " - Rastreio do Pedido {$Ped['id_ped']} atualizado - Saiu para Entrega";
+									$log .= PHP_EOL . date('d/m/Y H:i:s') . " - Pedido {$Ped['id_ped']} está se deslocando para a residência do destinatário";								
 								}
-
 								break;
 							case 4:
 								$Diferenca = $this->calculaData($Ped['data_rastreio']);//Calcula a diferença da data do rastreio
@@ -257,9 +258,10 @@
 									$this->status = 5;
 									$this->IdPed = $Ped['id_ped'];
 									$this->montaQuery(2);
-									$this->setDados();									
+									$this->setDados();
+									$log .= PHP_EOL . date('d/m/Y H:i:s') . " - Rastreio do Pedido {$Ped['id_ped']} atualizado - Entregue";
+									$log .= PHP_EOL . date('d/m/Y H:i:s') . " - Pedido {$Ped['id_ped']} Foi entregue para o destinatário";				
 								}
-								//Valida pedido que foi entregue - Saiu para entrega
 								break;
 						}
 					}
