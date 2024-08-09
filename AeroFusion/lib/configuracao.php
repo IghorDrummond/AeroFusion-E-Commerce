@@ -204,6 +204,7 @@
 					foreach ($this->stmt as $Ped){
 						switch($Ped['status']){
 							case 1:
+							/*
 								//Calcula a diferença da data e verifica se já passou do prazo de 7 dias para processar - Pendente
 								$Diferenca = $this->calculaData($Ped['data_ped']);
 								if($Diferenca->days >= 7){
@@ -213,7 +214,7 @@
 									$this->AtualizaStatusRastreio($Ped['id_ped'], 7);
 									//Atualiza status do pedido para 6 de cancelado
 									$log .= PHP_EOL . date('d/m/Y H:i:s') . " - Pedido {$Ped['id_ped']} foi cancelado por passar do 7 dias para pagar - Data do Pedido Inicial: {$Ped['data_ped']}";
-								}
+								}*/
 								break;
 							case 2:
 								$Diferenca = $this->calculaData($Ped['data_rastreio']);//Calcula a diferença da data do rastreio
