@@ -183,7 +183,6 @@
 			private $status = null;
 			private $status_ras = null;
 			private $Data_Ras = null;
-
 			
 			//Construtor
 			public function __construct(){
