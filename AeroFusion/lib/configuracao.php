@@ -201,7 +201,7 @@
 				$log = '';
 
 				//Pesquisa Pedidos que estão com status ainda não finalizados
-				$this->montaQuery(0);
+				$this->montaQuery(1);
 				$this->getDados();
 
 				if(isset($this->stmt[0]['id_ped'])){
