@@ -192,6 +192,12 @@
 			}
 
 			//Métodos
+			/*
+			 *Metodo: attPeds()
+			 *Descrição: Responsável por atualizar o rastreio e o status do pedido.
+			 *Data: 04/08/2024
+			 *Programador(a): Ighor Drummond
+			 */
 			public function attPeds(){
 				$log = '';
 
@@ -204,7 +210,7 @@
 					foreach ($this->stmt as $Ped){
 						switch($Ped['status']){
 							case 1:
-							/*
+								/*
 								//Calcula a diferença da data e verifica se já passou do prazo de 7 dias para processar - Pendente
 								$Diferenca = $this->calculaData($Ped['data_ped']);
 								if($Diferenca->days >= 7){
