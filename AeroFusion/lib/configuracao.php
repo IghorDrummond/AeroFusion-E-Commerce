@@ -224,15 +224,15 @@
 							case 2:
 								$Diferenca = $this->calculaData($Ped['data_rastreio']);//Calcula a diferença da data do rastreio
 								//Valida pedido que está sendo preparado para envio - Aguardando Envio
-								if($Ped['status_ras'] === 1 and $Diferenca->i > 5){
+								if($Ped['status_ras'] === 1 and ($Diferenca->i > 5 or $Diferenca->h >= 1) ){
 									//Atualiza status do rastreio para 2 de saiu do armazem
 									$this->AtualizaStatusRastreio($Ped['id_ped'],2);
 									$log .= PHP_EOL . date('d/m/Y H:i:s') . " - Rastreio do Pedido {$Ped['id_ped']} atualizado - Saiu do Armazém";
-								}else if($Ped['status_ras'] === 2 and $Diferenca->i > 5){
+								}else if($Ped['status_ras'] === 2 and ($Diferenca->i > 5 or $Diferenca->h >= 1) ){
 									//Atualiza status do rastreio para 3 de recebido pela transportadora
 									$this->AtualizaStatusRastreio($Ped['id_ped'], 3);
 									$log .= PHP_EOL . date('d/m/Y H:i:s') . " - Rastreio do Pedido {$Ped['id_ped']} atualizado - Recebido pela Transportadora";
-								}else if($Ped['status_ras'] === 3 and $Diferenca->i > 5){
+								}else if($Ped['status_ras'] === 3 and ($Diferenca->i > 5 or $Diferenca->h >= 1) ){
 									//Atualiza status do rastreio para 4 de deslocando para sua cidade e o pedido atualizado para Transportando
 									$this->AtualizaStatusRastreio($Ped['id_ped'], 4);
 									$this->status = 3;
@@ -246,7 +246,7 @@
 							case 3:
 								$Diferenca = $this->calculaData($Ped['data_rastreio']);//Calcula a diferença da data do rastreio
 								//Valida pedido que está saiu para entrega - Saiu para entrega
-								if($Diferenca->i > 5 and $Ped['status_ras'] === 4){
+								if(($Diferenca->i > 5 or $Diferenca->h >= 1) and $Ped['status_ras'] === 4){
 									$this->AtualizaStatusRastreio($Ped['id_ped'], 5);
 									$this->status = 4;
 									$this->IdPed = $Ped['id_ped'];
@@ -259,7 +259,7 @@
 							case 4:
 								$Diferenca = $this->calculaData($Ped['data_rastreio']);//Calcula a diferença da data do rastreio
 								//Valida pedido que foi entregue ao destinatario - Entregue
-								if($Diferenca->i > 5 and $Ped['status_ras'] === 5){
+								if(($Diferenca->i > 5 or $Diferenca->h >= 1) and $Ped['status_ras'] === 5){
 									$this->AtualizaStatusRastreio($Ped['id_ped'], 6);
 									$this->status = 5;
 									$this->IdPed = $Ped['id_ped'];
@@ -287,13 +287,24 @@
 				if($Opc === 1){
 					$this->Query = "
 						SELECT
-							*
+							ped.*,
+							ras.*,
+							str.*
 						FROM
 							pedidos ped
-						INNER JOIN	
-							rastreio as ras ON ras.id_ped = ped.id_ped
+						INNER JOIN
+							rastreio ras ON ras.id_ped = ped.id_ped
+						INNER JOIN
+							status_rastreio str ON str.id_sta_ras = ras.status_ras
 						WHERE
 							status BETWEEN 1 AND 4
+							AND ras.id_ras = (
+								SELECT MAX(ras_inner.id_ras)
+								FROM rastreio ras_inner
+								WHERE ras_inner.id_ped = ped.id_ped
+							)
+						ORDER BY
+							ras.id_ras DESC
 					";
 				}else if($Opc === 2){
 					$this->Query = "
