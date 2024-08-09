@@ -300,7 +300,23 @@ CREATE TABLE carrinho(
     FOREIGN KEY (id_tam) REFERENCES tamanho(id_tam)
 );
 
-#CRIANDO TABELA DE REGISTRO DE RASTREIO
+# CRIANDO TABELA DE STATUS DE RASTREIO (antes da tabela rastreio)
+CREATE TABLE status_rastreio(
+    id_sta_ras int primary key auto_increment not null,
+    titulo_ras varchar(50) not null,
+    descricao_ras varchar(250) default ''
+);
+
+# INSERINDO DADOS NA TABELA STATUS_RASTREIO
+INSERT INTO status_rastreio(titulo_ras, descricao_ras) VALUES('PREPARANDO PRODUTO(S)', 'A AEROFUSION ESTÁ PREPARANDO SEU PRODUTO(S)');
+INSERT INTO status_rastreio(titulo_ras, descricao_ras) VALUES('SAIU DO ARMAZÉM', 'SAIU DO ARMAZÉM PARA A DISTRIBUIDORA');
+INSERT INTO status_rastreio(titulo_ras, descricao_ras) VALUES('RECEBIDO PELA TRANSPORTADORA', 'TRANSPORTADORA COLETOU O PRODUTO(S) DO PEDIDO');
+INSERT INTO status_rastreio(titulo_ras, descricao_ras) VALUES('DESLOCANDO PARA SUA CIDADE', 'TRANSPORTADORA ESTÁ SE DESLOCANDO PARA SUA CIDADE');
+INSERT INTO status_rastreio(titulo_ras, descricao_ras) VALUES('SAIU PARA ENTREGA', 'A TRANSPORTADORA ESTÁ LEVANDO SEU PRODUTO(S) PARA SUA RESIDÊNCIA');
+INSERT INTO status_rastreio(titulo_ras, descricao_ras) VALUES('ENTREGUE', 'PRODUTO(S) ENTREGUE PARA O DESTINATÁRIO');
+INSERT INTO status_rastreio(titulo_ras, descricao_ras) VALUES('DEVOLVIDO', 'PRODUTO(S) FOI DEVOLVIDO AO ARMAZÉM PARA A AEROFUSION');
+
+# CRIANDO TABELA DE REGISTRO DE RASTREIO
 CREATE TABLE rastreio(
     id_ras int primary key auto_increment not null,
     id_ped int not null,
@@ -309,19 +325,3 @@ CREATE TABLE rastreio(
     FOREIGN KEY (id_ped) REFERENCES pedidos(id_ped),
     FOREIGN KEY (status_ras) REFERENCES status_rastreio(id_sta_ras)
 );
-
-#CRIANDO TABELA DE STATUS DE RASTREIO
-CREATE TABLE status_rastreio(
-    id_sta_ras int primary key auto_increment not null,
-    status_ras varchar(50) not null,
-    descricao_ras varchar(250) default ''
-);
-
-#INSIRINDO FORMA DE PAGAMENTOS
-INSERT INTO status_rastreio(status_ras, descricao_ras) VALUES('PREPARANDO PRODUTOS(OS)', 'A AEROFUSION ESTÁ PREPARANDO SEU PRODUTO(OS)');
-INSERT INTO status_rastreio(status_ras, descricao_ras) VALUES('SAIU DO ARMAZÉM', 'SAIU DO ARMAZÉM PARA A DISTRIBUIDORA');
-INSERT INTO status_rastreio(status_ras, descricao_ras) VALUES('RECEBIDO PELA TRANSPORTADORA', 'TRANSPORTADORA COLETOU O PRODUTO(OS) DO PEDIDO');
-INSERT INTO status_rastreio(status_ras, descricao_ras) VALUES('DESLOCANDO PARA SUA CIDADE', 'TRANSPORTADORA ESTÁ SE DESLOCANDO PARA SUA CIDADE');
-INSERT INTO status_rastreio(status_ras, descricao_ras) VALUES('SAIU PARA ENTREGA', 'A TRANSPORTADORA ESTÁ LEVANDO SEU PRODUTO(OS) PARA SUA RESIDÊNCIA');
-INSERT INTO status_rastreio(status_ras, descricao_ras) VALUES('ENTREGUE', 'PRODUTO(OS) ENTREGUE PARA O DESTINATÁRIO');
-INSERT INTO status_rastreio(status_ras, descricao_ras) VALUES('DEVOLVIDO', 'PRODUTO(OS) FOI DEVOLVIDO AO ARMAZÉM PARA A AEROFUSION');
