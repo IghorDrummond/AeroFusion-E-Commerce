@@ -76,6 +76,7 @@
 			 *Programador(a): Ighor Drummond
 			*/
 			public function getRastreio($IdPed){
+				$this->IdPed = $IdPed;
 				$this->montaQuery();
 				$this->getDados();
 				return $this->stmt;
@@ -103,7 +104,7 @@
 			 *Data: 10/08/2024
 			 *Programador(a): Ighor Drummond
 			 */
-			private function montaQuery($Opc){
+			private function montaQuery(){
 				$this->query = "
 					SELECT
 						sta.descricao_ras,
@@ -117,10 +118,10 @@
 					INNER JOIN 
 						pedidos as ped ON ped.id_ped = ras.id_ped
 					INNER JOIN
-						cliente as cli ON cli.id =  ped.id_cliente
+						cliente as cli ON cli.id = ped.id_cliente
 					WHERE
 						ras.id_ped = $this->IdPed
-						AND cli.email '$this->Email'
+						AND cli.email = '$this->Email'
 				";
 			}
 		}
