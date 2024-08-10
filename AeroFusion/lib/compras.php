@@ -1242,23 +1242,32 @@ namespace Pedido {
 			}else if($Opc === 9){
 				$this->query = "
 					SELECT
-						*,
-						CONCAT('R$ ', REPLACE(FORMAT(ped.valor_total, 2), ',', '.')) AS valor_total,
-						MAX(ras.data_rastreio) as data_rastreio
+					    *,
+					    CONCAT('R$ ', REPLACE(FORMAT(ped.valor_total, 2), ',', '.')) AS valor_total,
+					    last_rastreio.data_rastreio
 					FROM
-						pedidos as ped
+					    pedidos as ped
 					INNER JOIN 
-						cliente as cli ON cli.id = ped.id_cliente
+					    cliente as cli ON cli.id = ped.id_cliente
 					INNER JOIN 
-						forma_pagamento as fm ON fm.id_form = ped.id_form
+					    forma_pagamento as fm ON fm.id_form = ped.id_form
 					INNER JOIN 
-						status as st ON st.id_sta = ped.status
-					INNER JOIN 
-						rastreio as ras ON ras.id_ped = ped.id_ped
+					    status as st ON st.id_sta = ped.status
+					INNER JOIN
+					    (
+					        SELECT
+					            id_ped,
+					            MAX(data_rastreio) AS data_rastreio
+					        FROM
+					            rastreio
+					        GROUP BY
+					            id_ped
+					    ) AS last_rastreio ON last_rastreio.id_ped = ped.id_ped
 					WHERE
-						cli.email = '$this->Email'
+					    cli.email = '$this->Email'
 					ORDER BY
-						ped.id_ped DESC
+					    ped.id_ped DESC;
+
 				";
 			}else if($Opc === 10){
 				$this->query = "
