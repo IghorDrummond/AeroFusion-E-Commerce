@@ -349,6 +349,9 @@
 									$log .= PHP_EOL . date('d/m/Y H:i:s') . " - Pedido {$Ped['id_ped']} Foi entregue para o destinatário";				
 								}
 								break;
+							default:
+								$log .= date('d/m/Y H:i:s') . " - Nenhum pedido encontrado para atualização.";
+								break;
 						}
 					}
 				}else{
