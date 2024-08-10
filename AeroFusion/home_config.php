@@ -121,6 +121,7 @@
 						<tr>
 							<th>Código do Pedido</th>
 							<th>Data de Abertura</th>
+							<th>Ultima Atualização</th>
 							<th>Status</th>
 							<th>Valor</th>
 							<th>Mais Detalhes</th>
@@ -133,6 +134,7 @@
 							<tr <?php echo ($key % 2 === 0 ? 'class="bg-light linha_ped"' : '') ?>>
 								<td>#<?php echo $Ped['id_ped']; ?></td>
 								<td><time><?php echo date('d/m/Y H:i', strtotime($Ped['data_pedido'])); ?></time></td>
+								<td><time>><?php echo date('d/m/Y H:i', strtotime($Ped['data_rastreio'])); ?></time></td>
 								<td>
 									<?php
 									//Valida qual é o status do pedido
@@ -167,7 +169,7 @@
 								</td>
 							</tr>
 							<tr class="itens d-none">
-								<td colspan="5" class="shadow itens_tabela">
+								<td colspan="6" class="shadow itens_tabela">
 									<?php
 									$ItemPed = $Compras->getPedido($Ped['id_ped'], $_SESSION['Email']);
 									foreach ($ItemPed as $Item) {

@@ -1164,60 +1164,60 @@ namespace Pedido {
 			}else if($Opc === 6){
 				$this->query = "
 					SELECT
-						Cp.nome_cupom,
-						Pd.id_ped,
-						Pd.id_cliente,
-						Pd.id_form,
-						FORMAT(Pd.valor_total, 2, 'pt_BR') as valor_total,
-						Pd.id_end,
-						Pd.data_pedido,
-						Ip.id_prod, 
-						Ip.quant,
-						Ip.preco_item,
-						Prod.nome,
-						Prod.promocao_ativo,
-						Prod.estoque,
-						FORMAT(Prod.promocao, 2, 'pt_BR') as promocao,
-						FORMAT(Prod.preco, 2, 'pt_BR') as preco,
-						Img.img1,
-						cat.nome_cat,
-						tam.nome_tam,
-						fm.forma_pag,
-						cli.email,
-						st.nome as status_,
-                        en.rua,
-                        en.bairro,
-                        en.cidade,
-                        en.numero,
-                        en.complemento,
-                        en.referencia,
-                        en.cep,
-                        en.uf
+					    Cp.nome_cupom,
+					    Pd.id_ped,
+					    Pd.id_cliente,
+					    Pd.id_form,
+					    FORMAT(Pd.valor_total, 2, 'pt_BR') as valor_total,
+					    Pd.id_end,
+					    Pd.data_pedido,
+					    Ip.id_prod, 
+					    Ip.quant,
+					    Ip.preco_item,
+					    Prod.nome,
+					    Prod.promocao_ativo,
+					    Prod.estoque,
+					    FORMAT(Prod.promocao, 2, 'pt_BR') as promocao,
+					    FORMAT(Prod.preco, 2, 'pt_BR') as preco,
+					    Img.img1,
+					    cat.nome_cat,
+					    tam.nome_tam,
+					    fm.forma_pag,
+					    cli.email,
+					    st.nome as status_,
+					    en.rua,
+					    en.bairro,
+					    en.cidade,
+					    en.numero,
+					    en.complemento,
+					    en.referencia,
+					    en.cep,
+					    en.uf
 					FROM
-						Pedidos as Pd
+					    Pedidos as Pd
 					LEFT JOIN
-						cupons as Cp ON Cp.nome_cupom = Pd.nome_cupom
+					    cupons as Cp ON Cp.nome_cupom = Pd.nome_cupom
 					LEFT JOIN
-						cliente as cli ON cli.id = Pd.id_cliente
+					    cliente as cli ON cli.id = Pd.id_cliente
 					LEFT JOIN
-						endereco as en ON en.id_end = Pd.id_end
+					    endereco as en ON en.id_end = Pd.id_end
 					INNER JOIN 
-						item_pedidos as Ip ON Ip.id_ped = Pd.id_ped
+					    item_pedidos as Ip ON Ip.id_ped = Pd.id_ped
 					INNER JOIN 
-						produtos as Prod ON Prod.id_prod = Ip.id_prod
+					    produtos as Prod ON Prod.id_prod = Ip.id_prod
 					INNER JOIN 
-						imagens_prod as Img ON Img.id_prod = Prod.id_prod
+					    imagens_prod as Img ON Img.id_prod = Prod.id_prod
 					INNER JOIN 
-						categoria as cat ON cat.id_cat = Prod.id_cat
+					    categoria as cat ON cat.id_cat = Prod.id_cat
 					INNER JOIN
-						tamanho as tam ON tam.id_tam = Ip.id_tam
+					    tamanho as tam ON tam.id_tam = Ip.id_tam
 					INNER JOIN 
-						forma_pagamento as fm ON fm.id_form = Pd.id_form
+					    forma_pagamento as fm ON fm.id_form = Pd.id_form
 					INNER JOIN
-						status as st ON st.id_sta = Pd.status
+					    status as st ON st.id_sta = Pd.status
 					WHERE
-						cli.email = '$this->Email'
-						AND Pd.id_ped = $this->IdPed 
+					    cli.email = '$this->Email'
+					    AND Pd.id_ped = $this->IdPed
 				";	
 			}else if($Opc === 7){
 				$this->query = "
@@ -1243,7 +1243,8 @@ namespace Pedido {
 				$this->query = "
 					SELECT
 						*,
-						CONCAT('R$ ', REPLACE(FORMAT(ped.valor_total, 2), ',', '.')) AS valor_total
+						CONCAT('R$ ', REPLACE(FORMAT(ped.valor_total, 2), ',', '.')) AS valor_total,
+						MAX(ras.data_rastreio) as data_rastreio
 					FROM
 						pedidos as ped
 					INNER JOIN 
@@ -1252,6 +1253,8 @@ namespace Pedido {
 						forma_pagamento as fm ON fm.id_form = ped.id_form
 					INNER JOIN 
 						status as st ON st.id_sta = ped.status
+					INNER JOIN 
+						rastreio as ras ON ras.id_ped = ped.id_ped
 					WHERE
 						cli.email = '$this->Email'
 					ORDER BY
