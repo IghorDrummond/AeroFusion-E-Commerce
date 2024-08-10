@@ -188,6 +188,12 @@
 									//Fazer validações sobre os botãos para cada status do pedido
 									?>
 									<div class="text-lg-right text-left px-2">
+										<button class="btn btn-warning rounded"
+											onclick="rastreio(<?php echo ($Ped['id_ped']) ?>)"
+											title="Detalhes do Rastreio"
+										>
+												Rastreio
+										</button>
 										<?php
 										if ($Ped['nome'] === 'Pendente') {
 											?>

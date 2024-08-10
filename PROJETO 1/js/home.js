@@ -607,3 +607,19 @@ function deletarEnd(element){
         }
     });
 }
+/*
+Função: rastreio(Id do Pedido)
+Descrição: Abre janela de rastreio
+Data: 10/08/2024
+Programador: Ighor Drummond   
+*/
+function rastreio(IdPed){
+    //Carrega arquivo para adição para html
+    $.get('script/rastreio.php?pedido=' + encodeURIComponent(IdPed), function (data) {
+        telaCarregamento(false);
+        $('body').append(data);
+    }).fail(function (xhr) {
+        alerta("Ocorreu um erro: " + xhr.status + " " + xhr.statusText, 0);
+        telaCarregamento(false);
+    });
+}

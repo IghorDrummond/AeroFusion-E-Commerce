@@ -304,17 +304,18 @@ CREATE TABLE carrinho(
 CREATE TABLE status_rastreio(
     id_sta_ras int primary key auto_increment not null,
     titulo_ras varchar(50) not null,
-    descricao_ras varchar(250) default ''
+    descricao_ras varchar(250) default '',
+    icone_status varchar(50) not null default 'fa-cart-flatbed'
 );
 
 # INSERINDO DADOS NA TABELA STATUS_RASTREIO
-INSERT INTO status_rastreio(titulo_ras, descricao_ras) VALUES('PREPARANDO PRODUTO(S)', 'A AEROFUSION ESTÁ PREPARANDO SEU PRODUTO(S)');
-INSERT INTO status_rastreio(titulo_ras, descricao_ras) VALUES('SAIU DO ARMAZÉM', 'SAIU DO ARMAZÉM PARA A DISTRIBUIDORA');
-INSERT INTO status_rastreio(titulo_ras, descricao_ras) VALUES('RECEBIDO PELA TRANSPORTADORA', 'TRANSPORTADORA COLETOU O PRODUTO(S) DO PEDIDO');
-INSERT INTO status_rastreio(titulo_ras, descricao_ras) VALUES('DESLOCANDO PARA SUA CIDADE', 'TRANSPORTADORA ESTÁ SE DESLOCANDO PARA SUA CIDADE');
-INSERT INTO status_rastreio(titulo_ras, descricao_ras) VALUES('SAIU PARA ENTREGA', 'A TRANSPORTADORA ESTÁ LEVANDO SEU PRODUTO(S) PARA SUA RESIDÊNCIA');
-INSERT INTO status_rastreio(titulo_ras, descricao_ras) VALUES('ENTREGUE', 'PRODUTO(S) ENTREGUE PARA O DESTINATÁRIO');
-INSERT INTO status_rastreio(titulo_ras, descricao_ras) VALUES('DEVOLVIDO', 'PRODUTO(S) FOI DEVOLVIDO AO ARMAZÉM PARA A AEROFUSION');
+INSERT INTO status_rastreio(icone_status, titulo_ras, descricao_ras) VALUES('fa-cart-flatbed','PREPARANDO PRODUTO(S)', 'A AEROFUSION ESTÁ PREPARANDO SEU PRODUTO(S)');
+INSERT INTO status_rastreio(icone_status, titulo_ras, descricao_ras) VALUES('fa-dolly','SAIU DO ARMAZÉM', 'SAIU DO ARMAZÉM PARA A DISTRIBUIDORA');
+INSERT INTO status_rastreio(icone_status, titulo_ras, descricao_ras) VALUES('fa-truck','RECEBIDO PELA TRANSPORTADORA', 'TRANSPORTADORA COLETOU O PRODUTO(S) DO PEDIDO');
+INSERT INTO status_rastreio(icone_status, titulo_ras, descricao_ras) VALUES('fa-truck-arrow-right','DESLOCANDO PARA SUA CIDADE', 'TRANSPORTADORA ESTÁ SE DESLOCANDO PARA SUA CIDADE');
+INSERT INTO status_rastreio(icone_status, titulo_ras, descricao_ras) VALUES('fa-truck-fast','SAIU PARA ENTREGA', 'A TRANSPORTADORA ESTÁ LEVANDO SEU PRODUTO(S) PARA SUA RESIDÊNCIA');
+INSERT INTO status_rastreio(icone_status, titulo_ras, descricao_ras) VALUES('fa-check-to-slot','ENTREGUE', 'PRODUTO(S) ENTREGUE PARA O DESTINATÁRIO');
+INSERT INTO status_rastreio(icone_status, titulo_ras, descricao_ras) VALUES('fa-right-left','DEVOLVIDO', 'PRODUTO(S) FOI DEVOLVIDO AO ARMAZÉM PARA A AEROFUSION');
 
 # CRIANDO TABELA DE REGISTRO DE RASTREIO
 CREATE TABLE rastreio(
