@@ -134,7 +134,7 @@
 							<tr <?php echo ($key % 2 === 0 ? 'class="bg-light linha_ped"' : '') ?>>
 								<td>#<?php echo $Ped['id_ped']; ?></td>
 								<td><time><?php echo date('d/m/Y H:i', strtotime($Ped['data_pedido'])); ?></time></td>
-								<td><time>><?php echo date('d/m/Y H:i', strtotime($Ped['data_rastreio'])); ?></time></td>
+								<td><time class="data_rastreio"><?php echo date('d/m/Y H:i', strtotime($Ped['data_rastreio'])); ?></time></td>
 								<td>
 									<?php
 									//Valida qual é o status do pedido

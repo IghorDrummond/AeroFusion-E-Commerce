@@ -16,9 +16,14 @@
 	$rastreio = new Rastreio(Email: $_SESSION['Email']);
 ?>
 <div class="w-100 d-flex p-3 justify-content-center align-items-center end_body">
-	<div class="bg-white rounded p-2 end_dados">
-		<h3>Acompanhe seu pedido</h3>
-		<ul class="text-dark font-weight-bold list-unstyled">
+	<div class="bg-white rounded end_dados">
+		<div class="sticky-top p-3 bg-white d-flex">
+			<h3>Acompanhe seu pedido</h3>
+			<button onclick="fecharEnd()" class="btn btn-danger text-white font-weight-bold rounded p-1 d-block ml-auto">
+				Fechar
+			</button>
+		</div>
+		<ul class="text-dark font-weight-bold list-unstyled p-2">
 			<?php 
 				foreach($rastreio->getRastreio($Pedido) as $posic => $ras){
 			?>
@@ -38,8 +43,5 @@
 				}
 			?>
 		</ul>
-		<button onclick="fecharEnd()" class="btn btn-danger text-white font-weight-bold rounded p-1 d-block m-auto">
-			Fechar
-		</button>
 	</div>
 </div>
