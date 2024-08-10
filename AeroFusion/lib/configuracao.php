@@ -110,7 +110,7 @@
 						sta.descricao_ras,
 						sta.icone_status,
 						sta.titulo_ras,
-						ras.data_rastreio
+						DATE_FORMAT(ras.data_rastreio, '%d/%m/%Y %H:%i') as data_rastreio
 					FROM
 						rastreio as ras
 					INNER JOIN
@@ -122,6 +122,8 @@
 					WHERE
 						ras.id_ped = $this->IdPed
 						AND cli.email = '$this->Email'
+					ORDER BY
+						ras.id_ras DESC
 				";
 			}
 		}

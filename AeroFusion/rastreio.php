@@ -23,8 +23,9 @@
 				foreach($rastreio->getRastreio($Pedido) as $posic => $ras){
 			?>
 			<hr>
+			Atualização desse status: <time><?php echo($ras['data_rastreio']) ?></time>
 			<li class="d-flex flex-wrap align-items-center">
-				<div class="bg-warning rounded-circle p-3 text-white mx-1">
+				<div class="bg-warning rounded-circle p-2 text-white mx-1">
 					<i class="fa-solid <?php echo(mb_convert_case($ras['icone_status'], MB_CASE_FOLD, 'UTF-8')); ?>"></i>
 				</div>
 				<?php echo( ucfirst(mb_convert_case($ras['titulo_ras'], MB_CASE_FOLD, 'UTF-8'))); ?>:
@@ -37,7 +38,7 @@
 				}
 			?>
 		</ul>
-		<button onclick="fecharRastreio()" class="btn btn-danger text-white font-weight-bold rounded p-1 d-block m-auto">
+		<button onclick="fecharEnd()" class="btn btn-danger text-white font-weight-bold rounded p-1 d-block m-auto">
 			Fechar
 		</button>
 	</div>
