@@ -665,7 +665,12 @@ function atualizarTabela() {
         }
     });
 }
-
+/*
+Função: atualizaIcone
+Descrição: Atualiza icone e status de cada pedido
+Data: 15/08/2024
+Programador: Ighor Drummond   
+*/
 function atualizaIcone(titulo, objStatus){
     let posic = [ 
         ['Pendente', 'Aguardando Envio', 'Transportando', 'Saiu para entrega', 'Entregue', 'Cancelado'],

@@ -167,8 +167,7 @@
 						    ped.id_ped IN($this->IdPeds)
 						    AND cli.email = '$this->Email'
 						ORDER BY
-						    ras.id_ras DESC;
-
+						    ras.id_ped DESC;
 					";
 				}
 			}

@@ -118,6 +118,6 @@
 	<?php require_once('script/scripts.php'); ?>
 	<?php require_once('script/3dRequest.php'); ?>
 	<!-- Script Obrigatório -->
-	<script type="text/javascript" src="js/index_3d.js"></script>
+	<script defer type="text/javascript" src="js/index_3d.js"></script>
 </body>
 </html>
