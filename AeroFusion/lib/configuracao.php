@@ -58,7 +58,7 @@
 			private $con = null;
 			private $query = null;
 			private $stmt = [];
-			private $IdPed = null;
+			private $IdPeds = null;
 
 			function __construct(
 				public $Email = ''
@@ -76,12 +76,24 @@
 			 *Programador(a): Ighor Drummond
 			*/
 			public function getRastreio($IdPed){
-				$this->IdPed = $IdPed;
-				$this->montaQuery();
+				$this->IdPeds = $IdPed;
+				$this->montaQuery(1);
 				$this->getDados();
 				return $this->stmt;
 			}
-
+			/*
+			 *Metodo: getAttPedidos(Id dos Pedidos)
+			 *Descrição: Retorna as atualizações dos Pedidos
+			 *Data: 15/08/2024
+			 *Programador(a): Ighor Drummond
+			*/
+			public function getAttPedidos($IdPeds){
+				$this->IdPeds = $IdPeds;
+				$this->montaQuery(2);
+				$this->getDados();
+				$json = null;
+				return json_encode($this->stmt);
+			}
 			/*
 			 *Metodo: getDados()
 			 *Descrição: Responsavel por receber dados da consulta
@@ -104,27 +116,61 @@
 			 *Data: 10/08/2024
 			 *Programador(a): Ighor Drummond
 			 */
-			private function montaQuery(){
-				$this->query = "
-					SELECT
-						sta.descricao_ras,
-						sta.icone_status,
-						sta.titulo_ras,
-						DATE_FORMAT(ras.data_rastreio, '%d/%m/%Y %H:%i') as data_rastreio
-					FROM
-						rastreio as ras
-					INNER JOIN
-						status_rastreio as sta ON sta.id_sta_ras = ras.status_ras
-					INNER JOIN 
-						pedidos as ped ON ped.id_ped = ras.id_ped
-					INNER JOIN
-						cliente as cli ON cli.id = ped.id_cliente
-					WHERE
-						ras.id_ped = $this->IdPed
-						AND cli.email = '$this->Email'
-					ORDER BY
-						ras.id_ras DESC
-				";
+			private function montaQuery($Opc){
+				if($Opc === 1){
+					$this->query = "
+						SELECT
+							sta.descricao_ras,
+							sta.icone_status,
+							sta.titulo_ras,
+							DATE_FORMAT(ras.data_rastreio, '%d/%m/%Y %H:%i') as data_rastreio
+						FROM
+							rastreio as ras
+						INNER JOIN
+							status_rastreio as sta ON sta.id_sta_ras = ras.status_ras
+						INNER JOIN 
+							pedidos as ped ON ped.id_ped = ras.id_ped
+						INNER JOIN
+							cliente as cli ON cli.id = ped.id_cliente
+						WHERE
+							ras.id_ped = $this->IdPeds
+							AND cli.email = '$this->Email'
+						ORDER BY
+							ras.id_ras DESC
+					";
+				}else{
+					$this->query = "
+						SELECT
+						    st.nome as 'Nome_do_status',
+						    DATE_FORMAT(ras.data_rastreio, '%d/%m/%Y %H:%i') as 'data_do_rastreio'
+						FROM
+						    pedidos as ped
+						INNER JOIN	
+						    status as st ON st.id_sta = ped.status
+						INNER JOIN 
+						    (
+						        SELECT 
+						            id_ped, 
+						            MAX(data_rastreio) as ultima_data_rastreio 
+						        FROM 
+						            rastreio 
+						        GROUP BY 
+						            id_ped
+						    ) as ras_max ON ras_max.id_ped = ped.id_ped
+						INNER JOIN 
+						    rastreio as ras ON ras.id_ped = ped.id_ped AND ras.data_rastreio = ras_max.ultima_data_rastreio
+						INNER JOIN
+						    status_rastreio as stras ON stras.id_sta_ras = ras.status_ras
+						INNER JOIN 
+						    cliente as cli ON cli.id = ped.id_cliente
+						WHERE
+						    ped.id_ped IN($this->IdPeds)
+						    AND cli.email = '$this->Email'
+						ORDER BY
+						    ras.id_ras DESC;
+
+					";
+				}
 			}
 		}
 	}

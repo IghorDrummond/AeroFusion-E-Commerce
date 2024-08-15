@@ -31,6 +31,10 @@ var imagem = [
     'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/UnionPay_logo.svg/1280px-UnionPay_logo.svg.png',
     'https://w7.pngwing.com/pngs/49/82/png-transparent-credit-card-visa-logo-mastercard-bank-mastercard-blue-text-rectangle.png'
 ];
+var status = [
+        ['fa-ban', 'fa-spinner', 'fa-dolly', 'fa-truck-fast', 'fa-truck-arrow-right', 'fa-check-to-slot'],
+        ['CANCELADO', 'PENDENTE', 'AGUARDANDO ENVIO', 'TRANSPORTANDO', 'SAIU PARA ENTREGA', 'ENTREGUE']
+];
 //Booleano
 var lGira = false;
 //Objeto
@@ -60,6 +64,10 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    setInterval(()=>{
+        atualizarTabela();
+    }, 1000);
 });
 /*
 * Evento: submit
@@ -622,4 +630,75 @@ function rastreio(IdPed){
         alerta("Ocorreu um erro: " + xhr.status + " " + xhr.statusText, 0);
         telaCarregamento(false);
     });
+}
+/*
+Função: atualizaTabela
+Descrição: Atualiza dados dos pedidos
+Data: 10/08/2024
+Programador: Ighor Drummond   
+*/
+function atualizarTabela() {
+    let dados = '';
+    let pedido = document.getElementsByClassName('id_ped');
+    //Vai popular os dados a seguir
+    for(nCont = 0; nCont <= pedido.length -1 ; nCont++){
+        dados += encodeURIComponent(pedido[nCont].textContent) + ',';
+    }
+    dados = dados.substr( 0, dados.length -1)
+    //retornar dados rastreios
+    $.ajax({
+        url: 'script/home_config_js.php?Opc=11&pedidos=' + dados,
+        type: 'GET', 
+        dataType: 'json',
+        success: function(response) {
+            let data_att = document.getElementsByClassName('data_rastreio');
+            let status_att = document.getElementsByClassName('status_rastreio');
+
+            response.forEach(function(dados, nCont) {
+                data_att[nCont].textContent = dados.data_do_rastreio;
+                status_att[nCont].textContent = '';
+                atualizaIcone(dados.Nome_do_status, status_att[nCont]);
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error('Erro ao atualizar os dados da tabela. Error:' + error);
+        }
+    });
+}
+
+function atualizaIcone(titulo, objStatus){
+    let posic = [ 
+        ['Pendente', 'Aguardando Envio', 'Transportando', 'Saiu para entrega', 'Entregue', 'Cancelado'],
+        [   
+            "fa-spinner",
+            "fa-dolly",
+            "fa-truck-fast",
+            "fa-truck-arrow-right",
+            "fa-check-to-slot",
+            "fa-ban"
+        ],
+        [
+            "orangered",
+            "orange",
+            "blueviolet",
+            "blue",
+            "green",
+            "red"
+        ]
+    ];
+    nCont = posic[0].indexOf(titulo);
+
+    /*Cria a tag icone*/
+    icone = document.createElement('i');
+    //Configura a classe
+    icone.className = 'fa-solid ' + posic[1][nCont] + ' mx-1';
+    //Configura a cor
+    icone.style.color = posic[2][nCont];
+    //Configura a margem
+    icone.style.marginTop = '15 px';
+    /* Cria texto de status */
+    texto = document.createTextNode(titulo);
+
+    objStatus.appendChild(icone);
+    objStatus.appendChild(texto);
 }

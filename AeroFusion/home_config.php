@@ -16,6 +16,7 @@
 	use Configuracao\Configuracao;
 	use Configuracao\AtualizaUsuario;
 	use Configuracao\ConfigEndereco;
+	use Pagamentos\Rastreio;
 
 	if (session_status() === PHP_SESSION_NONE) {
 		session_start();
@@ -67,6 +68,9 @@
 			break;
 		case '10':
 			cadastrarCartao();
+			break;
+		case '11':
+			atualizarRastreio();
 			break;
 		default:
 			Categorias();
@@ -132,10 +136,10 @@
 						foreach ($Compras->getPedidos($_SESSION['Email']) as $key => $Ped) {
 							?>
 							<tr <?php echo ($key % 2 === 0 ? 'class="bg-light linha_ped"' : '') ?>>
-								<td>#<?php echo $Ped['id_ped']; ?></td>
+								<td class="id_ped">#<?php echo $Ped['id_ped']; ?></td>
 								<td><time><?php echo date('d/m/Y H:i', strtotime($Ped['data_pedido'])); ?></time></td>
 								<td><time class="data_rastreio"><?php echo date('d/m/Y H:i', strtotime($Ped['data_rastreio'])); ?></time></td>
-								<td>
+								<td class="status_rastreio">
 									<?php
 									//Valida qual é o status do pedido
 									switch ($Ped['nome']) {
@@ -693,7 +697,6 @@
 		}
 	}
 
-
 	function deletarEnd(){
 	    //Palavras a serem validadas
 	    $palavrasParaRemover = ["CEP:", "RUA:", "ESTADO:", "REFERENCIA:", "COMPLEMENTO:", "NUMERO:", "CIDADE:", "BAIRRO:"];
@@ -726,10 +729,19 @@
 			return null;
 		}
 	}
+
 	function cadastrarCartao(){
 		if(!empty($_GET['bandeira']) and !empty($_GET['nome']) and !empty($_GET['validade']) and !empty($_GET['cvv']) and !empty($_GET['numero'])){
 			$Cartao = new Cartao($_SESSION['Email']);
 			$Cartao->setCartao(str_replace(' ', '', $_GET['numero']), strtoupper($_GET['nome']), $_GET['bandeira'], $_GET['validade'], $_GET['cvv']);
+		}
+	}
+
+	function atualizarRastreio(){
+		if(isset($_GET['pedidos']) and !empty($_GET['pedidos'])){
+			$_GET['pedidos'] = str_replace('#', '', $_GET['pedidos']);
+			$pedidos = new Rastreio($_SESSION['Email']);
+			echo $pedidos->getAttPedidos($_GET['pedidos']);
 		}
 	}
 ?>
