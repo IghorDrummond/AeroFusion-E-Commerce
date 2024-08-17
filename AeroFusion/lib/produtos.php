@@ -225,15 +225,16 @@
             protected $IdCli = '';
             protected $quantidadeEstrelas = '';
             protected $Gravou = false;
-            protected $Email = '';
             protected $IdPed = '';
             protected $Data = '';
 
             //Construtor
-            public function __construct($Produto){
-                $this->ID = $Produto;
+            public function __construct(protected $Email = ''){
                 $this->Conexao = new \IniciaServer();
                 $this->Conexao = $this->Conexao->conexao();
+                $this->montaQuery(4);
+                $this->getDados();
+                $this->IdCli = $this->stmt[0]['id'];
             }
 
             //Metodo
@@ -258,14 +259,14 @@
             *Data: 17/08/2024
             *Programador(a): Ighor Drummond
             */
-            public function setAvaliaProd($produto, $titulo, $descricao, $quantidade, $Email){
+            public function setAvaliaProd($produto, $titulo, $descricao, $quantidade){
                 $this->ID = $produto;
                 $this->titulo = $titulo;
                 $this->descricao = $descricao;
                 $this->quantidadeEstrelas = $quantidade;
-                $this->Email = $Email;
                 $Ret = [];
-
+                date_default_timezone_set('America/Sao_Paulo'); // Configura data e hora do servidor
+                $this->Data = date('Y-m-d H:i:s');
                 $this->montaQuery(2);
                 if($this->Gravou){
                     $Ret[0]['gravou'] = true;
@@ -282,10 +283,9 @@
             *Data: 17/08/2024
             *Programador(a): Ighor Drummond
             */
-            public function existe($produto, $Email, $pedido){
+            public function existe($produto, $pedido){
                 $this->ID = $produto;
                 $this->IdPed = $pedido;
-                $this->Email = $Email;
                 $Ret = false;
 
                 $this->montaQuery(3);      
@@ -369,6 +369,15 @@
                             iped.id_prod = $this->ID
                             AND cli.email = '$this->Email'
                             AND ped.id_ped = $this->IdPed
+                    ";
+                }else if($Opc === 4){
+                    $this->query = "
+                        SELECT
+                            id
+                        FROM
+                            cliente    
+                        WHERE
+                            email = '$this->Email'                    
                     ";
                 }
             }

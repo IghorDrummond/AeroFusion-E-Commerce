@@ -144,11 +144,13 @@ avaliacao.addEventListener('submit', (event)=>{
         data: formData,
         processData: false,
         contentType: false, 
+        dataType: 'json',
         success: function(response) {
             alerta('Dados enviados com sucesso!', 1);
             console.log(response);
         },
         error: function(xhr, status, error) {
+            console.log('wdwdd');
             alerta('Ocorreu um erro ao enviar os dados: ' + error, 0);
         }
     });

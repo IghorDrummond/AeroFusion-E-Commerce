@@ -40,14 +40,20 @@ if (
 
     // Validação dos dados - Evita SQL Injection 
     if (empty($titulo) || empty($descricao) || !validateInteger($quantidadeEstrelas, 1, 5) || !validateInteger($produto, $_POST['produto'] , $_POST['produto'])) {
-    	die('Tentativa de SQL Injection detectada!');
+        $json[0]['error'] = true;
+        $json[0]['mensagem'] = 'Tentativa de SQL Injection detectada!';
+        echo json_encode($json);
+    	die();
     }
 
     //Prepara a classe que irá inserir no banco de dados
-    $avaliacao = new AvalicaoProduto('');
+    $avaliacao = new AvalicaoProduto($_SESSION['Email']);
 
-    if($avaliacao->existe($produto, $_SESSION['Email'], $_SESSION['pedido'])){
-    	die('Tentativa de SQL Injection detectada!');
+    if($avaliacao->existe($produto, $_SESSION['pedido'])){
+        $json[0]['error'] = true;
+        $json[0]['mensagem'] = 'Avaliação já existe';
+        echo json_encode($json);
+    	die();
     }
 
     //após validar se o pedido se trata do cliente logado, mata a posição para prosseguir com a demanda
@@ -85,11 +91,12 @@ if (
             }
 
             // Gera um nome único para o arquivo
-            $filePath =  $uploadDir . uniqid() . '-' . basename($fileName);
+            $fileName =  uniqid() . '-' . basename($fileName);
+            $filePath =  $uploadDir . $fileName;
 
             // Move o arquivo para o diretório de upload
             if (move_uploaded_file($fileTmpPath, $filePath)) {
-            	$avaliacao->setImagem($filePath);
+            	$avaliacao->setImagem($fileName);
             	$Ret[$nCont]['error'] = false;
                 $Ret[$nCont]['mensagem'] = 'Imagem enviada com sucesso.';
                 $Ret[$nCont]['imagem'] = $_FILES["imagem$nCont"]['name'];
@@ -103,8 +110,11 @@ if (
         	$Ret[$nCont]['mensagem'] = 'imagem não foi transitada corretamente por rede: ' . $_FILES["imagem$nCont"]['error'];
         }
     }
-    //Ejeta a imagens ao qual deu certo
-   // $avaliacao->setAvaliaProd($_POST['produto']);
+    //Guarda avaliação do produto
+   	$avaliacao->setAvaliaProd($produto, $titulo, $descricao, $quantidadeEstrelas);
+    $json[0]['error'] = false;
+    $json[0]['mensagem'] = $Ret;
+    echo json_encode($json);
 } else {
     echo "Preencha todos os campos";
 }
