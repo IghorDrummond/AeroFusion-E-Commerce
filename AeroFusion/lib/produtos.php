@@ -219,6 +219,13 @@
             protected $Conexao = null;
             protected $stmt = null;
             protected $query = '';
+            protected $titulo = '';
+            protected $descricao = '';
+            protected $imagens = ['', '', ''];
+            protected $IdCli = '';
+            protected $quantidadeEstrelas = '';
+            protected $Gravou = false;
+            protected $Email = '';
 
             //Construtor
             public function __construct($Produto){
@@ -231,7 +238,7 @@
             /*
             *Metodo: retornaValores()
             *Descrição: Retorna valores da pesquisa da query
-            *Data: 28/05/2024
+            *Data: 17/08/2024
             *Programador(a): Ighor Drummond
             */
             public function retornaValores(){
@@ -247,30 +254,76 @@
                 }
             }
             /*
+            *Metodo: setAvaliaProd()
+            *Descrição: Guarda validação do produtos
+            *Data: 17/08/2024
+            *Programador(a): Ighor Drummond
+            */
+            public function setAvaliaProd($produto,$titulo, $descricao, $imagens, $quantidade, $Email){
+                $this->ID = $produto;
+                $this->titulo = $titulo;
+                $this->descricao = $descricao;
+                $this->imagens = $imagens;
+                $this->quantidadeEstrelas = $quantidade;
+                $this->Email = $Email;
+                $Ret = [];
+
+                $this->montaQuery(2);
+                if($this->Gravou){
+                    $Ret[0]['gravou'] = true;
+                    $Ret[0]['produto'] = $this->ID;
+                }else{
+                    $Ret[0]['gravou'] = false;
+                    $Ret[0]['mensagem_erro'] = 'não foi possivel gravar a avaliação';
+                }
+                return $Ret;
+            }
+            /*
             *Metodo: montaQuery()
             *Descrição: Retorna por montar a query
             *Data: 28/05/2024
             *Programador(a): Ighor Drummond
             */
-            private function montaQuery(){
-                $this->query = "
-                    SELECT 
-                        ava.img,
-                        ava.img2,
-                        ava.img3,
-                        ava.mensagem as comentario,
-                        ava.estrelas as estrelas,
-                        CONCAT(cli.nome, ' ', cli.sobrenome) as Nome,
-                        cli.foto as Foto 
-                    FROM 
-                        avaliacoes as ava
-                    INNER JOIN
-                        produtos as prod ON ava.id_prod = prod.id_prod
-                    INNER JOIN 
-                        cliente as cli ON cli.id = ava.id_cliente
-                    WHERE
-                        prod.id_prod = $this->ID                  
-                ";
+            private function montaQuery($Opc){
+                if($Opc === 1){
+                    $this->query = "
+                        SELECT 
+                            ava.img,
+                            ava.img2,
+                            ava.img3,
+                            ava.mensagem as comentario,
+                            ava.estrelas as estrelas,
+                            CONCAT(cli.nome, ' ', cli.sobrenome) as Nome,
+                            cli.foto as Foto 
+                        FROM 
+                            avaliacoes as ava
+                        INNER JOIN
+                            produtos as prod ON ava.id_prod = prod.id_prod
+                        INNER JOIN 
+                            cliente as cli ON cli.id = ava.id_cliente
+                        WHERE
+                            prod.id_prod = $this->ID                  
+                    ";
+                }else if($Opc === 2){
+                    //ESTÁ QUERY ESTÁ SENDO MONTADA PARA EVITAR ATAQUES XSS E SQL INJECTION
+                    $this->query = "
+                        INSERT INTO avaliacoes(titulo_men, mensagem, estrelas, img, img2, img3, id_prod, id_cliente, data_ava)
+                        VALUES(:titulo, :descricao, :quantidadeEstrelas, :imagem1, :imagem2, :imagem3, :IdProd, :IdCliente, :DataAva)
+                    ";
+                    $this->stmt = $this->Conexao->prepare($this->query);
+                    $this->stmt->bindParam(':titulo', $this->titulo);
+                    $this->stmt->bindParam(':descricao', $this->descricao);
+                    $this->stmt->bindParam(':quantidadeEstrelas', $this->quantidadeEstrelas, \PDO::PARAM_INT);
+                    $this->stmt->bindParam(':imagem1', $this->imagens[0]);
+                    $this->stmt->bindParam(':imagem2', $this->imagens[1]);      
+                    $this->stmt->bindParam(':imagem3', $this->imagens[2]);       
+                    $this->stmt->bindParam(':IdProd', $this->ID, \PDO::PARAM_INT);        
+                    $this->stmt->bindParam(':IdCliente', $this->IdCli, \PDO::PARAM_INT);       
+
+                    if($this->stmt->execute()){
+                        $this->Gravou = true;
+                    }
+                }
             }
         }
         /*

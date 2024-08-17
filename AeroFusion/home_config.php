@@ -6,11 +6,8 @@
 	require_once ('lib/produtos.php');
 
 	use Acesso\Endereco;
-	use Cadastro\RenovarSenha;
 	use Cadastro\Cartao;
-	use Compra\ApagarItem;
 	use Compra\VerCarrinho;
-	use Compra\atualizaCarrinho;
 	use Pedido\novoPedido;
 	use Produto\Favoritos;
 	use Configuracao\Configuracao;

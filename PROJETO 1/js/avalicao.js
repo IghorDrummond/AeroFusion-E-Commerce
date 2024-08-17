@@ -1,18 +1,15 @@
 // Declaracção de variáveis
 // Elementos
-const descricao = document?.getElementsByClassName('descricao')[0];
-const titulo = document.getElementsByName('titulo')[0];
-const quantidade = document.getElementById('quant-carac');
-const inputimagens = document.getElementById('inputGroupFile01');
-const imagePreview = document.getElementsByClassName('imagens');
-const deletar = document.getElementsByClassName('deletar');
-const estrelas = document.getElementsByClassName('stars');
-const avaliacao = document.getElementById('avaliacao');
+var descricao = document.getElementsByClassName('descricao')[0];
+var titulo = document.getElementsByName('titulo')[0];
+var quantidade = document.getElementById('quant-carac');
+var inputimagens = document.getElementById('inputGroupFile01');
+var imagePreview = document.getElementsByClassName('imagens');
+var deletar = document.getElementsByClassName('deletar');
+var estrelas = document.getElementsByClassName('stars');
+var avaliacao = document.getElementById('avaliacao');
 //Array
-const imagens = [null, null, null];
-// Constantes
-const maxCaracteres = 1000;
-const tamLimite = 500 * 1024;
+var imagens = [null, null, null];
 //numero
 var quantStars = 1;
 
@@ -24,7 +21,7 @@ Data: 17/08/2024
 Programador: Ighor Drummond   
 */
 descricao.addEventListener('input', () => {
-
+    const maxCaracteres = 1000;
     let diferenca = maxCaracteres - descricao.value.length;
     quantidade.textContent = "Restam " + diferenca.toString() + " caracteres disponíveis";
 
@@ -105,6 +102,7 @@ Data: 17/08/2024
 Programador: Ighor Drummond   
 */
 avaliacao.addEventListener('submit', (event)=>{
+    const tamLimite = 500 * 1024;
     //Impede de atualizar a página após o submit
     event.preventDefault();
 
@@ -147,3 +145,17 @@ avaliacao.addEventListener('submit', (event)=>{
         }
     });
 });
+
+function fecharAba(){
+    //Remove a janela
+    $('.end_body').remove();
+    descricao = null; 
+    titulo = null; 
+    quantidade = null; 
+    inputimagens = null; 
+    imagePreview = null; 
+    deletar = null; 
+    estrelas = null; 
+    avaliacao = null; 
+    imagens = null;
+}
