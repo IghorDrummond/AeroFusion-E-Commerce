@@ -90,7 +90,16 @@ tbody tr:not(hover){
     width: 30% !important;
 }
 
-/* Animações */
+/*avaliação */
+.imagens{
+    width: 100px;
+    height: 100px;
+}
+.descricao{
+    max-height: 250px;
+}
+
+/* An1imações */
 @-webkit-keyframes expandindoParaFora {
     0% {
         -webkit-transform: scale(0);

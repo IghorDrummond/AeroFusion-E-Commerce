@@ -21,8 +21,9 @@ $_SESSION['avaPed'] = $_GET['pedido'];
             </fieldset>
             <fieldset class="form-group">
                 <label class="font-weight-bold" for="descricao">Descrição:</label>
-                <textarea class="form-control" name="descricao" rows="5" placeholder="Insira sua descrição"
+                <textarea class="form-control descricao" maxlength="1000" name="descricao" rows="5" placeholder="Insira sua descrição"
                     required></textarea>
+                    <span id="quant-carac" class="text-warning">Restam 1000 caracteres disponíveis.</span>
             </fieldset>
             <fieldset class="form-group">
                 <label class="font-weight-bold" for="imagens">Imagens:</label>
@@ -32,16 +33,23 @@ $_SESSION['avaPed'] = $_GET['pedido'];
                     </div>
                     <div class="custom-file">
                         <input type="file" class="custom-file-input" id="inputGroupFile01"
-                            aria-describedby="inputGroupFileAddon01" accept="image/*" multiple required>
+                            aria-describedby="inputGroupFileAddon01" accept="image/*" multiple>
                         <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
                     </div>
                 </div>
-                <div class="text-center py-2">
-                    <img src="img/inserir_img.jpg" width="100" height="100" class="img-fluid rounded border border-secondary p-4" name="imagem1">
-                    <img src="img/inserir_img.jpg" width="100" height="100" class="img-fluid rounded border border-secondary p-4" name="imagem2">
-                    <img src="img/inserir_img.jpg" width="100" height="100" class="img-fluid rounded border border-secondary p-4" name="imagem3">
-                    <img src="img/inserir_img.jpg" width="100" height="100" class="img-fluid rounded border border-secondary p-4" name="imagem4">
-                    <img src="img/inserir_img.jpg" width="100" height="100" class="img-fluid rounded border border-secondary p-4" name="imagem5">
+                <div class="text-center py-2 d-flex justify-content-center align-items-center">
+                    <div>
+                        <img src="img/inserir_img.jpg" width="100" height="100" class="img-fluid rounded border border-secondary p-1 m-2 imagens" name="imagem1">          
+                        <button data-toggle="0" type="button" class="btn btn-danger p-1 rounded d-none deletar m-auto">deletar</button>
+                    </div>
+                    <div>
+                        <img src="img/inserir_img.jpg" width="100" height="100" class="img-fluid rounded border border-secondary p-1 m-2 imagens" name="imagem2">          
+                        <button data-toggle="1" type="button" class="btn btn-danger p-1 rounded d-none deletar m-auto">deletar</button>
+                    </div>
+                    <div>
+                        <img src="img/inserir_img.jpg" width="100" height="100" class="img-fluid rounded border border-secondary p-1 m-2 imagens" name="imagem3">          
+                        <button data-toggle="2" type="button" class="btn btn-danger p-1 rounded d-none deletar m-auto">deletar</button>
+                    </div>
                 </div>
                 <ul class="list-unstyled text-warning">
                     <li>Imagem não pode ser maior que 500kb</li>
@@ -54,4 +62,5 @@ $_SESSION['avaPed'] = $_GET['pedido'];
             </div>
         </form>
     </div>
+    <script type="text/javascript" src="js/avalicao.js"></script>
 </div>

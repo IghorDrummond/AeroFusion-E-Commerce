@@ -1,3 +1,4 @@
+
 // Declaração de Variáveis
 //Elementos
 var categoria = document.getElementsByClassName('navegacao');
