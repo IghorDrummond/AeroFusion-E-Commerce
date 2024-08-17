@@ -703,7 +703,23 @@ function atualizaIcone(titulo, objStatus){
     icone.style.marginTop = '15 px';
     /* Cria texto de status */
     texto = document.createTextNode(titulo);
-
+    //Adiciona o status novo na tabela
     objStatus.appendChild(icone);
     objStatus.appendChild(texto);
+}
+/*
+Função: avaliarPedido(id do pedido)
+Descrição: Abre janela de avaliar pedido
+Data: 17/08/2024
+Programador: Ighor Drummond   
+*/
+function avaliarPedido(idped){  
+    //Carrega arquivo para adição para html
+    $.get('script/HTML/htmlAvaliar.php?pedido=' + encodeURIComponent(idped), function (data) {
+        telaCarregamento(false);
+        $('body').append(data);
+    }).fail(function (xhr) {
+        alerta("Ocorreu um erro: " + xhr.status + " " + xhr.statusText, 0);
+        telaCarregamento(false);
+    });
 }

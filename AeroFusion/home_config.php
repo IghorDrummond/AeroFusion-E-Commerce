@@ -226,7 +226,7 @@
 										if ($Ped['nome'] === 'Entregue') {
 											?>
 											<button class="btn btn-info rounded"
-												onclick="cancelaPedido(<?php echo ($Ped['id_ped']) ?>)">
+												onclick="avaliarPedido(<?php echo ($Ped['id_ped']) ?>)">
 												Avaliar Pedido
 											</button>
 											<?php
