@@ -1,18 +1,20 @@
 // Declaracção de variáveis
 // Elementos
-const descricao = document.getElementsByClassName('descricao')[0];
+const descricao = document?.getElementsByClassName('descricao')[0];
 const titulo = document.getElementsByName('titulo')[0];
 const quantidade = document.getElementById('quant-carac');
 const inputimagens = document.getElementById('inputGroupFile01');
 const imagePreview = document.getElementsByClassName('imagens');
 const deletar = document.getElementsByClassName('deletar');
 const estrelas = document.getElementsByClassName('stars');
+const avaliacao = document.getElementById('avaliacao');
 //Array
 const imagens = [null, null, null];
 // Constantes
 const maxCaracteres = 1000;
+const tamLimite = 500 * 1024;
 //numero
-var quantStars = 0;
+var quantStars = 1;
 
 //------------------Eventos
 /*
@@ -22,15 +24,14 @@ Data: 17/08/2024
 Programador: Ighor Drummond   
 */
 descricao.addEventListener('input', () => {
+
     let diferenca = maxCaracteres - descricao.value.length;
     quantidade.textContent = "Restam " + diferenca.toString() + " caracteres disponíveis";
 
     if(diferenca <= 100){
-        quantidade.classList.remove('text-warning');
-        quantidade.classList.add('text-danger');
-    }else{
-        quantidade.classList.remove('text-danger');
-        quantidade.classList.add('text-warning');       
+        quantidade.classList.replace('text-warning', 'text-danger');
+    }else{ 
+        quantidade.classList.replace('text-danger', 'text-warning');    
     }
 });
 /*
@@ -39,26 +40,30 @@ Descrição: Mostra uma mensagem de alerta e informações sobre o arquivo selec
 Data: 17/08/2024
 Programador: Ighor Drummond   
 */
-inputimagens.addEventListener('change', (event) => {
-    // Verifica se há arquivos selecionados
+inputimagens.addEventListener('change', () => {
     if (inputimagens.files.length > 0) {
-        var file = inputimagens.files[0]; // Pega o primeiro arquivo
-        // Cria um novo FileReader
-        var reader = new FileReader();
+        const file = inputimagens.files[0];
 
-        // Define o que fazer quando o arquivo for carregado
+        if (file.size > tamLimite) { // Verifica se o arquivo é maior que 500KB
+            alert('A imagem não pode ser maior que 500KB', 0);
+            return;
+        }
+
+        const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+        if (!validTypes.includes(file.type)) {
+            alert('Formato de imagem inválido. Apenas JPG, PNG e GIF são permitidos.');
+            return;
+        }
+
+        const reader = new FileReader();
         reader.onload = function(e) {
-            let Posic = imagens.indexOf(null);
-
-            if(Posic >= 0){
-                // Atualiza o atributo src da tag img com a URL da imagem
-                imagePreview[Posic].src = e.target.result;
-                imagens[Posic] = inputimagens.files[0];
-                deletar[Posic].classList.remove('d-none');
-                deletar[Posic].classList.add('d-block');
+            const posic = imagens.indexOf(null);
+            if (posic >= 0) {
+                imagePreview[posic].src = e.target.result;
+                imagens[posic] = file;
+                deletar[posic].classList.replace('d-none', 'd-block');
             }
         }
-        // Lê o arquivo como uma URL de dados
         reader.readAsDataURL(file);
     }
 });
@@ -72,8 +77,7 @@ Array.from(deletar).forEach((element, index) => {
     element.addEventListener('click', () => {
         imagePreview[index].src = "img/inserir_img.jpg";
         imagens[index] = null;
-        element.classList.remove('d-block');
-        element.classList.add('d-none');
+        element.classList.replace('d-block', 'd-none');
     });
 });
 /*
@@ -86,13 +90,60 @@ Array.from(estrelas).forEach((element, index) => {
     element.addEventListener('mouseover', () => {
         for(nCont = 0; nCont <= 4; nCont++){
             if(nCont <= index){
-                estrelas[nCont].classList.remove('fa-regular');
-                estrelas[nCont].classList.add('fa-solid');
+                estrelas[nCont].classList.replace('fa-regular', 'fa-solid');
             }else{
-                estrelas[nCont].classList.remove('fa-solid');
-                estrelas[nCont].classList.add('fa-regular');                
+                estrelas[nCont].classList.replace('fa-solid', 'fa-regular');            
             }
         }
-        quantStars = index;
+        quantStars = index + 1;
+    });
+});
+/*
+Evento: submit
+Descrição: Envia os dados para o banco de dados
+Data: 17/08/2024
+Programador: Ighor Drummond   
+*/
+avaliacao.addEventListener('submit', (event)=>{
+    //Impede de atualizar a página após o submit
+    event.preventDefault();
+
+    //Remove a janela
+    $('.end_body').remove();
+
+    // Verificar se o usuário selecionou entre 1 e 3 imagens
+    const imagensSelecionadas = imagens.filter(img => img !== null).length;
+    if (imagensSelecionadas < 1 || imagensSelecionadas > 3) {
+        alert('Você deve enviar entre 1 e 3 imagens.');
+        return;
+    }
+
+    // Cria um FormData para enviar dados e arquivos
+    const formData = new FormData();
+    formData.append('titulo', titulo.value);//Envia o titulo
+    formData.append('descricao', descricao.value);//Envia a descrição
+    formData.append('quantidadeEstrelas', quantStars);//Envia a quantidade de estrelas
+
+    // Adiciona as imagens ao FormData
+    imagens.forEach((imagem, index) => {
+        if (imagem) {
+            formData.append(`imagem${index + 1}`, imagem);
+        }
+    });
+
+    // Enviar os dados usando $.ajax()
+    $.ajax({
+        url: 'script/avaliacao.php',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false, 
+        success: function(response) {
+            alerta('Dados enviados com sucesso!', 1);
+            console.log(response);
+        },
+        error: function(xhr, status, error) {
+            alerta('Ocorreu um erro ao enviar os dados: ' + error, 0);
+        }
     });
 });

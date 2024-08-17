@@ -98,6 +98,9 @@ tbody tr:not(hover){
 .descricao{
     max-height: 250px;
 }
+.stars{
+    font-size: 2vw; /* Tamanho das estrelas baseado na largura da viewport */
+}
 
 /* An1imações */
 @-webkit-keyframes expandindoParaFora {
@@ -163,5 +166,8 @@ tbody tr:not(hover){
     }
     #cartao{
         width: 95% !important;
+    }
+    .stars{
+        font-size: 5vw; /* Tamanho das estrelas baseado na largura da viewport */
     }
 }

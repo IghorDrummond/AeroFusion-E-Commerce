@@ -3,15 +3,15 @@ $_SESSION['avaPed'] = $_GET['pedido'];
 ?>
 <div class="end_body p-3 d-flex justify-content-center align-items-center">
     <div class="end_dados p-1 rounded bg-white">
-        <form class="form-group" action="script/avaliacao.php" method="POST" enctype="multipart/form-data">
+        <form id="avaliacao" class="form-group" enctype="multipart/form-data">
             <fieldset class="text-center">
                 <h1 class="text-warning">Avaliar</h1>
                 <div class="text-warning" style="cursor: pointer;">
-                    <i class="fa-solid fa-star stars display-4"></i>
-                    <i class="fa-regular fa-star stars display-4"></i>
-                    <i class="fa-regular fa-star stars display-4"></i>
-                    <i class="fa-regular fa-star stars display-4"></i>
-                    <i class="fa-regular fa-star stars display-4"></i>
+                    <i class="fa-solid fa-star stars"></i>
+                    <i class="fa-regular fa-star stars"></i>
+                    <i class="fa-regular fa-star stars"></i>
+                    <i class="fa-regular fa-star stars"></i>
+                    <i class="fa-regular fa-star stars"></i>
                 </div>
             </fieldset>
             <fieldset class="form-group">

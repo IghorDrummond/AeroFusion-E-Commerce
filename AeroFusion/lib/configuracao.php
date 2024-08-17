@@ -1,7 +1,6 @@
 <?php
 	namespace Pagamentos{
 		require_once('conexao.php');
-
 		/*
 		*Classes: Pagamento
 		*Descrição: Classe responsavel por recuperar formas de pagamentos
