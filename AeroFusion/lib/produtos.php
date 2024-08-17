@@ -213,7 +213,7 @@
         *Data: 28/05/2024
         *Programador(a): Ighor Drummond
         */
-        class AvalicaoProduto implements ProdutoInterface{
+        class AvalicaoProduto{
             //Atributos
             public $ID;
             protected $Conexao = null;
@@ -226,6 +226,8 @@
             protected $quantidadeEstrelas = '';
             protected $Gravou = false;
             protected $Email = '';
+            protected $IdPed = '';
+            protected $Data = '';
 
             //Construtor
             public function __construct($Produto){
@@ -241,16 +243,13 @@
             *Data: 17/08/2024
             *Programador(a): Ighor Drummond
             */
-            public function retornaValores(){
+            private function getDados(){
                 $Ret = false;
                 try{
-                    $this->montaQuery();
                     $this->stmt = $this->Conexao->query($this->query);
-                    $Ret = $this->stmt->fetchAll(\PDO::FETCH_ASSOC);
+                    $this->stmt = $this->stmt->fetchAll(\PDO::FETCH_ASSOC);
                 }catch(\PDOException $e){
                     echo $e->getMessage();
-                }finally{
-                    return $Ret;
                 }
             }
             /*
@@ -259,11 +258,10 @@
             *Data: 17/08/2024
             *Programador(a): Ighor Drummond
             */
-            public function setAvaliaProd($produto,$titulo, $descricao, $imagens, $quantidade, $Email){
+            public function setAvaliaProd($produto, $titulo, $descricao, $quantidade, $Email){
                 $this->ID = $produto;
                 $this->titulo = $titulo;
                 $this->descricao = $descricao;
-                $this->imagens = $imagens;
                 $this->quantidadeEstrelas = $quantidade;
                 $this->Email = $Email;
                 $Ret = [];
@@ -284,8 +282,30 @@
             *Data: 17/08/2024
             *Programador(a): Ighor Drummond
             */
-            public function existe(){
-                $this->montaQuery(3);       
+            public function existe($produto, $Email, $pedido){
+                $this->ID = $produto;
+                $this->IdPed = $pedido;
+                $this->Email = $Email;
+                $Ret = false;
+
+                $this->montaQuery(3);      
+                $this->getDados(); 
+
+                if(isset($this->stmt[0]['tem_avaliacao'])){
+                   $Ret = $this->stmt[0]['tem_avaliacao'] === 'Não' ?  false : true;
+                }
+
+                return $Ret;
+            }
+            /*
+            *Metodo: setImagem()
+            *Descrição: Carrega imagem para salvar
+            *Data: 17/08/2024
+            *Programador(a): Ighor Drummond
+            */
+            public function setImagem($imagem){
+                $Posic = array_search('', $this->imagens);
+                $this->imagens[$Posic] = $imagem;
             }
             /*
             *Metodo: montaQuery()
@@ -328,10 +348,28 @@
                     $this->stmt->bindParam(':imagem3', $this->imagens[2]);       
                     $this->stmt->bindParam(':IdProd', $this->ID, \PDO::PARAM_INT);        
                     $this->stmt->bindParam(':IdCliente', $this->IdCli, \PDO::PARAM_INT);       
+                    $this->stmt->bindParam(':DataAva', $this->Data);  
 
                     if($this->stmt->execute()){
                         $this->Gravou = true;
                     }
+                }else if($Opc === 3){
+                    $this->query = "
+                        SELECT
+                            IF(ava.id_ava > 0, 'Sim', 'Não') AS tem_avaliacao
+                        FROM
+                            pedidos as ped
+                        INNER JOIN
+                            item_pedidos as iped ON iped.id_ped = ped.id_ped
+                        INNER JOIN
+                            cliente as cli ON cli.id = ped.id_cliente
+                        LEFT JOIN
+                            avaliacoes as ava ON ava.id_prod = iped.id_prod
+                        WHERE
+                            iped.id_prod = $this->ID
+                            AND cli.email = '$this->Email'
+                            AND ped.id_ped = $this->IdPed
+                    ";
                 }
             }
         }

@@ -14,6 +14,8 @@ $quantidadeEstrelas = 0;
 $json = [];
 //Objeto
 $avalicao = null;
+//constantes
+define('TAM_LIMITE', 500 * 1024);
 
 
 /*
@@ -38,19 +40,21 @@ if (
 
     // Validação dos dados - Evita SQL Injection 
     if (empty($titulo) || empty($descricao) || !validateInteger($quantidadeEstrelas, 1, 5) || !validateInteger($produto, $_POST['produto'] , $_POST['produto'])) {
-        echo "Dad";
-        exit;
+    	die('Tentativa de SQL Injection detectada!');
     }
 
     //Prepara a classe que irá inserir no banco de dados
-    $avaliacao = new AvalicaoProduto($_SESSION['Email']);
+    $avaliacao = new AvalicaoProduto('');
 
-    if(!$avaliacao->existe($produto)){
-    	echo 'Tentativa de SQL Injection detectada!';
+    if($avaliacao->existe($produto, $_SESSION['Email'], $_SESSION['pedido'])){
+    	die('Tentativa de SQL Injection detectada!');
     }
 
+    //após validar se o pedido se trata do cliente logado, mata a posição para prosseguir com a demanda
+    unset($_SESSION['pedido']);
+
     // Processamento de arquivos
-    $uploadDir = '../img';
+    $uploadDir = '../img/avaliacao/';
     if (!is_dir($uploadDir)) {
         mkdir($uploadDir, 0755, true);
     }
@@ -64,10 +68,10 @@ if (
             $fileType = $_FILES["imagem$nCont"]['type'];
 
             // Verificar o tamanho do arquivo (máximo 500KB)
-            if ($fileSize > 500 * 1024) {
+            if ($fileSize > TAM_LIMITE) {
             	$Ret[$nCont]['error'] = true;
                 $Ret[$nCont]['mensagem'] =  'A imagem não pode ser maior que 500KB.';
-                $Ret[$nCont]['imagem'] = $_FILES['name'];
+                $Ret[$nCont]['imagem'] = $_FILES["imagem$nCont"]['name'];
               	continue;
             }
 
@@ -76,29 +80,31 @@ if (
             if (!in_array($fileType, $allowedTypes)) {
             	$Ret[$nCont]['error'] = true;
                	$Ret[$nCont]['mensagem'] = 'Formato de imagem inválido. Apenas JPG, PNG e GIF são permitidos.';
-               	$Ret[$nCont]['imagem'] = $_FILES['name'];
+               	$Ret[$nCont]['imagem'] = $_FILES["imagem$nCont"]['name'];
                 continue;
             }
 
             // Gera um nome único para o arquivo
-            $filePath = $uploadDir . uniqid() . '-' . basename($fileName);
+            $filePath =  $uploadDir . uniqid() . '-' . basename($fileName);
 
             // Move o arquivo para o diretório de upload
             if (move_uploaded_file($fileTmpPath, $filePath)) {
-            	$avaliacao->setAvaliaProd($_POST['produto']);
+            	$avaliacao->setImagem($filePath);
             	$Ret[$nCont]['error'] = false;
                 $Ret[$nCont]['mensagem'] = 'Imagem enviada com sucesso.';
-                $Ret[$nCont]['imagem'] = $_FILES['name'];
+                $Ret[$nCont]['imagem'] = $_FILES["imagem$nCont"]['name'];
             } else {
             	$Ret[$nCont]['error'] = true;
                 $Ret[$nCont]['mensagem'] = 'Erro ao enviar a imagem.';
-                $Ret[$nCont]['imagem'] = $_FILES['name'];
+                $Ret[$nCont]['imagem'] = $_FILES["imagem$nCont"]['name'];
                 continue;
             }
         }else{
         	$Ret[$nCont]['mensagem'] = 'imagem não foi transitada corretamente por rede: ' . $_FILES["imagem$nCont"]['error'];
         }
     }
+    //Ejeta a imagens ao qual deu certo
+   // $avaliacao->setAvaliaProd($_POST['produto']);
 } else {
     echo "Preencha todos os campos";
 }

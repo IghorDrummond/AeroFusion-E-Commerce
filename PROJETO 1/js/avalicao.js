@@ -98,7 +98,7 @@ Descrição: seleciona a quantidade de estrelas
 Data: 17/08/2024
 Programador: Ighor Drummond   
 */
-Array.from(produtos).forEach((element, index) => {
+Array.from(estrelas).forEach((element, index) => {
     element.addEventListener('mouseover', () => {
         for(nCont = 0; nCont <= 4; nCont++){
             if(nCont <= index){
@@ -157,4 +157,13 @@ avaliacao.addEventListener('submit', (event)=>{
 function fecharAba(){
     //Remove a janela
     $('.end_body').remove();
+    descricao = null;
+    titulo = null;
+    quantidade = null;
+    inputimagens = null;
+    imagePreview = null;
+    deletar = null;
+    estrelas = null;
+    avaliacao = null;
+    produtos = null;
 }
