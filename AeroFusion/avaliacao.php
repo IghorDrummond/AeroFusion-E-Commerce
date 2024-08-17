@@ -116,7 +116,9 @@ if (
     $json[0]['mensagem'] = $Ret;
     echo json_encode($json);
 } else {
-    echo "Preencha todos os campos";
+	$json[0]['error'] = true;
+	$json[0]['mensagem'] = 'Tentativa de SQL Injection detectada!';
+    echo json_encode($json);
 }
 
 // Função para sanitizar entradas

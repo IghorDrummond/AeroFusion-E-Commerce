@@ -146,8 +146,12 @@ avaliacao.addEventListener('submit', (event)=>{
         contentType: false, 
         dataType: 'json',
         success: function(response) {
-            alerta('Dados enviados com sucesso!', 1);
             console.log(response);
+            if(!response[0]['error']){
+                alerta('Dados enviados com sucesso!', 1);
+            }else{
+                alerta(response[0]['mensagem'], 0);
+            }
         },
         error: function(xhr, status, error) {
             console.log('wdwdd');
