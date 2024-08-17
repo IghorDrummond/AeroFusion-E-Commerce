@@ -7,6 +7,7 @@ use Produto\AvalicaoProduto;
 $titulo = '';
 $descricao = '';
 $uploadDir = '';
+$produto = '';
 //Numerico
 $quantidadeEstrelas = 0;
 //Array
@@ -25,21 +26,28 @@ $avalicao = null;
 if (
     isset($_POST['titulo']) && !empty($_POST['titulo']) &&
     isset($_POST['descricao']) && !empty($_POST['descricao']) &&
-    isset($_POST['quantidadeEstrelas']) && !empty($_POST['quantidadeEstrelas'])
+    isset($_POST['quantidadeEstrelas']) && !empty($_POST['quantidadeEstrelas']) &&
+    isset($_POST['produto']) && !empty($_POST['produto'])
+
 ) {
     // Sanitização dos dados - Evita ataque XSS
     $titulo = santizacaoDados($_POST['titulo']);
     $descricao = santizacaoDados($_POST['descricao']);
     $quantidadeEstrelas = santizacaoDados($_POST['quantidadeEstrelas']);
+    $produto = santizacaoDados($_POST['produto']);
 
     // Validação dos dados - Evita SQL Injection 
-    if (empty($titulo) || empty($descricao) || !validateInteger($quantidadeEstrelas, 1, 5)) {
+    if (empty($titulo) || empty($descricao) || !validateInteger($quantidadeEstrelas, 1, 5) || !validateInteger($produto, $_POST['produto'] , $_POST['produto'])) {
         echo "Dad";
         exit;
     }
 
     //Prepara a classe que irá inserir no banco de dados
     $avaliacao = new AvalicaoProduto($_SESSION['Email']);
+
+    if(!$avaliacao->existe($produto)){
+    	echo 'Tentativa de SQL Injection detectada!';
+    }
 
     // Processamento de arquivos
     $uploadDir = '../img';

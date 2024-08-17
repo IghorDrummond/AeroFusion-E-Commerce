@@ -715,7 +715,7 @@ Programador: Ighor Drummond
 */
 function avaliarPedido(idped){  
     //Carrega arquivo para adição para html
-    $.get('script/HTML/htmlAvaliar.php?pedido=' + encodeURIComponent(idped), function (data) {
+    $.get('script/avaliar.php?pedido=' + encodeURIComponent(idped) , function (data) {
         telaCarregamento(false);
         $('body').append(data);
     }).fail(function (xhr) {

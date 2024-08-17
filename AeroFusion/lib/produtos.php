@@ -279,6 +279,15 @@
                 return $Ret;
             }
             /*
+            *Metodo: existe()
+            *Descrição: Verifica se o pedido e produto existe para o cliente logado
+            *Data: 17/08/2024
+            *Programador(a): Ighor Drummond
+            */
+            public function existe(){
+                $this->montaQuery(3);       
+            }
+            /*
             *Metodo: montaQuery()
             *Descrição: Retorna por montar a query
             *Data: 28/05/2024

@@ -8,6 +8,9 @@ var imagePreview = document.getElementsByClassName('imagens');
 var deletar = document.getElementsByClassName('deletar');
 var estrelas = document.getElementsByClassName('stars');
 var avaliacao = document.getElementById('avaliacao');
+var produtos = document.getElementsByClassName('produtos');
+//String
+var produto = '';
 //Array
 var imagens = [null, null, null];
 //numero
@@ -39,6 +42,7 @@ Programador: Ighor Drummond
 */
 inputimagens.addEventListener('change', () => {
     if (inputimagens.files.length > 0) {
+        const tamLimite = 500 * 1024;
         const file = inputimagens.files[0];
 
         if (file.size > tamLimite) { // Verifica se o arquivo é maior que 500KB
@@ -78,12 +82,23 @@ Array.from(deletar).forEach((element, index) => {
     });
 });
 /*
+Evento: click
+Descrição: Seleciona o produto a ser avaliado
+Data: 17/08/2024
+Programador: Ighor Drummond   
+*/
+Array.from(produtos).forEach((element, index) => {
+    element.addEventListener('click', () => {
+        produto = element.getAttribute('data-toggle');
+    });
+});
+/*
 Evento: mouseover
 Descrição: seleciona a quantidade de estrelas
 Data: 17/08/2024
 Programador: Ighor Drummond   
 */
-Array.from(estrelas).forEach((element, index) => {
+Array.from(produtos).forEach((element, index) => {
     element.addEventListener('mouseover', () => {
         for(nCont = 0; nCont <= 4; nCont++){
             if(nCont <= index){
@@ -102,25 +117,18 @@ Data: 17/08/2024
 Programador: Ighor Drummond   
 */
 avaliacao.addEventListener('submit', (event)=>{
-    const tamLimite = 500 * 1024;
     //Impede de atualizar a página após o submit
     event.preventDefault();
 
     //Remove a janela
     $('.end_body').remove();
 
-    // Verificar se o usuário selecionou entre 1 e 3 imagens
-    const imagensSelecionadas = imagens.filter(img => img !== null).length;
-    if (imagensSelecionadas < 1 || imagensSelecionadas > 3) {
-        alert('Você deve enviar entre 1 e 3 imagens.');
-        return;
-    }
-
     // Cria um FormData para enviar dados e arquivos
     const formData = new FormData();
     formData.append('titulo', titulo.value);//Envia o titulo
     formData.append('descricao', descricao.value);//Envia a descrição
     formData.append('quantidadeEstrelas', quantStars);//Envia a quantidade de estrelas
+    formData.append('produto', produto);//Envia o produto para ser avaliado
 
     // Adiciona as imagens ao FormData
     imagens.forEach((imagem, index) => {
@@ -149,13 +157,4 @@ avaliacao.addEventListener('submit', (event)=>{
 function fecharAba(){
     //Remove a janela
     $('.end_body').remove();
-    descricao = null; 
-    titulo = null; 
-    quantidade = null; 
-    inputimagens = null; 
-    imagePreview = null; 
-    deletar = null; 
-    estrelas = null; 
-    avaliacao = null; 
-    imagens = null;
 }
