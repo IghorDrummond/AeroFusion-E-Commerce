@@ -2,21 +2,21 @@
 $_SESSION['avaPed'] = $_GET['pedido'];
 ?>
 <div class="end_body p-3 d-flex justify-content-center align-items-center">
-    <div class="w-50 p-1 rounded bg-white">
+    <div class="end_dados p-1 rounded bg-white">
         <form class="form-group" action="script/avaliacao.php" method="POST" enctype="multipart/form-data">
             <fieldset class="text-center">
                 <h1 class="text-warning">Avaliar</h1>
                 <div class="text-warning" style="cursor: pointer;">
-                    <i class="fa-regular fa-star"></i>
-                    <i class="fa-regular fa-star"></i>
-                    <i class="fa-regular fa-star"></i>
-                    <i class="fa-regular fa-star"></i>
-                    <i class="fa-regular fa-star"></i>
+                    <i class="fa-solid fa-star stars display-4"></i>
+                    <i class="fa-regular fa-star stars display-4"></i>
+                    <i class="fa-regular fa-star stars display-4"></i>
+                    <i class="fa-regular fa-star stars display-4"></i>
+                    <i class="fa-regular fa-star stars display-4"></i>
                 </div>
             </fieldset>
             <fieldset class="form-group">
                 <label class="font-weight-bold" for="titulo">Título:</label>
-                <input type="text" name="titulo" class="form-control" placeholder="Insira o título da avaliação"
+                <input type="text" name="titulo" class="form-control font-weight-bold" placeholder="Insira o título da avaliação"
                     required>
             </fieldset>
             <fieldset class="form-group">

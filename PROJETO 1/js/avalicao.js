@@ -6,10 +6,13 @@ const quantidade = document.getElementById('quant-carac');
 const inputimagens = document.getElementById('inputGroupFile01');
 const imagePreview = document.getElementsByClassName('imagens');
 const deletar = document.getElementsByClassName('deletar');
+const estrelas = document.getElementsByClassName('stars');
 //Array
 const imagens = [null, null, null];
 // Constantes
 const maxCaracteres = 1000;
+//numero
+var quantStars = 0;
 
 //------------------Eventos
 /*
@@ -71,5 +74,25 @@ Array.from(deletar).forEach((element, index) => {
         imagens[index] = null;
         element.classList.remove('d-block');
         element.classList.add('d-none');
+    });
+});
+/*
+Evento: mouseover
+Descrição: seleciona a quantidade de estrelas
+Data: 17/08/2024
+Programador: Ighor Drummond   
+*/
+Array.from(estrelas).forEach((element, index) => {
+    element.addEventListener('mouseover', () => {
+        for(nCont = 0; nCont <= 4; nCont++){
+            if(nCont <= index){
+                estrelas[nCont].classList.remove('fa-regular');
+                estrelas[nCont].classList.add('fa-solid');
+            }else{
+                estrelas[nCont].classList.remove('fa-solid');
+                estrelas[nCont].classList.add('fa-regular');                
+            }
+        }
+        quantStars = index;
     });
 });
