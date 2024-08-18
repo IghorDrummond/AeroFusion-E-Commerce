@@ -107,11 +107,11 @@
 	}
 ?>
 
-<!-- Botões -->
+<!-- Botões 
 <div class="btn-group mt-auto flex-fill w-100 p-1" role="group" aria-label="Basic example">
 	<button class="btn btn-primary "><|</button>
 	<button class="btn btn-primary">1</button>
 	<button class="btn btn-primary">2</button>
-	<!-- Ajustar o tamanho facilmente  - LIMITE DE 12 POR PAGINA -->
+	Ajustar o tamanho facilmente  - LIMITE DE 12 POR PAGINA
 	<button class="btn btn-primary">|></button>
-</div>
+</div>-->

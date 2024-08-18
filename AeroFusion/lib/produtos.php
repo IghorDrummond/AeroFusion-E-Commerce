@@ -122,10 +122,11 @@
                 }
 
                 //Adiciona limite de retorno dos produtos
+                /*
                 $query .= PHP_EOL . "
                     LIMIT
                         12
-                ";
+                ";*/
                 return $query;
             }
         }   

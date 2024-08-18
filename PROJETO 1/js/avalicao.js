@@ -148,11 +148,11 @@ avaliacao.addEventListener('submit', (event)=>{
         success: function(response) {
             if(!response[0]['error']){
                 msg = 'Dados enviados com sucesso!';
-                response[0]['imagem_Ok'].forEach(status => {
-                    if (status['error']) {
-                        msg += '\n Atenção: ' + status['mensagem'] + ' - ' + status['imagem'];
+                for($nCont = 0; $nCont <= response[0]['imagem_Ok'].length -1; $nCont++ ){
+                    if (response[0]['imagem_Ok'][$nCont]['error']) {
+                        msg += '\n Atenção: ' + response[0]['imagem_Ok'][$nCont]['mensagem'] + ' - ' + response[0]['imagem_Ok'][$nCont]['mensagem'];
                     }
-                });
+                } 
                 alerta(msg, 1);
             }else{
                 alerta(response[0]['mensagem'], 0);
