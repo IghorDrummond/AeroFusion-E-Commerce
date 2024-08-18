@@ -1004,7 +1004,7 @@ namespace Pedido {
 			$this->getDados();
 			$this->Parcelamento = 1;
 			$this->IdCli = $this->stmt[0]['id_cliente'];
-			//Valida se o pedido já foi cancelado
+			//Valida se o pedido já foi cancelado ou se está em rota de entrega
 			if($this->stmt[0]['status_'] != 'Pendente' and $this->stmt[0]['status_'] != 'Aguardando Envio'){
 				return null;
 			}
@@ -1023,8 +1023,15 @@ namespace Pedido {
 				$this->pushDados();
 			}
 
-			//Atualiza status do pedido
+			//Atualiza status e rastreio do pedido
 			$this->montaQuery(7);
+			$this->pushDados();
+
+			//Atualiza rastreio para devolvido
+			$this->status = '7';
+			date_default_timezone_set('America/Sao_Paulo');//Define o horario
+			$this->Data = date('Y-m-d H:i:s');
+			$this->montaQuery(10);
 			$this->pushDados();
 		}
 

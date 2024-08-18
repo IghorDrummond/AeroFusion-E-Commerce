@@ -115,7 +115,7 @@ if (
     $palavroes = explode(',', strtoupper($palavrao)); 
     for($nCont = 0; $nCont <= count($palavroes) -1; $nCont++){
         $censura = str_repeat('*', strlen($palavroes[$nCont]));
-        $descricao = preg_replace('/\b' . preg_quote($palavroes[$nCont] , '/') . '\b/i', $censura, strtoupper($descricao));
+        $descricao = preg_replace('/\b' . preg_quote($palavroes[$nCont] , '/') . '\b/i', $censura, $descricao);
     }
 
     //Guarda avaliação do produto
