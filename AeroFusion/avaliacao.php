@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once('lib/produtos.php');
+require_once('palavrao.php');
 use Produto\AvalicaoProduto;
 //Declaração de variaveis
 //String
@@ -16,7 +17,6 @@ $json = [];
 $avalicao = null;
 //constantes
 define('TAM_LIMITE', 500 * 1024);
-
 
 /*
 	Data - 17/08/2024
@@ -110,6 +110,14 @@ if (
         	$Ret[$nCont]['mensagem'] = 'imagem não foi transitada corretamente por rede: ' . $_FILES["imagem$nCont"]['error'];
         }
     }
+
+    //Filtrar palavras de baixo-calão
+    $palavroes = explode(',', strtoupper($palavrao)); 
+    for($nCont = 0; $nCont <= count($palavroes) -1; $nCont++){
+        $censura = str_repeat('*', strlen($palavroes[$nCont]));
+        $descricao = preg_replace('/\b' . preg_quote($palavroes[$nCont] , '/') . '\b/i', $censura, strtoupper($descricao));
+    }
+
     //Guarda avaliação do produto
    	$avaliacao->setAvaliaProd($produto, $titulo, $descricao, $quantidadeEstrelas);
     $json[0]['error'] = false;

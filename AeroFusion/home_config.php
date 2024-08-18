@@ -361,7 +361,7 @@
 				<h1>Carrinho</h1>
 				<table class="w-100 bg-white">
 					<thead>
-						<tr class="text-center">n
+						<tr class="text-center">
 							<th>Imagens</th>
 							<th>Detalhes do Carrinho</th>
 						</tr>

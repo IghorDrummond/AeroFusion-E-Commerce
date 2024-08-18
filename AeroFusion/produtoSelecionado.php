@@ -186,11 +186,11 @@
 							}
 						?>
 					</div>
-					<p class="mt-3">
+					<p class="mt-3 paragrafo">
 						<span>
 							<time><?php echo date('d/m/Y H:i', strtotime($ava['data_ava'])); ?></time> -
 							<?php echo ucfirst(mb_convert_case($ava['nome'] . ' ' . $ava['sobrenome'], MB_CASE_FOLD, 'UTF-8')); ?>	
-						</span>:<br> <?php echo($ava['mensagem']) ?>
+						</span>:<br><?php echo($ava['mensagem']) ?>
 					</p>
 					<div>
 						<div class="text-center py-2 d-flex justify-content-center align-items-center">

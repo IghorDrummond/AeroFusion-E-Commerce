@@ -431,6 +431,10 @@ html::-webkit-scrollbar-thumb {
     overflow: auto;
 }
 
+/* Mensagem da avaliação */
+.paragrafo{
+	word-wrap: break-word;
+}
 /*Rodapé*/
 footer i{
 	cursor: pointer;
