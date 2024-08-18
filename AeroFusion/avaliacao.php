@@ -51,7 +51,7 @@ if (
 
     if($avaliacao->existe($produto, $_SESSION['pedido'])){
         $json[0]['error'] = true;
-        $json[0]['mensagem'] = 'Avaliação já existe';
+        $json[0]['mensagem'] = 'Avaliação para este produto já existe';
         echo json_encode($json);
     	die();
     }
@@ -113,7 +113,8 @@ if (
     //Guarda avaliação do produto
    	$avaliacao->setAvaliaProd($produto, $titulo, $descricao, $quantidadeEstrelas);
     $json[0]['error'] = false;
-    $json[0]['mensagem'] = $Ret;
+    $json[0]['mensagem'] = 'Sucesso! Avaliação foi registrada!';
+    $json[0]['imagem_Ok'] = $Ret;
     echo json_encode($json);
 } else {
 	$json[0]['error'] = true;

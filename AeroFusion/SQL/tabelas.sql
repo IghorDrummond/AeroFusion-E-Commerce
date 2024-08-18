@@ -166,7 +166,7 @@ CREATE TABLE avaliacoes(
     titulo_men varchar(100) not null,
     mensagem text not null,
     estrelas int default 0 not null,
-    img varchar(150),
+    img1 varchar(150),
     img2 varchar(150),
     img3 varchar(150),
     id_prod int not null,

@@ -29,8 +29,8 @@
 
 	if($Produto != false){
 		//Monta avaliação do produto caso houver
-		$Avaliacao = new AvalicaoProduto($_GET['Prod']);
-		$Avaliacoes = $Avaliacao->retornaValores();
+		$Avaliacao = new AvalicaoProduto('');
+		$Avaliacoes = $Avaliacao->getAvaliacoes($_GET['Prod']);
 		//Monta tamanhos disponiveis para esse par de tênis
 		$Tamanho = new Tamanhos($Produto['tamanho']);
 		$Tamanhos = $Tamanho->retornaValores();
@@ -167,69 +167,59 @@
 			</section>
 			<section class="bg-warning border border-top border-warning">
 				<h2 class="text-center bg-warning">Avaliações</h2>
+				<?php
+					if(isset($Avaliacoes[0]['id_ava'])){
+						foreach ($Avaliacoes as $ava) {
+				?>
 				<div class="border p-2 rounded bg-light text-center mensagem">
-					<h5>Otimo Produto!</h5>
-					<img src="img/novo_usuario.png" class="img-fluid rounded-circle border border-dark" width="60">
+					<h5><?php echo($ava['titulo_men']) ?></h5>
+					<img src="img/<?php echo($ava['foto']) ?>" class="img-fluid rounded-circle border border-dark" width="60">
 					<br>
 					<div class="estrelas">
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star-half-stroke"></i>
-						<i class="fa-regular fa-star"></i>
+						<?php
+							for($nCont = 1; $nCont <= 5; $nCont++){
+								if($nCont <= $ava['estrelas']){
+									echo "<i class='fa-solid fa-star'></i>";
+								}else{
+									echo "<i class='fa-regular fa-star'></i>";
+								}
+							}
+						?>
 					</div>
 					<p class="mt-3">
 						<span>
-							<time>15/12/8000</time> -
-							Nome Usuário
-						</span>:<br> Mensagem deixada
+							<time><?php echo date('d/m/Y H:i', strtotime($ava['data_ava'])); ?></time> -
+							<?php echo ucfirst(mb_convert_case($ava['nome'] . ' ' . $ava['sobrenome'], MB_CASE_FOLD, 'UTF-8')); ?>	
+						</span>:<br> <?php echo($ava['mensagem']) ?>
 					</p>
 					<div>
-						imagens caso houver
+						<div class="text-center py-2 d-flex justify-content-center align-items-center">
+							<?php
+								for($nCont = 1; $nCont <= 3; $nCont++){
+									if(!empty($ava["img$nCont"])){
+							?>
+								<img src="img/avaliacao/<?php echo $ava["img$nCont"]  ?>" width="100" height="100"
+									class="img-fluid rounded border border-secondary p-1 m-2">
+							<?php
+									}
+								}
+							?>
+						</div>
 					</div>
 				</div>
+			<?php	
+					}
+				}else{
+			?>
 				<div class="border p-2 rounded bg-light text-center mensagem">
-					<h5>Otimo Produto!</h5>
-					<img src="img/novo_usuario.png" class="img-fluid rounded-circle border border-dark" width="60">
-					<br>
-					<div class="estrelas">
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star-half-stroke"></i>
-						<i class="fa-regular fa-star"></i>
-					</div>
-					<p class="mt-3">
-						<span>
-							<time>15/12/8000</time> -
-							Nome Usuário
-						</span>:<br> Mensagem deixada
-					</p>
-					<div>
-						imagens caso houver
-					</div>
+					<h4>Não há valiações para esse produto ainda.
+						<br>
+						Seja o primeiro avaliar após sua compra!
+					</h4>
 				</div>
-				<div class="border p-2 rounded bg-light text-center mensagem">
-					<h5>Otimo Produto!</h5>
-					<img src="img/novo_usuario.png" class="img-fluid rounded-circle border border-dark" width="60">
-					<br>
-					<div class="estrelas">
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star-half-stroke"></i>
-						<i class="fa-regular fa-star"></i>
-					</div>
-					<p class="mt-3">
-						<span>
-							<time>15/12/8000</time> -
-							Nome Usuário
-						</span>:<br> Mensagem deixada
-					</p>
-					<div>
-						imagens caso houver
-					</div>
-				</div>
+			<?php	
+				}
+			?>
 			</section>
 <?php
 	}

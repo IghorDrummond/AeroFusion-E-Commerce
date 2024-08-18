@@ -146,15 +146,19 @@ avaliacao.addEventListener('submit', (event)=>{
         contentType: false, 
         dataType: 'json',
         success: function(response) {
-            console.log(response);
             if(!response[0]['error']){
-                alerta('Dados enviados com sucesso!', 1);
+                msg = 'Dados enviados com sucesso!';
+                response[0]['imagem_Ok'].forEach(status => {
+                    if (status['error']) {
+                        msg += '\n Atenção: ' + status['mensagem'] + ' - ' + status['imagem'];
+                    }
+                });
+                alerta(msg, 1);
             }else{
                 alerta(response[0]['mensagem'], 0);
             }
         },
         error: function(xhr, status, error) {
-            console.log('wdwdd');
             alerta('Ocorreu um erro ao enviar os dados: ' + error, 0);
         }
     });

@@ -234,7 +234,7 @@
                 $this->Conexao = $this->Conexao->conexao();
                 $this->montaQuery(4);
                 $this->getDados();
-                $this->IdCli = $this->stmt[0]['id'];
+                $this->IdCli = isset($this->stmt[0]['id']) ? $this->stmt[0]['id'] : '';
             }
 
             //Metodo
@@ -308,6 +308,18 @@
                 $this->imagens[$Posic] = $imagem;
             }
             /*
+            *Metodo: getAvaliacoes()
+            *Descrição: Retornar avaliações do produto selecionado
+            *Data: 17/08/2024
+            *Programador(a): Ighor Drummond
+            */
+            public function getAvaliacoes($produto){
+                $this->ID = $produto;
+                $this->montaQuery(5);
+                $this->getDados();
+                return $this->stmt;
+            }
+            /*
             *Metodo: montaQuery()
             *Descrição: Retorna por montar a query
             *Data: 28/05/2024
@@ -317,7 +329,7 @@
                 if($Opc === 1){
                     $this->query = "
                         SELECT 
-                            ava.img,
+                            ava.img1,
                             ava.img2,
                             ava.img3,
                             ava.mensagem as comentario,
@@ -336,7 +348,7 @@
                 }else if($Opc === 2){
                     //ESTÁ QUERY ESTÁ SENDO MONTADA PARA EVITAR ATAQUES XSS E SQL INJECTION
                     $this->query = "
-                        INSERT INTO avaliacoes(titulo_men, mensagem, estrelas, img, img2, img3, id_prod, id_cliente, data_ava)
+                        INSERT INTO avaliacoes(titulo_men, mensagem, estrelas, img1, img2, img3, id_prod, id_cliente, data_ava)
                         VALUES(:titulo, :descricao, :quantidadeEstrelas, :imagem1, :imagem2, :imagem3, :IdProd, :IdCliente, :DataAva)
                     ";
                     $this->stmt = $this->Conexao->prepare($this->query);
@@ -378,6 +390,17 @@
                             cliente    
                         WHERE
                             email = '$this->Email'                    
+                    ";
+                }else if($Opc === 5){
+                    $this->query = "
+                        SELECT
+                            *
+                        FROM
+                            avaliacoes as ava
+                        LEFT JOIN
+                            cliente as cli ON cli.id = ava.id_cliente
+                        WHERE
+                            id_prod = $this->ID
                     ";
                 }
             }
