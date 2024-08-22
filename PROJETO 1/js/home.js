@@ -653,10 +653,12 @@ function atualizarTabela() {
         success: function(response) {
             let data_att = document.getElementsByClassName('data_rastreio');
             let status_att = document.getElementsByClassName('status_rastreio');
-
+            let sessao_botao = document.getElementsByClassName('sessao_botao');
             response.forEach(function(dados, nCont) {
                 data_att[nCont].textContent = dados.data_do_rastreio;
                 status_att[nCont].textContent = '';
+                sessao_botao[nCont].innerHTML = '';
+                sessao_botao[nCont].innerHTML = dados.botao;
                 atualizaIcone(dados.Nome_do_status, status_att[nCont]);
             });
         },

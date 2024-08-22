@@ -90,7 +90,37 @@
 				$this->IdPeds = $IdPeds;
 				$this->montaQuery(2);
 				$this->getDados();
-				$json = null;
+				$btn = null;
+
+				for($nCont = 0; $nCont <= count($this->stmt) -1; $nCont++){
+					$btn = $this->montaEstrutura($this->stmt[$nCont]['id_ped']);
+
+					switch ($this->stmt[$nCont]['Nome_do_status']) {
+						case 'Pendente':
+							$btn .= '
+								<button class="btn btn-primary rounded"
+								onclick="prosseguirPedido('. $this->stmt[$nCont]['id_ped'] .')">
+									Prosseguir para o pagamento
+								</button>';
+							break;
+						case 'Aguardando Envio':
+							$btn .= '
+								<button class="btn btn-danger rounded"
+								onclick="cancelaPedido('. $this->stmt[$nCont]['id_ped'] .')">
+									Cancelar Pedido
+								</button>';
+							break;
+						case 'Entregue':
+							$btn .= '
+								<button class="btn btn-info rounded"
+								onclick="avaliarPedido('. $this->stmt[$nCont]['id_ped'] .')">
+									Avaliar Pedido
+								</button>';					
+							break;
+					}
+					$this->stmt[$nCont]['botao'] = $btn;
+				}
+
 				return json_encode($this->stmt);
 			}
 			/*
@@ -141,7 +171,8 @@
 					$this->query = "
 						SELECT
 						    st.nome as 'Nome_do_status',
-						    DATE_FORMAT(ras.data_rastreio, '%d/%m/%Y %H:%i') as 'data_do_rastreio'
+						    DATE_FORMAT(ras.data_rastreio, '%d/%m/%Y %H:%i') as 'data_do_rastreio',
+							ras.id_ped
 						FROM
 						    pedidos as ped
 						INNER JOIN	
@@ -169,6 +200,23 @@
 						    ras.id_ped DESC;
 					";
 				}
+			}
+			/*
+			 *Metodo: montaEstrutura()
+			 *Descrição: Responsavel por montar a estrutura dos botões
+			 *Data: 21/08/2024
+			 *Programador(a): Ighor Drummond
+			 */
+			private function montaEstrutura($IdPed){
+				$ret = '
+						<button class="btn btn-warning rounded"
+							onclick="rastreio('. $IdPed .')"
+							title="Detalhes do Rastreio"
+						>
+							Rastreio
+						</button>
+				';
+				return $ret;
 			}
 		}
 	}
