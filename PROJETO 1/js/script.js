@@ -78,9 +78,16 @@ if (img) {
 //Configura a barra de pesquisa
 Pesquisa.onfocus = abrePesq;//Para abrir a pesquisa
 Pesquisa.onkeyup = buscarProduto;//Para pesquisar o produto
-Pesquisa.onchange = ()=>{
-    fecharPesq();
-}
+// Evitar fechamento ao clicar dentro da caixa de pesquisa
+caixaPesq.onmousedown = (event) => {
+    event.stopPropagation();
+};
+// Fechar a caixa de pesquisa ao perder o foco (mas não ao clicar na caixa)
+Pesquisa.addEventListener('focusout', (event) => {
+    if (!caixaPesq.contains(event.relatedTarget)) {
+        fecharPesq();
+    }
+});
 // ------------------------- Eventos
 /*
 * Evento: click
@@ -91,10 +98,10 @@ Pesquisa.onchange = ()=>{
 window.addEventListener('click', function (event) {
     if (configuracao && !configuracao.contains(event.target) && event.target !== img) {
         fecharConfig();
-    }
+    }/*
     if (caixaPesq && !caixaPesq.contains(event.target) && event.target !== Pesquisa) {
         //fecharPesq();
-    }
+    }*/
     if (categoria[0] && categoria[0].classList.contains('d-flex') && window.clientWidth >= 1200) {
         desligaCab();
     }
