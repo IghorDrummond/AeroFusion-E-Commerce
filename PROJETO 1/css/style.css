@@ -236,6 +236,13 @@ dialog:ntd-child(3) div{
 	        animation: 1s surgir;
 	z-index: 3;
 }
+.navegacao a,
+.navbar-nav{
+	cursor: pointer;
+}
+.navegacao a:hover{
+	text-decoration: none;
+}
 /* Menu para Dispositivo Mobile */
 .collapse{
 	position: fixed;
