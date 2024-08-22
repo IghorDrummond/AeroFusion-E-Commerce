@@ -58,7 +58,8 @@ var abrePesq = () => {
     caixaPesq.style.left = (Dir.left + Dir.width / 2 - dialogWidth / 2) + 'px';
     caixaPesq.style.top = (Dir.bottom + 4) + 'px';
     caixaPesq.style.visibility = 'visible'; // Altera visibilidade
-    caixaPesq.show();
+    caixaPesq.show(); 
+    Pesquisa.focus();
 };
 var buscarProduto = () => {
     if (Pesquisa.value != '') {
@@ -76,18 +77,14 @@ if (img) {
 }
 
 //Configura a barra de pesquisa
-Pesquisa.onfocus = abrePesq;//Para abrir a pesquisa
-Pesquisa.onkeyup = buscarProduto;//Para pesquisar o produto
-// Evitar fechamento ao clicar dentro da caixa de pesquisa
-caixaPesq.onmousedown = (event) => {
-    event.stopPropagation();
-};
-// Fechar a caixa de pesquisa ao perder o foco (mas não ao clicar na caixa)
-Pesquisa.addEventListener('focusout', (event) => {
+Pesquisa.onfocus = abrePesq;
+Pesquisa.onkeyup = buscarProduto;
+Pesquisa.onblur = (event) => {
+    // Verifica se o foco foi perdido para um elemento fora da caixa de pesquisa
     if (!caixaPesq.contains(event.relatedTarget)) {
         fecharPesq();
     }
-});
+};
 // ------------------------- Eventos
 /*
 * Evento: click
