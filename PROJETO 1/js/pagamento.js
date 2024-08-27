@@ -616,8 +616,21 @@ function addCartao() {
             },
             success: function (response) {
                 telaCarregamento(false);
-                // Carrega a resposta na tag <main>
-                $('main').html(response);
+                switch(response){
+                    case 'DATA':
+                        alerta('Data de validade incorreta! ', 0);
+                        break;
+                    case 'EXISTE': 
+                        alerta('Cartão já cadastrado!', 0);
+                        break;
+                    case 'VENCIDO':
+                        alerta('Cartão com data de validade vencida!', 0);
+                        break;
+                    default:
+                        // Carrega a resposta na tag <main>
+                        $('main').html(response);
+                        break;
+                }
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 telaCarregamento(false);
